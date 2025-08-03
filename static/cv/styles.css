@@ -1,452 +1,696 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
 }
 
-h1, h2, h3 {
-    color: #2c3e50;
+h1,
+h2,
+h3 {
+  color: #2c3e50;
 }
 
 /* Modal and Form Styles (from cv-form.html) */
+
+h2, .form-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
 .modal {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 0 auto;
-    padding: 20px 30px 40px;   /* bottom padding for footer visibility */
-    border-radius: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow-y: auto;
-    box-shadow: none;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
+  background-color: #fefefe;
+  margin: 0 auto;
+  padding: 20px 30px 40px; /* bottom padding for footer visibility */
+  border-radius: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .modal-content::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 3px;
+  background-color: #ccc;
+  border-radius: 3px;
 }
 
 .progress-bar {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 20px 0 12px 0;
+  gap: clamp(8px, 6vw, 80px);
 }
 
 .progress-step {
-    width: 30px;
-    height: 30px;
-    background-color: #ddd;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
+  width: 32px;
+  height: 32px;
+  background: #e5e7eb;
+  border-radius: 50%;
+  color: #b0b3b8;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  transition: all 0.2s;
+  border: 2px solid #e5e7eb;
+  position: relative;
+  z-index: 1;
 }
 
 .progress-step.active {
-    background-color: #3498db;
+  background: #3498f1;
+  color: #fff;
+  border: 2px solid #3498f1;
+  box-shadow: 0 2px 8px rgba(52,152,241,0.18);
+  transform: scale(1.08);
+  z-index: 2;
+}
+
+.progress-step.completed {
+  background: #22c55e;
+  color: #fff;
+  border: 2px solid #22c55e;
+}
+
+
+.progress-step.completed::after {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  color: #fff;
+  background: #22c55e;
+  border-radius: 50%;
+  z-index: 2;
 }
 
 .progress-text {
-    text-align: center;
-    margin-bottom: 10px;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .form-step {
-    display: none;
-    padding-bottom: 120px;
+  display: none;
+  padding-bottom: 120px;
 }
 
 .form-step.active {
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 20px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+display: block;
+  opacity: 1;
+  transform: translateY(0);
+  
 }
 
 .form-step h3 {
   margin-top: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
 .form-group {
-    flex: 1;
-    margin-right: 15px;
+  flex: 1;
+  margin-right: 15px;
 }
 
 .form-group:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+/* --- Compact Review Step (Step 10) --- */
+/* --- Compact, Dashboard-style Review (Step 10) --- */
+#step-10 {
+  width: 100vw;
+  min-height: 78vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.review-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(295px, 1fr));
+  gap: 20px 24px;
+  width: 97vw;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  max-width: 1400px;
+}
+.review-section-card {
+  background: #f8faff;
+  border-radius: 12px;
+  box-shadow: 0 2px 9px rgba(60, 72, 101, 0.06);
+  padding: 17px 22px 12px 18px;
+  border: 1px solid #ebedf2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  box-sizing: border-box;
+}
+.review-section-card h4 {
+  font-size: 1.07rem;
+  font-weight: 700;
+  color: #314689;
+  margin: 0 0 9px 0;
+  text-align: left;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid #e3e9fa;
+  padding-bottom: 4px;
+}
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.review-list li {
+  margin: 0 0 7px 0;
+  padding: 6px 0 3px 0;
+  font-size: 0.97em;
+  border-bottom: 1px dashed #e3e9fa;
+}
+.review-list li:last-child {
+  border-bottom: none;
+}
+.review-list-title {
+  display: block;
+  font-weight: 600;
+  color: #25335a;
+}
+.review-list-detail {
+  display: block;
+  font-size: 0.94em;
+  color: #5469a6;
+  margin-top: 1px;
+}
+@media (max-width: 700px) {
+  .review-section {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+    width: 99vw;
+    padding: 0 1vw;
+  }
+  .review-section-card {
+    padding: 11px 8px 7px 10px;
+  }
+}
+body,
+#step-10,
+.review-section {
+  overflow-x: hidden !important;
 }
 
+/*#step-10 {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 70vh;
+}
+
+.review-section {
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.review-section-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(80, 80, 80, 0.08);
+  padding: 22px 28px 18px 28px;
+  margin-bottom: 26px;
+  transition: box-shadow 0.2s;
+  border: 1px solid #eee;
+}
+
+.review-section-card h4 {
+  margin-top: 0;
+  margin-bottom: 13px;
+  font-size: 1.2rem;
+  color: #37509b;
+  letter-spacing: 0.5px;
+}
+
+.review-section-card p,
+.review-section-card ul,
+.review-section-card li {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0 0 7px 0;
+}
+
+.review-section-card ul {
+  padding-left: 1.2em;
+  margin-bottom: 7px;
+}
+
+.review-section-card li {
+  list-style: disc inside;
+  padding-left: 0;
+}
+
+@media (max-width: 600px) {
+  .review-section-card {
+    padding: 13px 7px 9px 13px;
+  }
+  #step-10 .review-section {
+    max-width: 99vw;
+  }
+}
+*/
+
 .input-group {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
 }
 
 .input-group i {
-    padding: 10px;
-    color: #3498db;
+  padding: 10px;
+  color: #3498db;
 }
 
-input, select, textarea {
-    flex: 1;
-    border: none;
-    padding: 10px;
-    font-size: 14px;
-    border-radius: 0 4px 4px 0;
-    outline: none;
+input,
+select,
+textarea {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 0 4px 4px 0;
+  outline: none;
 }
 
 textarea {
-    height: 80px;
-    resize: vertical;
+  height: 80px;
+  resize: vertical;
 }
 
 .error-message {
-    display: none;
-    color: #e74c3c;
-    font-size: 12px;
-    margin-top: 5px;
+  display: none;
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
 .checkbox-container {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
 }
 
 .checkbox-container input {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .checkmark {
-    position: relative;
-    top: 0;
-    left: 0;
-    height: 15px;
-    width: 15px;
-    background-color: #eee;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
 }
 
-.add-btn, .remove-btn {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;       /* normal rounded corners */
-    padding: 10px 20px;       /* similar padding as other buttons */
-    font-size: 14px;          /* smaller font size like others */
-    cursor: pointer;
-    margin-top: 10px;
-    width: auto;              /* remove fixed width */
-    height: auto;             /* remove fixed height */
-    display: inline-block;    /* ensures button respects padding */
+.add-btn,
+.remove-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px; /* normal rounded corners */
+  padding: 10px 20px; /* similar padding as other buttons */
+  font-size: 14px; /* smaller font size like others */
+  cursor: pointer;
+  margin-top: 10px;
+  width: auto; /* remove fixed width */
+  height: auto; /* remove fixed height */
+  display: inline-block; /* ensures button respects padding */
 }
 
 .remove-btn {
-    background-color: #e74c3c; /* keep red for remove */
+  background-color: #e74c3c; /* keep red for remove */
 }
 
-.add-btn:hover, .remove-btn:hover {
-    opacity: 0.8;
+.add-btn:hover,
+.remove-btn:hover {
+  opacity: 0.8;
 }
-
 
 .remove-btn {
-    background-color: #e74c3c;
+  background-color: #e74c3c;
 }
 
-.add-btn:hover, .remove-btn:hover {
-    opacity: 0.8;
+.add-btn:hover,
+.remove-btn:hover {
+  opacity: 0.8;
 }
 
 .form-navigation {
   background-color: transparent; /* or #ffffff if you want pure white */
   padding: 20px 30px;
-  margin-top: 40px;
-  border-top: none; /* REMOVE the line */
+  margin-top: 16px;
+  border-top: 1px solid #eee;
   text-align: right;
+  padding-top: 16px;
 }
 
-#saveDraftBtn, #clearFormBtn, #prevBtn, #nextBtn {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 18px;
-    margin-left: 10px;
-    font-size: 14px;
+#saveDraftBtn,
+#clearFormBtn,
+#prevBtn,
+#nextBtn,
+#submitBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 18px;
+  margin-left: 10px;
+  font-size: 14px;
 }
 
-#saveDraftBtn:hover, #clearFormBtn:hover, #prevBtn:hover, #nextBtn:hover {
-    background-color: #2980b9;
+#saveDraftBtn:hover,
+#clearFormBtn:hover,
+#prevBtn:hover,
+#nextBtn:hover,
+#submitBtn:hover {
+  background-color: #2980b9;
 }
 
-
-.save-draft-btn, .clear-form-btn, #prevBtn, #nextBtn {
-    padding: 10px 20px;
-    margin-left: 10px;
-    background-color: #2ecc71;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.save-draft-btn,
+.clear-form-btn,
+#prevBtn,
+#nextBtn,
+#submitBtn {
+  padding: 10px 20px;
+  margin-left: 10px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.save-draft-btn:hover, .clear-form-btn:hover, #prevBtn:hover, #nextBtn:hover {
-    background-color: #27ae60;
+.save-draft-btn:hover,
+.clear-form-btn:hover,
+#prevBtn:hover,
+#nextBtn:hover,
+#submitBtn:hover {
+  background-color: #27ae60;
 }
 
 /* UCA CV Book Styles (from cv-cards.html) */
 .header {
-    background-color: #2c3e50;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background-color: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header-title {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .header-nav a {
-    color: white;
-    margin-left: 20px;
-    text-decoration: none;
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
 }
 
 .header-nav a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .filter-section {
-    padding: 20px;
-    background-color: white;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  background-color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .filter-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .filter-tab {
-    padding: 5px 15px;
-    cursor: pointer;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+  padding: 5px 15px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .filter-tab.active {
-    background-color: #3498db;
-    color: white;
+  background-color: #3498db;
+  color: white;
 }
 
 .filter-controls {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .filter-dropdowns {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .dropdown {
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .filter-search-sort {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .search-bar {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .search-bar i {
-    padding: 5px;
-    color: #3498db;
+  padding: 5px;
+  color: #3498db;
 }
 
 .search-bar input {
-    border: none;
-    padding: 5px;
-    outline: none;
-    width: 200px;
+  border: none;
+  padding: 5px;
+  outline: none;
+  width: 200px;
 }
 
 .main-content {
-    padding: 20px;
+  padding: 20px;
 }
 
 .main-heading {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .student-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .student-card {
-    background-color: #ecf0f1;
-    padding: 15px;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .student-card:hover {
-    background-color: #dcdde1;
+  background-color: #dcdde1;
 }
 
 .student-name {
-    font-weight: bold;
-    margin-bottom: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .student-major {
-    color: #7f8c8d;
+  color: #7f8c8d;
 }
 
 .chat-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #e74c3c;
-    color: white;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .chat-icon:hover {
-    background-color: #c0392b;
+  background-color: #c0392b;
 }
 
 /* Message Styles */
 #message {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 3px;
-    display: none;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 3px;
+  display: none;
 }
 
 .success {
-    background-color: #dff0d8;
-    color: #3c763d;
-    display: block;
+  background-color: #dff0d8;
+  color: #3c763d;
+  display: block;
 }
 
 .error {
-    background-color: #f2dede;
-    color: #a94442;
-    display: block;
+  background-color: #f2dede;
+  color: #a94442;
+  display: block;
 }
 /* Add this to the existing styles.css */
 .navigation {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
 
 .nav-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 0 10px;
-    background-color: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #3498db;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 .nav-btn:hover {
-    background-color: #2980b9;
+  background-color: #2980b9;
 }
 
 /* Keep all existing styles from the previous response */
 .card-actions {
-    margin-top: 10px;
-    text-align: center;
+  margin-top: 10px;
+  text-align: center;
 }
 
 .action-btn {
-    display: inline-block;
-    padding: 5px 10px;
-    margin: 0 5px;
-    background-color: #2ecc71;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 0 5px;
+  background-color: #2ecc71;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
 }
 
 .action-btn:hover {
-    background-color: #27ae60;
+  background-color: #27ae60;
 }
 
 .required {
   color: red;
 }
 
-.cv-preview { font-family: Arial, sans-serif; font-size:14px; line-height:1.25; }
-.cv-preview h4 { letter-spacing:1px; font-size:15px; margin:22px 0 6px; border-bottom:1px solid #444; padding-bottom:2px; text-transform:uppercase; }
-.cv-row { display:flex; justify-content:space-between; }
-.cv-small { font-size:12px; color:#444; }
-.cv-section-block p { margin:2px 0 4px; }
-.cv-bullets { margin:2px 0 8px 16px; padding:0; }
-.cv-bullets li { margin:0 0 2px; }
-.cv-inline { display:flex; flex-wrap:wrap; gap:40px; }
-.cv-ref-col { flex:1 1 200px; }
-.cv-muted { color:#555; }
-.upper { text-transform:uppercase; }
+.cv-preview {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.25;
+}
+.cv-preview h4 {
+  letter-spacing: 1px;
+  font-size: 15px;
+  margin: 22px 0 6px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 2px;
+  text-transform: uppercase;
+}
+.cv-row {
+  display: flex;
+  justify-content: space-between;
+}
+.cv-small {
+  font-size: 12px;
+  color: #444;
+}
+.cv-section-block p {
+  margin: 2px 0 4px;
+}
+.cv-bullets {
+  margin: 2px 0 8px 16px;
+  padding: 0;
+}
+.cv-bullets li {
+  margin: 0 0 2px;
+}
+.cv-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+.cv-ref-col {
+  flex: 1 1 200px;
+}
+.cv-muted {
+  color: #555;
+}
+.upper {
+  text-transform: uppercase;
+}

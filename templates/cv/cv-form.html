@@ -17,9 +17,9 @@
       <div class="modal-content">
         <h2>CV Builder Form</h2>
         <div class="progress-bar" id="progressBar">
-          <div class="progress-step active">1</div>
-          <div class="progress-step">2</div>
-          <div class="progress-step">3</div>
+          <div class="progress-step ">1</div>
+          <div class="progress-step ">2</div>
+          <div class="progress-step ">3</div>
           <div class="progress-step">4</div>
           <div class="progress-step">5</div>
           <div class="progress-step">6</div>
@@ -37,7 +37,7 @@
         <form id="cvForm" method="post">
           {% csrf_token %}
           <!-- STEP 1: PERSONAL INFORMATION -->
-          <div class="form-step active" id="step-1">
+          <div class="form-step active" id="step-1" style="display: block">
             <h3>Personal Information</h3>
             <div class="row">
               <div class="form-group">
@@ -1009,18 +1009,14 @@
 </div>
 
           <!-- STEP 10: REVIEW AND SUBMIT -->
-          <div id="reviewInfo" class="cv-preview">
+          
           <div class="form-step" id="step-10" style="display: none">
             <h3>Review Your CV & Submit</h3>
             <div id="reviewInfo" class="review-section">
               <!-- Review content will be dynamically inserted here -->
             </div>
           </div>
-</div>
-          <div class="progress-text">
-            Step <span id="currentStep">1</span> of
-            <span id="totalSteps">10</span>
-          </div>
+
           <div class="form-navigation">
             <!--<button type="button" class="save-draft-btn" id="saveDraftBtn">
               Save Draft
@@ -1030,7 +1026,7 @@
             </button>
             <button type="button" id="prevBtn">Previous</button>
             <button type="button" id="nextBtn">Next</button>
-            <button type="submit" id="submitBtn">Submit CV</button>
+            <button type="submit" id="submitBtn" class="button-submit">Submit CV</button>
           </div>
         </form>
       </div>
@@ -1079,21 +1075,25 @@
         else console.error("submitBtn or cvForm not found");
       }
 
-      function showStep(step) {
-        document
-          .querySelectorAll(".form-step")
-          .forEach((s) => (s.style.display = "none"));
-        const currentStepElement = document.getElementById(`step-${step}`);
-        if (currentStepElement) {
-          currentStepElement.style.display = "block";
-          updateStepIndicator(step);
-        } else {
-          console.error(`Step-${step} not found`);
-        }
-        if (step === totalSteps) {
-          populateReview();
-        }
-      }
+function showStep(step) {
+  // Hide all steps
+  document.querySelectorAll(".form-step").forEach(s => s.style.display = "none");
+  // Show the current step
+  const currentStepElement = document.getElementById(`step-${step}`);
+  if (currentStepElement) {
+    currentStepElement.style.display = "block";
+    updateStepIndicator(step); // (If you use this)
+    updateProgressBar(step);   // (If you use this)
+  } else {
+    console.error(`Step-${step} not found`);
+  }
+  if (step === totalSteps) {
+    populateReview();
+  }
+}
+
+
+
 
       function updateStepIndicator(step) {
         const currentStepEls = document.querySelectorAll("#currentStep");
@@ -1920,6 +1920,20 @@ function addExperience() {
         });
       }
 
+function updateProgressBar(currentStep) {
+  const steps = document.querySelectorAll('.progress-bar .progress-step');
+  steps.forEach((step, idx) => {
+    step.classList.remove('active', 'completed');
+    if (idx < currentStep - 1) {
+      step.classList.add('completed');
+    } else if (idx === currentStep - 1) {
+      step.classList.add('active');
+    }
+    // others: plain gray
+  });
+}
+
+
       function saveDraft() {
         showMessage("Draft saved (feature not implemented yet)", "success");
         console.log("Draft saved");
@@ -1964,223 +1978,210 @@ function populateReview() {
   const reviewInfo = document.getElementById("reviewInfo");
   if (!reviewInfo) return;
   reviewInfo.innerHTML = "";
-  const val = id => document.getElementById(id)?.value.trim() || "N/A";
-  const addSection = (title, html) => { if (html.trim()) reviewInfo.innerHTML += `<h4>${title}</h4>${html}`; };
 
-  // Personal
+  const val = id => document.getElementById(id)?.value.trim() || "—";
+  const addSection = (title, html) => {
+    if (html.trim()) reviewInfo.innerHTML += `
+      <div class="review-section-card">
+        <h4>${title}</h4>
+        ${html}
+      </div>`;
+  };
+
+  // PERSONAL INFO
   addSection("Personal Information", `
-    <p>Name: ${val("name")}</p>
-    <p>Surname: ${val("surname")}</p>
-    <p>Email: ${val("email")}</p>
-    <p>Major: ${val("major")}</p>
+    <ul class="review-list">
+      <li>
+        <span class="review-list-title">${val("name")} ${val("surname")}</span>
+        <span class="review-list-detail">
+          Email: ${val("email")}<br>
+          Major: ${val("major")}
+        </span>
+      </li>
+    </ul>
   `);
 
-  // Education
+  // EDUCATION
   let eduHTML = "";
-  document.querySelectorAll("#educationContainer .education-entry").forEach((_, idx) => {
-    const i = idx + 1;
-    eduHTML += `<p><strong>${val(`degreeTitle${i}`)}</strong> at ${val(`university${i}`)}<br>
-      ${val(`universityLocation${i}`)} | ${val(`eduStartDate${i}`)} to ${val(`eduEndDate${i}`)}<br>
-      GPA: ${val(`gpa${i}`)} | Honours: ${val(`honours${i}`)}<br>
-      Courses: ${val(`courses${i}`)}</p>`;
-  });
+  const eduEntries = document.querySelectorAll("#educationContainer .education-entry");
+  if (eduEntries.length) {
+    eduHTML += '<ul class="review-list">';
+    eduEntries.forEach((_, idx) => {
+      const i = idx + 1;
+      eduHTML += `
+        <li>
+          <span class="review-list-title">${val(`degreeTitle${i}`)}</span>
+          <span class="review-list-detail">
+            ${val(`university${i}`)} • ${val(`universityLocation${i}`)}<br>
+            ${val(`eduStartDate${i}`)} – ${val(`eduEndDate${i}`)}
+            ${val(`gpa${i}`) !== "—" ? " | GPA: " + val(`gpa${i}`) : ""}
+            ${val(`honours${i}`) !== "—" ? " | Honours: " + val(`honours${i}`) : ""}
+            ${val(`courses${i}`) !== "—" ? "<br>Courses: " + val(`courses${i}`) : ""}
+          </span>
+        </li>
+      `;
+    });
+    eduHTML += '</ul>';
+  }
   addSection("Education", eduHTML);
 
-  // Experience
+  // PROFESSIONAL EXPERIENCE
   let expHTML = "";
-  document.querySelectorAll("#experienceContainer .experience-entry").forEach((_, idx) => {
-    const i = idx + 1;
-    const bullets = [1,2,3].map(n => document.getElementById(`expAccomplishment${i}_${n}`)?.value.trim()).filter(Boolean);
-    expHTML += `<p><strong>${val(`positionTitle${i}`)}</strong> at ${val(`company${i}`)}<br>
-      ${val(`location${i}`)} | ${val(`employmentType${i}`)}<br>
-      ${val(`expStartDate${i}`)} to ${val(`expEndDate${i}`) || "Present"}</p>
-      ${bullets.length ? `<ul>${bullets.map(b=>`<li>${b}</li>`).join("")}</ul>` : ""}`;
-  });
+  const expEntries = document.querySelectorAll("#experienceContainer .experience-entry");
+  if (expEntries.length) {
+    expHTML += '<ul class="review-list">';
+    expEntries.forEach((_, idx) => {
+      const i = idx + 1;
+      const bullets = [1,2,3].map(n => document.getElementById(`expAccomplishment${i}_${n}`)?.value.trim()).filter(Boolean);
+      expHTML += `
+        <li>
+          <span class="review-list-title">${val(`positionTitle${i}`)} at ${val(`company${i}`)}</span>
+          <span class="review-list-detail">
+            ${val(`location${i}`)} ${val(`employmentType${i}`) !== "—" ? " | " + val(`employmentType${i}`) : ""}<br>
+            ${val(`expStartDate${i}`)} – ${val(`expEndDate${i}`) || "Present"}
+            ${bullets.length ? "<ul style='margin:4px 0 0 18px;padding:0;'>" + bullets.map(b=>`<li>${b}</li>`).join("") + "</ul>" : ""}
+          </span>
+        </li>
+      `;
+    });
+    expHTML += '</ul>';
+  }
   addSection("Professional Experience", expHTML);
 
-  // Projects
+  // PROJECTS
   let projHTML = "";
-  document.querySelectorAll("#projectContainer .project-entry").forEach((_, idx) => {
-    const i = idx + 1;
-    projHTML += `<p><strong>${val(`projectTitle${i}`)}</strong> (${val(`year${i}`)})<br>
-      Tech: ${val(`technologiesUsed${i}`)}<br>
-      ${val(`summary${i}`)}</p>`;
-  });
+  const projEntries = document.querySelectorAll("#projectContainer .project-entry");
+  if (projEntries.length) {
+    projHTML += '<ul class="review-list">';
+    projEntries.forEach((_, idx) => {
+      const i = idx + 1;
+      projHTML += `
+        <li>
+          <span class="review-list-title">${val(`projectTitle${i}`)} (${val(`year${i}`)})</span>
+          <span class="review-list-detail">
+            Tech: ${val(`technologiesUsed${i}`)}<br>
+            ${val(`summary${i}`) !== "—" ? val(`summary${i}`) : ""}
+          </span>
+        </li>
+      `;
+    });
+    projHTML += '</ul>';
+  }
   addSection("Projects", projHTML);
 
-  // Technical Skills
+  // TECHNICAL SKILLS
   addSection("Technical Skills", `
-    <p>Programming Languages: ${val("programmingLanguages")}</p>
-    <p>Frameworks/Databases: ${val("frameworksDatabases")}</p>
-    <p>Tools: ${val("tools")}</p>
-    <p>Web Development: ${val("webDevelopment")}</p>
-    <p>Multimedia: ${val("multimedia")}</p>
-    <p>Network: ${val("network")}</p>
-    <p>Operating Systems: ${val("operatingSystems")}</p>
+    <ul class="review-list">
+      <li><span class="review-list-title">Programming:</span>
+          <span class="review-list-detail">${val("programmingLanguages")}</span>
+      </li>
+      <li><span class="review-list-title">Frameworks/Databases:</span>
+          <span class="review-list-detail">${val("frameworksDatabases")}</span>
+      </li>
+      <li><span class="review-list-title">Tools:</span>
+          <span class="review-list-detail">${val("tools")}</span>
+      </li>
+      <li><span class="review-list-title">Web Development:</span>
+          <span class="review-list-detail">${val("webDevelopment")}</span>
+      </li>
+      <li><span class="review-list-title">Multimedia:</span>
+          <span class="review-list-detail">${val("multimedia")}</span>
+      </li>
+      <li><span class="review-list-title">Network:</span>
+          <span class="review-list-detail">${val("network")}</span>
+      </li>
+      <li><span class="review-list-title">Operating Systems:</span>
+          <span class="review-list-detail">${val("operatingSystems")}</span>
+      </li>
+    </ul>
   `);
 
-  // Languages
+  // LANGUAGES
   let langHTML = "";
-  document.querySelectorAll("#languagesContainer .language-entry").forEach((_, idx) => {
-    const i = idx + 1;
-    const name = val(`language${i}`);
-    const prof = val(`proficiency${i}`);
-    if (name !== "N/A" || prof !== "N/A") langHTML += `<li>${name}${prof !== "N/A" ? " – " + prof : ""}</li>`;
-  });
-  addSection("Languages", langHTML ? `<ul>${langHTML}</ul>` : "");
+  const langEntries = document.querySelectorAll("#languagesContainer .language-entry");
+  if (langEntries.length) {
+    langHTML += '<ul class="review-list">';
+    langEntries.forEach((_, idx) => {
+      const i = idx + 1;
+      const name = val(`language${i}`);
+      const prof = val(`proficiency${i}`);
+      if (name !== "—" || prof !== "—")
+        langHTML += `<li>
+          <span class="review-list-title">${name}</span>
+          <span class="review-list-detail">${prof}</span>
+        </li>`;
+    });
+    langHTML += '</ul>';
+  }
+  addSection("Languages", langHTML);
 
-  // Community
+  // COMMUNITY INVOLVEMENT
   let commHTML = "";
-  document.querySelectorAll("#communityContainer .community-entry").forEach((_, idx) => {
-    const i = idx + 1;
-    commHTML += `<p><strong>${val(`communityPosition${i}`)}</strong> at ${val(`communityOrg${i}`)}<br>
-      ${val(`communityStartDate${i}`)} to ${val(`communityEndDate${i}`)}<br>
-      ${val(`communityAccomplishment${i}`)}</p>`;
-  });
+  const commEntries = document.querySelectorAll("#communityContainer .community-entry");
+  if (commEntries.length) {
+    commHTML += '<ul class="review-list">';
+    commEntries.forEach((_, idx) => {
+      const i = idx + 1;
+      commHTML += `
+        <li>
+          <span class="review-list-title">${val(`communityPosition${i}`)}</span>
+          <span class="review-list-detail">
+            at ${val(`communityOrg${i}`)}<br>
+            ${val(`communityStartDate${i}`)} – ${val(`communityEndDate${i}`)}
+            ${val(`communityAccomplishment${i}`) !== "—" ? "<br>" + val(`communityAccomplishment${i}`) : ""}
+          </span>
+        </li>
+      `;
+    });
+    commHTML += '</ul>';
+  }
   addSection("Community Involvement", commHTML);
 
-  // Awards
+  // AWARDS
   let awardHTML = "";
-  document.querySelectorAll("#awardsContainer .award-entry").forEach((_, idx) => {
-    const i = idx + 1;
-    awardHTML += `<p><strong>${val(`awardName${i}`)}</strong> (${val(`awardYear${i}`)})<br>
-      ${val(`awardOrg${i}`)}<br>
-      ${val(`awardDescription${i}`)}</p>`;
-  });
+  const awardEntries = document.querySelectorAll("#awardsContainer .award-entry");
+  if (awardEntries.length) {
+    awardHTML += '<ul class="review-list">';
+    awardEntries.forEach((_, idx) => {
+      const i = idx + 1;
+      awardHTML += `
+        <li>
+          <span class="review-list-title">${val(`awardName${i}`)}</span>
+          <span class="review-list-detail">
+            (${val(`awardYear${i}`)})<br>
+            ${val(`awardOrg${i}`)}<br>
+            ${val(`awardDescription${i}`) !== "—" ? val(`awardDescription${i}`) : ""}
+          </span>
+        </li>
+      `;
+    });
+    awardHTML += '</ul>';
+  }
   addSection("Awards", awardHTML);
 
-  // References
+  // REFERENCES
   let refHTML = "";
-  document.querySelectorAll("#referencesContainer .reference-entry").forEach((_, idx) => {
-    const i = idx + 1;
-    refHTML += `<p><strong>${val(`refName${i}`)}</strong> (${val(`refPosition${i}`)})<br>
-      ${val(`refCompany${i}`)}<br>
-      Phone: ${val(`refPhone${i}`)} | Email: ${val(`refEmail${i}`)}<br>
-      Relation: ${val(`refRelation${i}`)}</p>`;
-  });
+  const refEntries = document.querySelectorAll("#referencesContainer .reference-entry");
+  if (refEntries.length) {
+    refHTML += '<ul class="review-list">';
+    refEntries.forEach((_, idx) => {
+      const i = idx + 1;
+      refHTML += `
+        <li>
+          <span class="review-list-title">${val(`refName${i}`)}</span>
+          <span class="review-list-detail">
+            ${val(`refPosition${i}`)}, ${val(`refCompany${i}`)}<br>
+            Phone: ${val(`refPhone${i}`)}<br>
+            Email: ${val(`refEmail${i}`)}<br>
+            Relation: ${val(`refRelation${i}`)}
+          </span>
+        </li>
+      `;
+    });
+    refHTML += '</ul>';
+  }
   addSection("References", refHTML);
 }
-
-      async function submitForm(e) {
-        e.preventDefault();
-        if (!validateStep(currentStep)) return; // Your validation logic
-
-        // Helper to safely get element value by id, returns "" if not found
-        function getValue(id) {
-          const el = document.getElementById(id);
-          return el ? el.value : "";
-        }
-
-        // Collect form data with top-level fields
-        const formData = {
-          name: getValue("name"),
-          surname: getValue("surname"),
-          email: getValue("email"),
-          major: getValue("major"),
-
-          educations: Array.from(
-            { length: formCounters.education },
-            (_, i) => ({
-              degree_title: getValue(`degreeTitle${i + 1}`),
-              university: getValue(`university${i + 1}`),
-              expected_graduation: getValue(`expectedGraduation${i + 1}`),
-              certificates: certificateCount[i + 1]
-                ? Array.from({ length: certificateCount[i + 1] }, (_, j) => ({
-                    certificate_title: getValue(
-                      `certificateTitle${i + 1}-${j + 1}`
-                    ),
-                    organization: getValue(`organization${i + 1}-${j + 1}`),
-                    year: getValue(`year${i + 1}-${j + 1}`),
-                  }))
-                : [],
-            })
-          ),
-
-          experiences: Array.from(
-            { length: formCounters.experience },
-            (_, i) => ({
-              position_title: getValue(`positionTitle${i + 1}`),
-              company: getValue(`company${i + 1}`),
-              dates: getValue(`dates${i + 1}`),
-              accomplishments: getValue(`accomplishments${i + 1}`),
-            })
-          ),
-
-          competencies: Array.from(
-            { length: formCounters.competency },
-            (_, i) => ({
-              competency_type: getValue(`competencyType${i + 1}`),
-              key_accomplishments: getValue(`keyAccomplishments${i + 1}`),
-            })
-          ),
-
-          projects: Array.from({ length: formCounters.project }, (_, i) => ({
-            project_title: getValue(`projectTitle${i + 1}`),
-            year: getValue(`year${i + 1}`),
-            summary: getValue(`summary${i + 1}`),
-          })),
-
-          technical_skills: {
-            programming_languages: getValue("programmingLanguages"),
-            frameworks_databases: getValue("frameworksDatabases"),
-            tools: getValue("tools"),
-          },
-
-          languages: Array.from({ length: formCounters.language }, (_, i) => ({
-            name: getValue(`languageName${i + 1}`),
-          })),
-
-          community_involvements: Array.from(
-            { length: formCounters.community },
-            (_, i) => ({
-              position_title: getValue(`communityPosition${i + 1}`),
-              organization: getValue(`communityOrg${i + 1}`),
-              start_date: getValue(`communityStartDate${i + 1}`),
-              end_date: getValue(`communityEndDate${i + 1}`),
-              achievements: getValue(`communityAchievements${i + 1}`),
-            })
-          ),
-
-          awards: Array.from({ length: formCounters.award }, (_, i) => ({
-            award_name: getValue(`awardName${i + 1}`),
-            year: getValue(`awardYear${i + 1}`),
-            presenting_organization: getValue(`awardOrg${i + 1}`),
-            short_description: getValue(`awardDescription${i + 1}`),
-          })),
-
-          references: Array.from(
-            { length: formCounters.reference },
-            (_, i) => ({
-              reference_name: getValue(`refName${i + 1}`),
-              position: getValue(`refPosition${i + 1}`),
-              company: getValue(`refCompany${i + 1}`),
-              phone: getValue(`refPhone${i + 1}`),
-              email: getValue(`refEmail${i + 1}`),
-            })
-          ),
-        };
-
-        try {
-          const response = await fetch("/cv/submit/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": getCookie("csrftoken"), // If needed
-            },
-            body: JSON.stringify(formData),
-          });
-
-          if (!response.ok) throw new Error("Failed to submit CV");
-          const data = await response.json();
-          showMessage(
-            "CV submitted successfully! Downloading your PDF...",
-            "success"
-          );
-          window.location.href = data.pdf_url; // Redirect to PDF
-        } catch (error) {
-          showMessage(`Error submitting CV: ${error.message}`, "error");
-        }
-      }
 
       // Helper function to get CSRF token (if needed)
       function getCookie(name) {
