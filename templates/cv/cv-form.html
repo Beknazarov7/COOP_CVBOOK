@@ -17,6 +17,7 @@
       <div class="modal-content">
         <h2>CV Builder Form</h2>
         <div class="progress-bar" id="progressBar">
+          <div class="progress-fill" id="progressFill"></div>
           <div class="progress-step ">1</div>
           <div class="progress-step ">2</div>
           <div class="progress-step ">3</div>
@@ -41,9 +42,11 @@
             <h3>Personal Information</h3>
             <div class="row">
               <div class="form-group">
-                <label for="name">Name <span class="required">*</span></label>
-                <div class="input-group">
+                <label for="name">
                   <i class="fas fa-user"></i>
+                  Name <span class="required">*</span>
+                </label>
+                <div class="input-group"> 
                   <input
                     type="text"
                     id="name"
@@ -55,9 +58,12 @@
                 <div class="error-message">This field is required</div>
               </div>
               <div class="form-group">
-                <label for="surname">Surname <span class="required">*</span></label>
-                <div class="input-group">
+                <label for="surname">
                   <i class="fas fa-user"></i>
+                  Surname <span class="required">*</span>
+                </label>
+                <div class="input-group">
+                  
                   <input
                     type="text"
                     id="surname"
@@ -71,9 +77,9 @@
             </div>
             <div class="row">
               <div class="form-group">
-                <label for="email">Email <span class="required">*</span></label>
+                <label for="email"><i class="fas fa-envelope"></i>Email <span class="required">*</span></label>
                 <div class="input-group">
-                  <i class="fas fa-envelope"></i>
+                  
                   <input
                     type="email"
                     id="email"
@@ -85,9 +91,9 @@
                 <div class="error-message">This field is required</div>
               </div>
               <div class="form-group">
-                <label for="major">Major <span class="required">*</span></label>
+                <label for="major"><i class="fas fa-graduation-cap"></i>Major <span class="required">*</span></label>
                 <div class="input-group">
-                  <i class="fas fa-graduation-cap"></i>
+                  
                   <select id="major" name="major" required>
                     <option value="">Select Major</option>
                     <option value="Computer Science">Computer Science</option>
@@ -113,9 +119,9 @@
     <div class="education-entry">
       <div class="row">
         <div class="form-group">
-          <label for="degreeTitle1">Degree Title <span class="required">*</span></label>
+          <label for="degreeTitle1"><i class="fas fa-graduation-cap"></i>Degree Title <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-graduation-cap"></i>
+            
             <input
               type="text"
               id="degreeTitle1"
@@ -128,9 +134,9 @@
         </div>
 
         <div class="form-group">
-          <label for="university1">University <span class="required">*</span></label>
+          <label for="university1"><i class="fas fa-university"></i>University <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-university"></i>
+            
             <input
               type="text"
               id="university1"
@@ -145,9 +151,9 @@
 
       <div class="row">
         <div class="form-group">
-          <label for="universityLocation1">City & Country <span class="required">*</span></label>
+          <label for="universityLocation1"><i class="fas fa-map-marker-alt"></i>City & Country <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-map-marker-alt"></i>
+            
             <input
               type="text"
               id="universityLocation1"
@@ -163,9 +169,9 @@
 
                 <div class="row">
                   <div class="form-group">
-                    <label for="eduStartDate1">Start Date *</label>
+                    <label for="eduStartDate1"><i class="fas fa-calendar"></i>Start Date *</label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input
                         type="date"
                         id="eduStartDate1"
@@ -176,9 +182,9 @@
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
-                    <label for="eduEndDate1">End Date *</label>
+                    <label for="eduEndDate1"><i class="fas fa-calendar"></i>Expected End Date <span class="required">*</span></label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input
                         type="date"
                         id="eduEndDate1"
@@ -192,9 +198,9 @@
 
                 <div class="row">
                   <div class="form-group">
-                    <label for="gpa1">GPA (Optional)</label>
+                    <label for="gpa1"><i class="fas fa-chart-line"></i>GPA (Optional)</label>
                     <div class="input-group">
-                      <i class="fas fa-chart-line"></i>
+                      
                       <input
                         type="text"
                         id="gpa1"
@@ -204,9 +210,9 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="honours1">Honours (Optional)</label>
+                    <label for="honours1"><i class="fas fa-award"></i>Honours (Optional)</label>
                     <div class="input-group">
-                      <i class="fas fa-award"></i>
+                      
                       <input
                         type="text"
                         id="honours1"
@@ -219,9 +225,9 @@
 
                 <div class="row">
                   <div class="form-group">
-                    <label for="courses1">Relevant Courses (Optional)</label>
+                    <label for="courses1"><i class="fas fa-book"></i>Relevant Courses (Optional)</label>
                     <div class="input-group">
-                      <i class="fas fa-book"></i>
+                      
                       <textarea
                         id="courses1"
                         name="courses1"
@@ -251,9 +257,9 @@
               <div class="certificate-entry">
                 <div class="row">
                   <div class="form-group">
-                    <label for="certificateTitle1">Certificate Title</label>
+                    <label for="certificateTitle1"><i class="fas fa-certificate"></i>Certificate Title</label>
                     <div class="input-group">
-                      <i class="fas fa-certificate"></i>
+                      
                       <input
                         type="text"
                         id="certificateTitle1"
@@ -263,9 +269,9 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="certificateOrg1">Organization & Location</label>
+                    <label for="certificateOrg1"><i class="fas fa-building"></i>Organization & Location</label>
                     <div class="input-group">
-                      <i class="fas fa-building"></i>
+                      
                       <input
                         type="text"
                         id="certificateOrg1"
@@ -278,9 +284,9 @@
 
                 <div class="row">
                   <div class="form-group">
-                    <label for="certDate1">Date Obtained</label>
+                    <label for="certDate1"><i class="fas fa-calendar"></i>Date Obtained</label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input type="date" id="certDate1" name="certDate1" />
                     </div>
                   </div>
@@ -309,9 +315,9 @@
               <div class="experience-entry">
                 <div class="row">
                   <div class="form-group">
-                    <label for="positionTitle1">Position Title *</label>
+                    <label for="positionTitle1"><i class="fas fa-briefcase"></i>Position Title *</label>
                     <div class="input-group">
-                      <i class="fas fa-briefcase"></i>
+                      
                       <input
                         type="text"
                         id="positionTitle1"
@@ -323,9 +329,9 @@
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
-                    <label for="company1">Company *</label>
+                    <label for="company1"><i class="fas fa-building"></i>Company *</label>
                     <div class="input-group">
-                      <i class="fas fa-building"></i>
+                      
                       <input
                         type="text"
                         id="company1"
@@ -340,9 +346,9 @@
 
                 <div class="row">
                   <div class="form-group">
-                    <label for="location1">Location *</label>
+                    <label for="location1"><i class="fas fa-map-marker-alt"></i>Location *</label>
                     <div class="input-group">
-                      <i class="fas fa-map-marker-alt"></i>
+                      
                       <input
                         type="text"
                         id="location1"
@@ -354,9 +360,9 @@
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
-                    <label for="employmentType1">Employment Type</label>
+                    <label for="employmentType1"><i class="fas fa-clock"></i>Employment Type</label>
                     <div class="input-group">
-                      <i class="fas fa-clock"></i>
+                      
                       <select id="employmentType1" name="employmentType1">
                         <option value="">Select type</option>
                         <option value="Full-time">Full-time</option>
@@ -371,9 +377,9 @@
 
                 <div class="row">
                   <div class="form-group">
-                    <label for="expStartDate1">Start Date *</label>
+                    <label for="expStartDate1"><i class="fas fa-calendar"></i>Start Date *</label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input
                         type="date"
                         id="expStartDate1"
@@ -384,9 +390,9 @@
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
-                    <label for="expEndDate1">End Date</label>
+                    <label for="expEndDate1"><i class="fas fa-calendar"></i>End Date</label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input type="date" id="expEndDate1" name="expEndDate1" />
                       <label class="checkbox-container">
                         <input
@@ -406,9 +412,9 @@
                 <div class="accomplishments-section">
                   <h5>Key Accomplishments</h5>
                   <div class="form-group">
-                    <label for="expAccomplishment1_1">Accomplishment 1</label>
+                    <label for="expAccomplishment1_1"><i class="fas fa-star"></i>Accomplishment 1</label>
                     <div class="input-group">
-                      <i class="fas fa-star"></i>
+                      
                       <textarea
                         id="expAccomplishment1_1"
                         name="expAccomplishment1_1"
@@ -417,9 +423,9 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="expAccomplishment1_2">Accomplishment 2</label>
+                    <label for="expAccomplishment1_2"><i class="fas fa-star"></i>Accomplishment 2</label>
                     <div class="input-group">
-                      <i class="fas fa-star"></i>
+                      
                       <textarea
                         id="expAccomplishment1_2"
                         name="expAccomplishment1_2"
@@ -428,9 +434,9 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="expAccomplishment1_3">Accomplishment 3</label>
+                    <label for="expAccomplishment1_3"><i class="fas fa-star"></i>Accomplishment 3</label>
                     <div class="input-group">
-                      <i class="fas fa-star"></i>
+                      
                       <textarea
                         id="expAccomplishment1_3"
                         name="expAccomplishment1_3"
@@ -460,9 +466,9 @@
             <h3>Professional Competencies</h3>
             <div class="row">
               <div class="form-group">
-                <label for="competencyType">Competency Type</label>
+                <label for="competencyType"><i class="fas fa-user-cog"></i>Competency Type</label>
                 <div class="input-group">
-                  <i class="fas fa-user-cog"></i>
+                  
                   <input
                     type="text"
                     id="competencyType"
@@ -474,9 +480,9 @@
             </div>
             <div class="row">
               <div class="form-group">
-                <label for="compAccomplishment1">Accomplishment 1</label>
+                <label for="compAccomplishment1"><i class="fas fa-check-circle"></i>Accomplishment 1</label>
                 <div class="input-group">
-                  <i class="fas fa-check-circle"></i>
+                  
                   <textarea
                     id="compAccomplishment1"
                     name="compAccomplishment1"
@@ -485,9 +491,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="compAccomplishment2">Accomplishment 2</label>
+                <label for="compAccomplishment2"><i class="fas fa-check-circle"></i>Accomplishment 2</label>
                 <div class="input-group">
-                  <i class="fas fa-check-circle"></i>
+                  
                   <textarea
                     id="compAccomplishment2"
                     name="compAccomplishment2"
@@ -498,9 +504,9 @@
             </div>
             <div class="row">
               <div class="form-group">
-                <label for="compAccomplishment3">Accomplishment 3</label>
+                <label for="compAccomplishment3"><i class="fas fa-check-circle"></i>Accomplishment 3</label>
                 <div class="input-group">
-                  <i class="fas fa-check-circle"></i>
+                  
                   <textarea
                     id="compAccomplishment3"
                     name="compAccomplishment3"
@@ -518,9 +524,9 @@
               <div class="project-entry" id="project-1">
                 <div class="row">
                   <div class="form-group">
-                    <label for="projectTitle1">Project Title *</label>
+                    <label for="projectTitle1"><i class="fas fa-project-diagram"></i>Project Title *</label>
                     <div class="input-group">
-                      <i class="fas fa-project-diagram"></i>
+                      
                       <input
                         type="text"
                         id="projectTitle1"
@@ -529,12 +535,12 @@
                         placeholder="Enter project title"
                       />
                     </div>
-                    <div class="error-message">This field is required</div>
+                    <div class="error-message"><i class="fas fa-calendar"></i>This field is required</div>
                   </div>
                   <div class="form-group">
                     <label for="year1">Year *</label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input
                         type="text"
                         id="year1"
@@ -548,9 +554,9 @@
                 </div>
                 <div class="row">
   <div class="form-group">
-    <label for="technologiesUsed1">Technologies Used <span class="required">*</span></label>
+    <label for="technologiesUsed1"><i class="fas fa-tools"></i>Technologies Used <span class="required">*</span></label>
     <div class="input-group">
-      <i class="fas fa-tools"></i>
+      
       <input
         type="text"
         id="technologiesUsed1"
@@ -565,9 +571,9 @@
 
 <div class="row">
   <div class="form-group">
-    <label for="summary1">Summary</label>
+    <label for="summary1"><i class="fas fa-list"></i>Summary</label>
     <div class="input-group">
-      <i class="fas fa-list"></i>
+      
       <textarea
         id="summary1"
         name="summary1"
@@ -597,9 +603,9 @@
             <h3>Technical Skills</h3>
             <div class="row">
               <div class="form-group">
-                <label for="programmingLanguages">Programming Languages</label>
+                <label for="programmingLanguages"><i class="fas fa-code"></i>Programming Languages</label>
                 <div class="input-group">
-                  <i class="fas fa-code"></i>
+                  
                   <input
                     type="text"
                     id="programmingLanguages"
@@ -609,9 +615,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="frameworksDatabases">Frameworks & Databases</label>
+                <label for="frameworksDatabases"><i class="fas fa-database"></i>Frameworks & Databases</label>
                 <div class="input-group">
-                  <i class="fas fa-database"></i>
+                  
                   <input
                     type="text"
                     id="frameworksDatabases"
@@ -624,9 +630,9 @@
 
             <div class="row">
               <div class="form-group">
-                <label for="tools">Tools</label>
+                <label for="tools"><i class="fas fa-tools"></i>Tools</label>
                 <div class="input-group">
-                  <i class="fas fa-tools"></i>
+                  
                   <input
                     type="text"
                     id="tools"
@@ -636,9 +642,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="webDevelopment">Web Development</label>
+                <label for="webDevelopment"><i class="fas fa-laptop-code"></i>Web Development</label>
                 <div class="input-group">
-                  <i class="fas fa-laptop-code"></i>
+                  
                   <input
                     type="text"
                     id="webDevelopment"
@@ -651,9 +657,9 @@
 
             <div class="row">
               <div class="form-group">
-                <label for="multimedia">Multimedia</label>
+                <label for="multimedia"><i class="fas fa-photo-video"></i>Multimedia</label>
                 <div class="input-group">
-                  <i class="fas fa-photo-video"></i>
+                  
                   <input
                     type="text"
                     id="multimedia"
@@ -663,9 +669,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="network">Network</label>
+                <label for="network"><i class="fas fa-network-wired"></i>Network</label>
                 <div class="input-group">
-                  <i class="fas fa-network-wired"></i>
+                  
                   <input
                     type="text"
                     id="network"
@@ -678,9 +684,9 @@
 
             <div class="row">
               <div class="form-group">
-                <label for="operatingSystems">Operating Systems</label>
+                <label for="operatingSystems"><i class="fas fa-desktop"></i>Operating Systems</label>
                 <div class="input-group">
-                  <i class="fas fa-desktop"></i>
+                  
                   <input
                     type="text"
                     id="operatingSystems"
@@ -699,9 +705,9 @@
               <div class="language-entry">
                 <div class="row">
                   <div class="form-group">
-                    <label for="language1">Language</label>
+                    <label for="language1"><i class="fas fa-language"></i>Language</label>
                     <div class="input-group">
-                      <i class="fas fa-language"></i>
+                      
                       <input
                         type="text"
                         id="language1"
@@ -711,9 +717,9 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="proficiency1">Proficiency Level</label>
+                    <label for="proficiency1"><i class="fas fa-star"></i>Proficiency Level</label>
                     <div class="input-group">
-                      <i class="fas fa-star"></i>
+                      
                       <select id="proficiency1" name="proficiency1">
                         <option value="">Select level</option>
                         <option value="Native">Native</option>
@@ -747,9 +753,9 @@
               <div class="community-entry">
                 <div class="row">
                   <div class="form-group">
-                    <label for="communityPosition1">Position Title</label>
+                    <label for="communityPosition1"><i class="fas fa-handshake"></i>Position Title</label>
                     <div class="input-group">
-                      <i class="fas fa-handshake"></i>
+                      
                       <input
                         type="text"
                         id="communityPosition1"
@@ -760,10 +766,10 @@
                   </div>
                   <div class="form-group">
                     <label for="communityOrg1"
-                      >Organization, City, Country</label
+                      ><i class="fas fa-building"></i>Organization, City, Country</label
                     >
                     <div class="input-group">
-                      <i class="fas fa-building"></i>
+                      
                       <input
                         type="text"
                         id="communityOrg1"
@@ -775,9 +781,9 @@
                 </div>
                 <div class="row">
                   <div class="form-group">
-                    <label for="communityStartDate1">Start Date</label>
+                    <label for="communityStartDate1"><i class="fas fa-calendar"></i>Start Date</label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input
                         type="date"
                         id="communityStartDate1"
@@ -786,9 +792,9 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="communityEndDate1">End Date</label>
+                    <label for="communityEndDate1"><i class="fas fa-calendar"></i>End Date</label>
                     <div class="input-group">
-                      <i class="fas fa-calendar"></i>
+                      
                       <input
                         type="date"
                         id="communityEndDate1"
@@ -798,9 +804,9 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="communityAccomplishment1">Accomplishment</label>
+                  <label for="communityAccomplishment1"><i class="fas fa-check-circle"></i>Accomplishment</label>
                   <div class="input-group">
-                    <i class="fas fa-check-circle"></i>
+                    
                     <textarea
                       id="communityAccomplishment1"
                       name="communityAccomplishment1"
@@ -830,9 +836,9 @@
     <div class="award-entry">
       <div class="row">
         <div class="form-group">
-          <label for="awardName1">Award Name</label>
+          <label for="awardName1"><i class="fas fa-trophy"></i>Award Name</label>
           <div class="input-group">
-            <i class="fas fa-trophy"></i>
+            
             <input
               type="text"
               id="awardName1"
@@ -842,9 +848,9 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="awardYear1">Year</label>
+          <label for="awardYear1"><i class="fas fa-calendar-alt"></i>Year</label>
           <div class="input-group">
-            <i class="fas fa-calendar-alt"></i>
+            
             <input
               type="number"
               id="awardYear1"
@@ -859,9 +865,9 @@
 
       <div class="row">
         <div class="form-group">
-          <label for="awardOrg1">Presenting Organization</label>
+          <label for="awardOrg1"><i class="fas fa-building"></i>Presenting Organization</label>
           <div class="input-group">
-            <i class="fas fa-building"></i>
+            
             <input
               type="text"
               id="awardOrg1"
@@ -871,9 +877,9 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="awardDescription1">Short Description</label>
+          <label for="awardDescription1"><i class="fas fa-align-left"></i>Short Description</label>
           <div class="input-group">
-            <i class="fas fa-align-left"></i>
+            
             <textarea
               id="awardDescription1"
               name="awardDescription1"
@@ -902,9 +908,9 @@
     <div class="reference-entry">
       <div class="row">
         <div class="form-group">
-          <label for="refName1">Reference Name <span class="required">*</span></label>
+          <label for="refName1"><i class="fas fa-user"></i>Reference Name <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-user"></i>
+            
             <input
               type="text"
               id="refName1"
@@ -916,9 +922,9 @@
           <div class="error-message">This field is required</div>
         </div>
         <div class="form-group">
-          <label for="refPosition1">Position <span class="required">*</span></label>
+          <label for="refPosition1"><i class="fas fa-user-tag"></i>Position <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-user-tag"></i>
+            
             <input
               type="text"
               id="refPosition1"
@@ -933,9 +939,9 @@
 
       <div class="row">
         <div class="form-group">
-          <label for="refCompany1">Company <span class="required">*</span></label>
+          <label for="refCompany1"><i class="fas fa-building"></i>Company <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-building"></i>
+            
             <input
               type="text"
               id="refCompany1"
@@ -947,9 +953,9 @@
           <div class="error-message">This field is required</div>
         </div>
         <div class="form-group">
-          <label for="refPhone1">Phone <span class="required">*</span></label>
+          <label for="refPhone1"><i class="fas fa-phone"></i>Phone <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-phone"></i>
+            
             <input
               type="tel"
               id="refPhone1"
@@ -964,9 +970,9 @@
 
       <div class="row">
         <div class="form-group">
-          <label for="refEmail1">Email <span class="required">*</span></label>
+          <label for="refEmail1"><i class="fas fa-envelope"></i>Email <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-envelope"></i>
+            
             <input
               type="email"
               id="refEmail1"
@@ -979,9 +985,9 @@
         </div>
 
         <div class="form-group">
-          <label for="refRelation1">Relation to You <span class="required">*</span></label>
+          <label for="refRelation1"><i class="fas fa-user-friends"></i>Relation to You <span class="required">*</span></label>
           <div class="input-group">
-            <i class="fas fa-user-friends"></i>
+            
             <input
               type="text"
               id="refRelation1"
@@ -1033,6 +1039,7 @@
     </div>
 
     <script>
+      console.log("Yam kor kiht");
       // Global state
       let currentStep = 1;
       const totalSteps = 10;
@@ -1057,6 +1064,12 @@
         } else {
           console.error("cvFormModal not found");
         }
+        const form = document.getElementById("cvForm");
+  if (form) {
+    form.addEventListener("submit", submitForm);
+  } else {
+    console.error("cvForm not found");
+  }
       });
 
       function setupEventListeners() {
@@ -1091,9 +1104,6 @@ function showStep(step) {
     populateReview();
   }
 }
-
-
-
 
       function updateStepIndicator(step) {
         const currentStepEls = document.querySelectorAll("#currentStep");
@@ -1163,18 +1173,18 @@ function showStep(step) {
   entry.innerHTML = `
     <div class="row">
       <div class="form-group">
-        <label for="degreeTitle${count}">Degree Title <span class="required">*</span></label>
+        <label for="degreeTitle${count}"><i class="fas fa-graduation-cap"></i>Degree Title <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-graduation-cap"></i>
+          
           <input type="text" id="degreeTitle${count}" name="degreeTitle${count}" required placeholder="Enter your degree title">
         </div>
         <div class="error-message">This field is required</div>
       </div>
 
       <div class="form-group">
-        <label for="university${count}">University <span class="required">*</span></label>
+        <label for="university${count}"><i class="fas fa-university"></i>University <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-university"></i>
+          
           <input type="text" id="university${count}" name="university${count}" required placeholder="Enter your university">
         </div>
         <div class="error-message">This field is required</div>
@@ -1183,9 +1193,9 @@ function showStep(step) {
 
     <div class="row">
       <div class="form-group">
-        <label for="universityLocation${count}">City & Country <span class="required">*</span></label>
+        <label for="universityLocation${count}"><i class="fas fa-map-marker-alt"></i>City & Country <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-map-marker-alt"></i>
+          
           <input type="text" id="universityLocation${count}" name="universityLocation${count}" required placeholder="Enter city and country">
         </div>
         <div class="error-message">This field is required</div>
@@ -1194,18 +1204,19 @@ function showStep(step) {
 
     <div class="row">
       <div class="form-group">
-        <label for="eduStartDate${count}">Start Date <span class="required">*</span></label>
+        <label for="eduStartDate${count}"><i class="fas fa-calendar"></i>Start Date <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input type="date" id="eduStartDate${count}" name="eduStartDate${count}" required>
         </div>
         <div class="error-message">This field is required</div>
       </div>
 
       <div class="form-group">
-        <label for="eduEndDate${count}">End Date <span class="required">*</span></label>
+        // In addEducation()
+        <label for="eduEndDate${count}"><i class="fas fa-calendar"></i>Expected End Date <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input type="date" id="eduEndDate${count}" name="eduEndDate${count}" required>
         </div>
         <div class="error-message">This field is required</div>
@@ -1214,17 +1225,17 @@ function showStep(step) {
 
     <div class="row">
       <div class="form-group">
-        <label for="gpa${count}">GPA (Optional)</label>
+        <label for="gpa${count}"><i class="fas fa-chart-line"></i>GPA (Optional)</label>
         <div class="input-group">
-          <i class="fas fa-chart-line"></i>
+          
           <input type="text" id="gpa${count}" name="gpa${count}" placeholder="e.g., 3.8/4.0">
         </div>
       </div>
 
       <div class="form-group">
-        <label for="honours${count}">Honours (Optional)</label>
+        <label for="honours${count}"><i class="fas fa-award"></i>Honours (Optional)</label>
         <div class="input-group">
-          <i class="fas fa-award"></i>
+          
           <input type="text" id="honours${count}" name="honours${count}" placeholder="Enter your honours">
         </div>
       </div>
@@ -1232,9 +1243,9 @@ function showStep(step) {
 
     <div class="row">
       <div class="form-group">
-        <label for="courses${count}">Relevant Courses (Optional)</label>
+        <label for="courses${count}"><i class="fas fa-book"></i>Relevant Courses (Optional)</label>
         <div class="input-group">
-          <i class="fas fa-book"></i>
+          
           <textarea id="courses${count}" name="courses${count}" placeholder="Enter your relevant courses"></textarea>
         </div>
       </div>
@@ -1262,25 +1273,25 @@ function showStep(step) {
         entry.innerHTML = `
     <div class="row">
       <div class="form-group">
-        <label for="certificateTitle${count}">Certificate Title</label>
+        <label for="certificateTitle${count}"><i class="fas fa-certificate"></i>Certificate Title</label>
         <div class="input-group">
-          <i class="fas fa-certificate"></i>
+          
           <input type="text" id="certificateTitle${count}" name="certificateTitle${count}" placeholder="Enter certificate title">
         </div>
       </div>
       <div class="form-group">
-        <label for="certificateOrg${count}">Organization & Location</label>
+        <label for="certificateOrg${count}"><i class="fas fa-building"></i>Organization & Location</label>
         <div class="input-group">
-          <i class="fas fa-building"></i>
+          
           <input type="text" id="certificateOrg${count}" name="certificateOrg${count}" placeholder="Enter organization & location">
         </div>
       </div>
     </div>
     <div class="row">
       <div class="form-group">
-        <label for="certDate${count}">Year Obtained</label>
+        <label for="certDate${count}"><i class="fas fa-calendar"></i>Year Obtained</label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input type="number" id="certDate${count}" name="certDate${count}" min="1900" max="2030" placeholder="2024">
         </div>
       </div>
@@ -1317,9 +1328,9 @@ function addExperience() {
   entry.innerHTML = `
     <div class="row">
       <div class="form-group">
-        <label for="positionTitle${count}">Position Title <span class="required">*</span></label>
+        <label for="positionTitle${count}"><i class="fas fa-briefcase"></i>Position Title <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-briefcase"></i>
+          
           <input
             type="text"
             id="positionTitle${count}"
@@ -1331,9 +1342,9 @@ function addExperience() {
         <div class="error-message">This field is required</div>
       </div>
       <div class="form-group">
-        <label for="company${count}">Company <span class="required">*</span></label>
+        <label for="company${count}"><i class="fas fa-building"></i>Company <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-building"></i>
+          
           <input
             type="text"
             id="company${count}"
@@ -1348,9 +1359,9 @@ function addExperience() {
 
     <div class="row">
       <div class="form-group">
-        <label for="location${count}">Location <span class="required">*</span></label>
+        <label for="location${count}"><i class="fas fa-map-marker-alt"></i>Location <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-map-marker-alt"></i>
+          
           <input
             type="text"
             id="location${count}"
@@ -1362,9 +1373,9 @@ function addExperience() {
         <div class="error-message">This field is required</div>
       </div>
       <div class="form-group">
-        <label for="employmentType${count}">Employment Type</label>
+        <label for="employmentType${count}"><i class="fas fa-clock"></i>Employment Type</label>
         <div class="input-group">
-          <i class="fas fa-clock"></i>
+          
           <select id="employmentType${count}" name="employmentType${count}">
             <option value="">Select type</option>
             <option value="Full-time">Full-time</option>
@@ -1379,9 +1390,9 @@ function addExperience() {
 
     <div class="row">
       <div class="form-group">
-        <label for="expStartDate${count}">Start Date <span class="required">*</span></label>
+        <label for="expStartDate${count}"><i class="fas fa-calendar"></i>Start Date <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input
             type="date"
             id="expStartDate${count}"
@@ -1392,9 +1403,9 @@ function addExperience() {
         <div class="error-message">This field is required</div>
       </div>
       <div class="form-group">
-        <label for="expEndDate${count}">End Date</label>
+        <label for="expEndDate${count}"><i class="fas fa-calendar"></i>End Date</label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input type="date" id="expEndDate${count}" name="expEndDate${count}" />
           <label class="checkbox-container">
             <input
@@ -1413,9 +1424,9 @@ function addExperience() {
     <div class="accomplishments-section">
       <h5>Key Accomplishments</h5>
       <div class="form-group">
-        <label for="expAccomplishment${count}_1">Accomplishment 1</label>
+        <label for="expAccomplishment${count}_1"><i class="fas fa-star"></i>Accomplishment 1</label>
         <div class="input-group">
-          <i class="fas fa-star"></i>
+          
           <textarea
             id="expAccomplishment${count}_1"
             name="expAccomplishment${count}_1"
@@ -1424,9 +1435,9 @@ function addExperience() {
         </div>
       </div>
       <div class="form-group">
-        <label for="expAccomplishment${count}_2">Accomplishment 2</label>
+        <label for="expAccomplishment${count}_2"><i class="fas fa-star"></i>Accomplishment 2</label>
         <div class="input-group">
-          <i class="fas fa-star"></i>
+          
           <textarea
             id="expAccomplishment${count}_2"
             name="expAccomplishment${count}_2"
@@ -1435,9 +1446,9 @@ function addExperience() {
         </div>
       </div>
       <div class="form-group">
-        <label for="expAccomplishment${count}_3">Accomplishment 3</label>
+        <label for="expAccomplishment${count}_3"><i class="fas fa-star"></i>Accomplishment 3</label>
         <div class="input-group">
-          <i class="fas fa-star"></i>
+          
           <textarea
             id="expAccomplishment${count}_3"
             name="expAccomplishment${count}_3"
@@ -1540,17 +1551,17 @@ function addExperience() {
         newEntry.innerHTML = `
             <div class="row">
                 <div class="form-group">
-                    <label for="competencyType${formCounters.competency}">Competency Type *</label>
+                    <label for="competencyType${formCounters.competency}"><i class="fas fa-star"></i>Competency Type *</label>
                     <div class="input-group">
-                        <i class="fas fa-star"></i>
+                        
                         <input type="text" id="competencyType${formCounters.competency}" name="competencyType${formCounters.competency}" required placeholder="e.g., Leadership">
                     </div>
                     <div class="error-message">This field is required</div>
                 </div>
                 <div class="form-group">
-                    <label for="keyAccomplishments${formCounters.competency}">Key Accomplishments</label>
+                    <label for="keyAccomplishments${formCounters.competency}"><i class="fas fa-list"></i>Key Accomplishments</label>
                     <div class="input-group">
-                        <i class="fas fa-list"></i>
+                        
                         <textarea id="keyAccomplishments${formCounters.competency}" name="keyAccomplishments${formCounters.competency}" placeholder="Describe your accomplishments"></textarea>
                     </div>
                 </div>
@@ -1578,9 +1589,9 @@ function addExperience() {
   entry.innerHTML = `
     <div class="row">
       <div class="form-group">
-        <label for="projectTitle${count}">Project Title <span class="required">*</span></label>
+        <label for="projectTitle${count}"><i class="fas fa-project-diagram"></i>Project Title <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-project-diagram"></i>
+          
           <input
             type="text"
             id="projectTitle${count}"
@@ -1592,9 +1603,9 @@ function addExperience() {
         <div class="error-message">This field is required</div>
       </div>
       <div class="form-group">
-        <label for="year${count}">Year <span class="required">*</span></label>
+        <label for="year${count}"><i class="fas fa-calendar"></i>Year <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input
             type="text"
             id="year${count}"
@@ -1609,9 +1620,9 @@ function addExperience() {
 
     <div class="row">
       <div class="form-group">
-        <label for="technologiesUsed${count}">Technologies Used <span class="required">*</span></label>
+        <label for="technologiesUsed${count}"><i class="fas fa-tools"></i>Technologies Used <span class="required">*</span></label>
         <div class="input-group">
-          <i class="fas fa-tools"></i>
+          
           <input
             type="text"
             id="technologiesUsed${count}"
@@ -1626,9 +1637,9 @@ function addExperience() {
 
     <div class="row">
       <div class="form-group">
-        <label for="summary${count}">Summary</label>
+        <label for="summary${count}"><i class="fas fa-list"></i>Summary</label>
         <div class="input-group">
-          <i class="fas fa-list"></i>
+          
           <textarea
             id="summary${count}"
             name="summary${count}"
@@ -1668,16 +1679,16 @@ function addExperience() {
         entry.innerHTML = `
     <div class="row">
       <div class="form-group">
-        <label for="language${count}">Language</label>
+        <label for="language${count}"><i class="fas fa-language"></i>Language</label>
         <div class="input-group">
-          <i class="fas fa-language"></i>
+          
           <input type="text" id="language${count}" name="language${count}" placeholder="e.g., English">
         </div>
       </div>
       <div class="form-group">
-        <label for="proficiency${count}">Proficiency Level</label>
+        <label for="proficiency${count}"><i class="fas fa-star"></i>Proficiency Level</label>
         <div class="input-group">
-          <i class="fas fa-star"></i>
+          
           <select id="proficiency${count}" name="proficiency${count}">
             <option value="">Select level</option>
             <option value="Native">Native</option>
@@ -1736,40 +1747,40 @@ function addExperience() {
         entry.innerHTML = `
     <div class="row">
       <div class="form-group">
-        <label for="communityPosition${count}">Position Title</label>
+        <label for="communityPosition${count}"><i class="fas fa-handshake"></i>Position Title</label>
         <div class="input-group">
-          <i class="fas fa-handshake"></i>
+          
           <input type="text" id="communityPosition${count}" name="communityPosition${count}" placeholder="Enter position title">
         </div>
       </div>
       <div class="form-group">
-        <label for="communityOrg${count}">Organization, City, Country</label>
+        <label for="communityOrg${count}"><i class="fas fa-building"></i>Organization, City, Country</label>
         <div class="input-group">
-          <i class="fas fa-building"></i>
+          
           <input type="text" id="communityOrg${count}" name="communityOrg${count}" placeholder="Enter organization details">
         </div>
       </div>
     </div>
     <div class="row">
       <div class="form-group">
-        <label for="communityStartDate${count}">Start Date</label>
+        <label for="communityStartDate${count}"><i class="fas fa-calendar"></i>Start Date</label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input type="date" id="communityStartDate${count}" name="communityStartDate${count}">
         </div>
       </div>
       <div class="form-group">
-        <label for="communityEndDate${count}">End Date</label>
+        <label for="communityEndDate${count}"><i class="fas fa-calendar"></i>End Date</label>
         <div class="input-group">
-          <i class="fas fa-calendar"></i>
+          
           <input type="date" id="communityEndDate${count}" name="communityEndDate${count}">
         </div>
       </div>
     </div>
     <div class="form-group">
-      <label for="communityAccomplishment${count}">Accomplishment</label>
+      <label for="communityAccomplishment${count}"><i class="fas fa-check-circle"></i>Accomplishment</label>
       <div class="input-group">
-        <i class="fas fa-check-circle"></i>
+        
         <textarea id="communityAccomplishment${count}" name="communityAccomplishment${count}" placeholder="Enter accomplishment"></textarea>
       </div>
     </div>
@@ -1812,32 +1823,32 @@ function addExperience() {
         newEntry.innerHTML = `
     <div class="row">
       <div class="form-group">
-        <label for="awardName${count}">Award Name</label>
+        <label for="awardName${count}"><i class="fas fa-trophy"></i>Award Name</label>
         <div class="input-group">
-          <i class="fas fa-trophy"></i>
+          
           <input type="text" id="awardName${count}" name="awardName${count}" placeholder="Enter award name">
         </div>
       </div>
       <div class="form-group">
-        <label for="awardYear${count}">Year</label>
+        <label for="awardYear${count}"><i class="fas fa-calendar-alt"></i>Year</label>
         <div class="input-group">
-          <i class="fas fa-calendar-alt"></i>
+          
           <input type="number" id="awardYear${count}" name="awardYear${count}" min="1900" max="2030" placeholder="2024">
         </div>
       </div>
     </div>
     <div class="row">
       <div class="form-group">
-        <label for="awardOrg${count}">Presenting Organization</label>
+        <label for="awardOrg${count}"><i class="fas fa-building"></i>Presenting Organization</label>
         <div class="input-group">
-          <i class="fas fa-building"></i>
+          
           <input type="text" id="awardOrg${count}" name="awardOrg${count}" placeholder="Enter organization">
         </div>
       </div>
       <div class="form-group">
-        <label for="awardDescription${count}">Short Description</label>
+        <label for="awardDescription${count}"><i class="fas fa-align-left"></i>Short Description</label>
         <div class="input-group">
-          <i class="fas fa-align-left"></i>
+          
           <textarea id="awardDescription${count}" name="awardDescription${count}" placeholder="Enter description"></textarea>
         </div>
       </div>
@@ -1920,19 +1931,29 @@ function addExperience() {
         });
       }
 
-function updateProgressBar(currentStep) {
-  const steps = document.querySelectorAll('.progress-bar .progress-step');
-  steps.forEach((step, idx) => {
-    step.classList.remove('active', 'completed');
-    if (idx < currentStep - 1) {
-      step.classList.add('completed');
-    } else if (idx === currentStep - 1) {
-      step.classList.add('active');
-    }
-    // others: plain gray
+function updateProgressBar(currentStep){
+  const bar   = document.getElementById('progressBar');
+  const fill  = document.getElementById('progressFill');
+  const steps = Array.from(bar.querySelectorAll('.progress-step'));
+
+  // states
+  steps.forEach((el, i) => {
+    el.classList.toggle('active', i === currentStep - 1);
+    el.classList.toggle('completed', i <  currentStep - 1);
   });
+
+  // line width: from first dot center to current dot center
+  const first = steps[0];
+  const curr  = steps[currentStep - 1];
+
+  const firstCenter = first.offsetLeft + first.offsetWidth/2;
+  const currCenter  = curr.offsetLeft  + curr.offsetWidth/2;
+
+  fill.style.width = Math.max(0, currCenter - firstCenter) + 'px';
 }
 
+// keep in sync on resize
+window.addEventListener('resize', () => updateProgressBar(currentStep));
 
       function saveDraft() {
         showMessage("Draft saved (feature not implemented yet)", "success");
@@ -1974,6 +1995,148 @@ function updateProgressBar(currentStep) {
         }
       }
 
+      function buildCVData() {
+  // Helper to get value or empty string
+  const val = id => document.getElementById(id)?.value.trim() || "";
+
+  // Gather Education entries
+  const educations = [];
+  document.querySelectorAll("#educationContainer .education-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    educations.push({
+      degree_title: val(`degreeTitle${i}`),
+      university: val(`university${i}`),
+      university_location: val(`universityLocation${i}`),
+      start_date: val(`eduStartDate${i}`),
+      expected_graduation: val(`eduEndDate${i}`),
+      gpa: val(`gpa${i}`),
+      honours: val(`honours${i}`),
+      courses: val(`courses${i}`)
+      // certificates: [] // Add if you implement certificates
+    });
+  });
+
+  // Gather Experience entries
+  const experiences = [];
+  document.querySelectorAll("#experienceContainer .experience-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    experiences.push({
+      position_title: val(`positionTitle${i}`),
+      company: val(`company${i}`),
+      location: val(`location${i}`),
+      employment_type: val(`employmentType${i}`),
+      start_date: val(`expStartDate${i}`),
+      end_date: val(`expEndDate${i}`),
+      accomplishment1: val(`expAccomplishment${i}_1`),
+      accomplishment2: val(`expAccomplishment${i}_2`),
+      accomplishment3: val(`expAccomplishment${i}_3`)
+    });
+  });
+
+  // Gather Competency entries
+  const competencies = [];
+  document.querySelectorAll("#competencyContainer .competency-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    competencies.push({
+      competency_type: val(`competencyType${i}`),
+      key_accomplishments: val(`keyAccomplishments${i}`)
+    });
+  });
+
+  // Gather Project entries
+  const projects = [];
+  document.querySelectorAll("#projectContainer .project-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    projects.push({
+      project_title: val(`projectTitle${i}`),
+      year: val(`year${i}`),
+      technologies_used: val(`technologiesUsed${i}`),
+      summary: val(`summary${i}`)
+    });
+  });
+
+  // Gather Languages
+  const languages = [];
+  document.querySelectorAll("#languagesContainer .language-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    languages.push({
+      name: val(`language${i}`),
+      proficiency: val(`proficiency${i}`)
+    });
+  });
+
+  // Gather Community entries
+  const community_involvements = [];
+  document.querySelectorAll("#communityContainer .community-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    community_involvements.push({
+      position_title: val(`communityPosition${i}`),
+      organization: val(`communityOrg${i}`),
+      start_date: val(`communityStartDate${i}`),
+      end_date: val(`communityEndDate${i}`),
+      accomplishment: val(`communityAccomplishment${i}`)
+    });
+  });
+
+  // Gather Awards
+  const awards = [];
+  document.querySelectorAll("#awardsContainer .award-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    awards.push({
+      award_name: val(`awardName${i}`),
+      year: val(`awardYear${i}`),
+      presenting_organization: val(`awardOrg${i}`),
+      short_description: val(`awardDescription${i}`)
+    });
+  });
+
+  // Gather References
+  const references = [];
+  document.querySelectorAll("#referencesContainer .reference-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    references.push({
+      reference_name: val(`refName${i}`),
+      position: val(`refPosition${i}`),
+      company: val(`refCompany${i}`),
+      phone: val(`refPhone${i}`),
+      email: val(`refEmail${i}`),
+      relation: val(`refRelation${i}`)
+    });
+  });
+
+  // Technical Skills (single, not repeatable)
+  const technical_skills = {
+    programming_languages: val("programmingLanguages"),
+    frameworks_databases: val("frameworksDatabases"),
+    tools: val("tools"),
+    web_development: val("webDevelopment"),
+    multimedia: val("multimedia"),
+    network: val("network"),
+    operating_systems: val("operatingSystems")
+  };
+
+  // Build final data object
+  const cvData = {
+    name: val("name"),
+    surname: val("surname"),
+    email: val("email"),
+    major: val("major"),
+    educations,
+    experiences,
+    competencies,
+    projects,
+    technical_skills,
+    languages,
+    community_involvements,
+    awards,
+    references
+  };
+
+  // LOG THE DATA HERE!
+  console.log("CV data about to be sent:", cvData);
+  return cvData;
+}
+
 function populateReview() {
   const reviewInfo = document.getElementById("reviewInfo");
   if (!reviewInfo) return;
@@ -2013,7 +2176,7 @@ function populateReview() {
           <span class="review-list-title">${val(`degreeTitle${i}`)}</span>
           <span class="review-list-detail">
             ${val(`university${i}`)} • ${val(`universityLocation${i}`)}<br>
-            ${val(`eduStartDate${i}`)} – ${val(`eduEndDate${i}`)}
+            ${formatDate(val(`eduStartDate${i}`))} – ${formatDate(val(`eduEndDate${i}`))}
             ${val(`gpa${i}`) !== "—" ? " | GPA: " + val(`gpa${i}`) : ""}
             ${val(`honours${i}`) !== "—" ? " | Honours: " + val(`honours${i}`) : ""}
             ${val(`courses${i}`) !== "—" ? "<br>Courses: " + val(`courses${i}`) : ""}
@@ -2038,7 +2201,7 @@ function populateReview() {
           <span class="review-list-title">${val(`positionTitle${i}`)} at ${val(`company${i}`)}</span>
           <span class="review-list-detail">
             ${val(`location${i}`)} ${val(`employmentType${i}`) !== "—" ? " | " + val(`employmentType${i}`) : ""}<br>
-            ${val(`expStartDate${i}`)} – ${val(`expEndDate${i}`) || "Present"}
+            ${formatDate(val(`expStartDate${i}`))} – ${formatDate(val(`expEndDate${i}`)) || "Present"}
             ${bullets.length ? "<ul style='margin:4px 0 0 18px;padding:0;'>" + bullets.map(b=>`<li>${b}</li>`).join("") + "</ul>" : ""}
           </span>
         </li>
@@ -2127,7 +2290,7 @@ function populateReview() {
           <span class="review-list-title">${val(`communityPosition${i}`)}</span>
           <span class="review-list-detail">
             at ${val(`communityOrg${i}`)}<br>
-            ${val(`communityStartDate${i}`)} – ${val(`communityEndDate${i}`)}
+            ${formatDate(val(`communityStartDate${i}`))} – ${formatDate(val(`communityEndDate${i}`))}
             ${val(`communityAccomplishment${i}`) !== "—" ? "<br>" + val(`communityAccomplishment${i}`) : ""}
           </span>
         </li>
@@ -2184,22 +2347,6 @@ function populateReview() {
 }
 
       // Helper function to get CSRF token (if needed)
-      function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== "") {
-          const cookies = document.cookie.split(";");
-          for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === name + "=") {
-              cookieValue = decodeURIComponent(
-                cookie.substring(name.length + 1)
-              );
-              break;
-            }
-          }
-        }
-        return cookieValue;
-      }
       function showMessage(text, type) {
         const message = document.createElement("div");
         message.style.cssText =
@@ -2210,6 +2357,183 @@ function populateReview() {
         document.body.appendChild(message);
         setTimeout(() => message.remove(), 5000);
       }
-    </script>
+
+      function formatDate(dateString) {
+  if (!dateString) return "";
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const [year, month, day] = dateString.split("-");
+  if (!year || !month || !day) return dateString;
+  return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+async function submitForm(e) {
+  e.preventDefault();
+
+  const raw = buildCVData();                      // your rich data
+  const payload = toBackendPayload(raw);          // transform to backend schema
+  console.log("Submitting payload:", payload);
+
+  const csrftoken = getCookie("csrftoken");
+
+  try {
+    const res = await fetch("/cv/submit/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken
+      },
+      credentials: "same-origin",
+      body: JSON.stringify(payload)
+    });
+
+    // Robust parse (handle HTML error pages)
+    const text = await res.text();
+    let json = null;
+    try { json = JSON.parse(text); } catch (e) { /* non-JSON -> leave null */ }
+
+    if (!res.ok) {
+      console.error("Server error response:", text);
+      const msg = (json && (json.error || json.detail)) ? JSON.stringify(json) : text.slice(0, 500);
+      alert("Failed to submit CV: " + msg);
+      return;
+    }
+
+    console.log("Server JSON:", json);
+    if (json && json.cv_id) {
+      alert("CV submitted successfully!");
+      // window.location.href = "/cv/cards/";
+    } else {
+      alert("Unexpected response: " + (json ? JSON.stringify(json) : text.slice(0, 500)));
+    }
+  } catch (err) {
+    alert("Network error: " + err);
+  }
+}
+function pick(obj, keys) {
+  const out = {};
+  keys.forEach(k => { if (obj[k] !== undefined && obj[k] !== null) out[k] = obj[k]; });
+  return out;
+}
+
+function toBackendPayload(cvData) {
+  // ---- EDUCATIONS ----
+  // Backend accepts: degree_title, university, expected_graduation
+  const educations = (cvData.educations || []).map(e => ({
+    ...pick(e, ["degree_title", "university", "expected_graduation"]),
+    // keep certificates array for backend loop
+    certificates: (e.certificates || []).map(c =>
+      pick(c, ["certificate_title", "year", "organization"])
+    )
+  }));
+
+  // ---- EXPERIENCES ----
+  // Backend accepts: position_title, company, dates, accomplishments
+  const experiences = (cvData.experiences || []).map(x => {
+    const start = x.start_date || "";
+    const end = x.end_date || "Present";
+    const dates = (start || end) ? `${start} – ${end}` : "";
+    const bullets = [x.accomplishment1, x.accomplishment2, x.accomplishment3].filter(Boolean);
+    const accomplishments = bullets.length ? `• ${bullets.join("\n• ")}` : "";
+    return pick(
+      {
+        position_title: x.position_title || "",
+        company: x.company || "",
+        dates,
+        accomplishments
+      },
+      ["position_title", "company", "dates", "accomplishments"]
+    );
+  });
+
+  // ---- COMPETENCIES ----
+  // Backend: competency_type, key_accomplishments
+  const competencies = (cvData.competencies || []).map(c =>
+    pick(c, ["competency_type", "key_accomplishments"])
+  );
+
+  // ---- PROJECTS ----
+  // Backend: project_title, year, summary
+  const projects = (cvData.projects || []).map(p =>
+    pick(p, ["project_title", "year", "summary"])
+  );
+
+  // ---- TECHNICAL SKILLS ----
+  // Backend: programming_languages, frameworks_databases, tools
+  const ts = cvData.technical_skills || {};
+  const technical_skills = pick(ts, [
+    "programming_languages",
+    "frameworks_databases",
+    "tools"
+  ]);
+
+  // ---- LANGUAGES ----
+  // Older template showed only name; to be safe, send just name
+  const languages = (cvData.languages || []).map(l =>
+    pick(l, ["name"])
+  );
+
+  // ---- COMMUNITY ----
+  // Backend: position_title, organization, dates, achievements
+  const community_involvements = (cvData.community_involvements || []).map(ci => {
+    const start = ci.start_date || "";
+    const end = ci.end_date || "";
+    const dates = (start || end) ? `${start} – ${end}` : "";
+    return pick(
+      {
+        position_title: ci.position_title || "",
+        organization: ci.organization || "",
+        dates,
+        achievements: ci.accomplishment || ""
+      },
+      ["position_title", "organization", "dates", "achievements"]
+    );
+  });
+
+  // ---- AWARDS ----
+  // Backend: award_name, year, short_description, presenting_organization
+  const awards = (cvData.awards || []).map(a =>
+    pick(a, ["award_name", "year", "short_description", "presenting_organization"])
+  );
+
+  // ---- REFERENCES ----
+  // Backend (from error): DOES NOT accept company or relation. Use only: reference_name, position, email, phone
+  const references = (cvData.references || []).map(r =>
+    pick(r, ["reference_name", "position", "email", "phone"])
+  );
+
+  // ---- ROOT ----
+  return {
+    ...pick(cvData, ["name", "surname", "email", "major"]),
+    educations,
+    experiences,
+    competencies,
+    projects,
+    technical_skills,
+    languages,
+    community_involvements,
+    awards,
+    references
+  };
+}
+
+</script>
   </body>
 </html>
