@@ -24,6 +24,13 @@ body {
   background-color: #f9f9f9; /* default bg; CV form overrides to --bg */
 }
 
+html, body { height: 100%; }
+
+h2.form-title, 
+.modal-content > h2{
+  margin-bottom: 14px !important;
+}
+
 h1,
 h2,
 h3 {
@@ -51,28 +58,30 @@ h3 {
 .modal {
   /* lighter look; remove dark overlay effect */
   background-color: transparent;
+  background: transparent;
   display: block;
-  position: fixed;
-  inset: 0;
+  position: static !important; /* was fixed */
+  inset: auto !important; /* reset */
   z-index: 1000;
 }
 
 .modal-content {
   background-color: var(--card);
   margin: 48px auto;
-  padding: 28px 28px 90px; /* extra space for sticky footer */
+  padding: 28px 28px 28px; /* extra space for sticky footer */
   border-radius: 20px;
   max-width: 960px;
   width: min(94vw, 960px);
   min-width: 340px;
   height: auto;
-  max-height: 92vh;
-  overflow-y: auto;
+  max-height: none !important; /* allow full height */
+  overflow-y: visible !important; /* let page scroll, not modal */
   overflow-x: hidden;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  min-height: calc(100vh - 96px); /* full height minus header/footer */
 }
 
 .modal-content::-webkit-scrollbar {
@@ -81,6 +90,53 @@ h3 {
 .modal-content::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 3px;
+}
+
+/* Page background (like your screenshot) */
+.cv-big {
+  /* use your own image path */
+  background: url("/CV-Book-for-Cooperative-Department/static/cv/foto1.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  background-position: center;
+  background-attachment: fixed; /* nice parallax feel */
+}
+
+body.cv-bg {
+  /* if you keep the url in CSS, use the absolute /static path */
+  background: url("/static/cv/foto1.jpg");
+  background-size: cover;
+  background-color: transparent !important;      /* beat earlier body bg */
+}
+
+/* Page wrapper: adds breathing room and enables page-level scroll */
+.site-wrap {
+  min-height: 100svh;
+  padding: 48px 16px;
+}
+
+/* Move scroll off the form: override previous fixed modal */
+.cv-big .modal {
+  position: static !important;          /* was fixed */
+  inset: auto !important;               /* reset */
+  background: transparent !important;   /* no dark overlay */
+}
+
+/* Let the page (not the card) handle scrolling */
+.cv-big .modal-content {
+  max-height: none !important;          /* was 92vh */
+  height: auto;
+  overflow: visible !important;         /* was overflow-y:auto */
+  margin: 0 auto;            /* centered card */
+  background: rgba(255,255,255,.92);             /* readable over photo */
+  backdrop-filter: blur(3px);
+}
+
+/* Optional: soften the card on busy backgrounds */
+.cv-big .modal-content {
+  background: rgba(255,255,255,0.9);
+   border-radius: 20px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
 }
 
 h2,
@@ -182,6 +238,8 @@ h2,
   align-items: center;
   width: 100%;
   overflow: visible;
+  margin-top: 6px;
+  margin-bottom: 22px;
 }
 .progress-bar::before {
   content: "";
@@ -240,7 +298,7 @@ border-color:#22c55e; color:#fff; background:#22c55e;
 /* --- Form sections & headings --- */
 .form-step {
   display: none;
-  padding-bottom: 120px;
+  padding-bottom: 18px;
   border-top: 1px solid var(--line);
   margin-top: 18px;
   padding-top: 18px;
@@ -254,11 +312,11 @@ border-color:#22c55e; color:#fff; background:#22c55e;
   display: block;
   opacity: 1;
   transform: none;
-  padding-bottom: 20px;
+  padding-bottom: 18px;
 }
 
 .form-step h3 {
-  margin: 18px 0 8px;
+  margin: 18px 0 12px;
   font-size: 18px;
   color: var(--text);
 }
@@ -364,17 +422,25 @@ textarea:focus {
 
 /* --- Sticky footer actions --- */
 .form-navigation {
-  position: sticky;
-  bottom: -1px;
-  z-index: 2;
+position: static;          /* sticks to bottom of viewport, inside the card */
+  bottom: 0;                 
+  left: 0;
+  width: 100%;               /* take full row width */
+  margin-top: 20px;
+  padding: 10px 0;           /* align with card padding */
+
   display: flex;
+  justify-content: flex-end; /* push buttons to the right */
   gap: 12px;
-  justify-content: flex-end;
-  margin-top: 18px;
-  padding: 12px;
-  background: linear-gradient(180deg, transparent, #fff 30%);
-  border-top: 1px solid var(--line);
+
+  /* blend with the card instead of separate bar */
+  background: transparent;
+  box-shadow: none;          /* remove floating look */
+  border-radius: 0;          /* inherit card edges visually */
+  z-index: 1;                /* just above fields, not over card edges */
 }
+
+
 #prevBtn {
   background: #f3f4f6;
   color: #111827;

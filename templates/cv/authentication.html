@@ -17,29 +17,139 @@
             line-height: 1.6;
             font-family: Arial, sans-serif;
         }
-        .header {
-            background-color: #6bb9e0;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header-title {
-            color: #ffffff;
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .header-nav a {
-            color: #ffffff;
-            text-decoration: none;
-            margin-left: 20px;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-        .header-nav a:hover {
-            text-decoration: underline;
-        }
+
+        /* ====== GLOBAL PAGE LAYOUT (centers sections nicely) ====== */
+.header-title,
+.header-nav,
+.filter-section,
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.main-content { padding: 18px 24px 42px; }
+.main-heading {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1f2a44;
+  margin: 6px 0 18px;
+}
+.header {
+  background: #fff;
+  border-bottom: 2px solid #223b84; /* UCA brand line */
+}
+
+
+.header-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 24px;
+  background:#fff;
+  border-bottom:2px solid #223b84;   /* blue line like before */
+  box-shadow:none;
+}
+/* ===== LOGO ===== */
+.header-logo{
+  height:76px;         /* adjust if you want it a bit bigger/smaller */
+  width:auto;
+  object-fit:contain;
+}
+
+/* ===== NAVIGATION ===== */
+.header-nav{
+  display:flex;
+  align-items:center;
+  gap:36px;            /* spacing between links */
+  background:transparent;  /* remove blue pill */
+  padding:0;
+  border-radius:0;
+  box-shadow:none;
+  margin-left:auto;    /* push nav to the right of the logo */
+}
+
+.header-nav a{
+  color:#223b84;       /* UCA blue text */
+  font-weight:700;
+  font-size:22px;      /* big, readable like the example */
+  letter-spacing:.2px;
+  text-decoration:none;
+  line-height:1;       /* tight like the example */
+  transition:color .15s ease, opacity .15s ease;
+}
+.header-nav a:hover{
+  color:#162f6a;       /* slightly darker on hover */
+  text-decoration:underline;
+}
+@media (max-width: 768px){
+  .header-nav{
+    gap:22px;
+    flex-wrap:wrap;
+  }
+  .header-nav a{ font-size:18px; }
+}
+
+/* ------- Page width + centering (no markup changes) ------- */
+.filter-section,
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+          /* Filter Section */
+.filter-section {
+  background:#fff;             /* remove gradient */
+  border:none;                 /* remove border */
+  box-shadow:none;             /* remove card look */
+  border-radius:0;             /* square edges */
+  padding: 16px 0 10px;
+}
+.filter-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin: 6px 0 16px;
+}
+.filter-tab {
+  color: #6b7aaa;
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color .2s ease, transform .2s ease;
+}
+ .filter-tab:hover { transform: translateY(-1px); }
+.filter-tab.active { color: #3d7fe0; }
+
+.filter-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.filter-dropdowns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.dropdown, .search-bar {
+  border: 2px solid #6bb9e0;
+  background-color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #333333;
+  font-size: 14px;
+  display: flex; align-items: center; gap: 8px;
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.dropdown:focus,
+.search-bar:focus-within {
+  border-color: #4c9bd5;
+  box-shadow: 0 0 0 3px rgba(76,155,213,.18);
+  outline: none;
+}
+.search-bar i { color: #4b5563; font-size: 16px; }
+.search-bar input {
+  border: none; outline: none; background: transparent;
+  color: #333; font-size: 14px; width: 210px;
+}
         .chat-icon {
             position: fixed;
             bottom: 20px;
@@ -60,419 +170,322 @@
             background-color: #2e639f;
         }
         .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
+            display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+  padding: 0;
         }
         .student-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-            padding: 20px;
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
+  background-color: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e6ebf6;
+  box-shadow: 0 10px 22px rgba(30,58,138,.08);
+  padding: 20px;
+  text-align: center;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+}
         .student-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-            background-color: #f8fbff;
-            cursor: pointer;
-        }
-        .student-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1e3a8a;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .student-major {
-            font-size: 14px;
-            color: #555555;
-            font-style: italic;
-        }
-        .submitted-date small {
-            font-size: 12px;
-            color: #888888;
-        }
+  transform: translateY(-2px);
+  border-color: #d6e3ff;
+  box-shadow: 0 16px 32px rgba(30,58,138,.14);
+  background-color: #f8fbff;
+  text-decoration: none;
+}
+        /* ------- Card typography ------- */
+.student-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1f2a44;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  line-height: 1.15;
+}
+.student-major {
+  font-size: 15px;
+  color: #4b5563;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+        .submitted-date small { font-size: 12px; color: #6b7280; }
+
+/* ------- Small screens ------- */
+@media (max-width: 900px){
+  .search-bar input { width: 160px; }
+  .main-heading { font-size: 28px; }
+}
+@media (max-width: 640px){
+  .filter-section { padding: 14px; border-radius: 10px; }
+  .search-bar input { width: 130px; }
+  .card-container { gap: 16px; }
+}
     </style>
 </head>
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        // State management
-        const { useState, useEffect } = React;
+    const { useState, useEffect } = React;
 
-        // Navigation Component
-        const NavBar = ({ token, setToken }) => (
-            <nav className="bg-gray-800 p-4 text-white">
-                <div className="container mx-auto flex justify-between">
-                    <h1 className="text-xl font-bold">CV Management</h1>
-                    <div>
-                        {token ? (
-                            <>
-                                <button onClick={() => window.location.hash = '#cv-cards'} className="mr-4 text-white hover:text-gray-300">CV Cards</button>
-                                <button onClick={() => { localStorage.removeItem('token'); setToken(null); window.location.hash = '#login'; }} className="mr-4 text-white hover:text-gray-300">Logout</button>
-                            </>
-                        ) : (
-                            <>
-                                <button onClick={() => window.location.hash = '#signup'} className="mr-4 text-white hover:text-gray-300">Sign Up</button>
-                                <button onClick={() => window.location.hash = '#login'} className="mr-4 text-white hover:text-gray-300">Login</button>
-                            </>
-                        )}
-                    </div>
+    const NavBar = ({ token, setToken }) => (
+        <nav className="bg-gray-800 p-4 text-white">
+            <div className="container mx-auto flex justify-between">
+                <h1 className="text-xl font-bold">CV Management</h1>
+                <div>
+                    {token ? (
+                        <>
+                            <button onClick={() => window.location.hash = '#cv-cards'} className="mr-4 text-white hover:text-gray-300">CV Cards</button>
+                            <button onClick={() => { localStorage.removeItem('token'); setToken(null); window.location.hash = '#login'; }} className="mr-4 text-white hover:text-gray-300">Logout</button>
+                        </>
+                    ) : (
+                        <>
+                            <button onClick={() => window.location.hash = '#signup'} className="mr-4 text-white hover:text-gray-300">Sign Up</button>
+                            <button onClick={() => window.location.hash = '#login'} className="mr-4 text-white hover:text-gray-300">Login</button>
+                        </>
+                    )}
                 </div>
-            </nav>
-        );
+            </div>
+        </nav>
+    );
 
-        // PendingApproval Component
-        const PendingApproval = () => (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-                <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg text-center">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-4">Pending Approval</h2>
-                    <p className="text-gray-600 mb-4">Your account is awaiting admin approval. Please wait while we review your request.</p>
-                    <p className="text-gray-500">You will be notified once your account is approved.</p>
+    const PendingApproval = () => (
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+            <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg text-center">
+                <h2 className="text-3xl font-bold text-gray-800 mb-4">Pending Approval</h2>
+                <p className="text-gray-600 mb-4">Your account is awaiting admin approval. Please wait while we review your request.</p>
+                <p className="text-gray-500">You will be notified once your account is approved.</p>
+            </div>
+        </div>
+    );
+
+    const SignUp = () => {
+        const [formData, setFormData] = useState({ username: '', email: '', password: '', first_name: '', last_name: '' });
+        const [message, setMessage] = useState('');
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/signup/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+                const data = await response.json();
+                if (response.status === 201) {
+                    setMessage(data.message || 'Sign up successful. Awaiting approval.');
+                    setTimeout(() => window.location.hash = '#pending-approval', 1500);
+                } else {
+                    setMessage(data.error || 'Sign up failed.');
+                }
+            } catch (error) {
+                setMessage('An error occurred. Please try again.');
+            }
+        };
+
+        return (
+            <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
+                <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+                    <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Sign Up</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="Username" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} required />
+                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
+                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required />
+                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="First Name" value={formData.first_name} onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} />
+                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="Last Name" value={formData.last_name} onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} />
+                        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">Sign Up</button>
+                        {message && <p className={`mt-4 text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
+                    </form>
                 </div>
             </div>
         );
+    };
 
-        // SignUp Component
-        const SignUp = () => {
-            const [formData, setFormData] = useState({ username: '', email: '', password: '', first_name: '', last_name: '' });
-            const [message, setMessage] = useState('');
+    const Login = ({ setToken }) => {
+        const [formData, setFormData] = useState({ username: '', password: '' });
+        const [message, setMessage] = useState('');
 
-            const handleSubmit = async (e) => {
-                e.preventDefault();
-                try {
-                    const response = await fetch('http://localhost:8000/api/auth/signup/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData),
-                    });
-                    const data = await response.json();
-                    if (response.status === 201) {
-                        setMessage(data.message || 'Sign up successful. Awaiting approval.');
-                        setTimeout(() => window.location.hash = '#pending-approval', 1500);
-                    } else {
-                        setMessage(data.error || 'Sign up failed.');
-                    }
-                } catch (error) {
-                    setMessage('An error occurred. Please try again.');
-                }
-            };
-
-            return (
-                <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
-                    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Sign Up</h2>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="Username" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} required />
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required />
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="First Name" value={formData.first_name} onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} />
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="Last Name" value={formData.last_name} onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} />
-                            <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-200">Sign Up</button>
-                            {message && <p className={`mt-4 text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
-                        </form>
-                    </div>
-                </div>
-            );
-        };
-
-        // Login Component
-        const Login = ({ setToken }) => {
-            const [formData, setFormData] = useState({ username: '', password: '' });
-            const [message, setMessage] = useState('');
-
-            const handleSubmit = async (e) => {
-                e.preventDefault();
-                try {
-                    const response = await fetch('http://localhost:8000/api/auth/signin/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData),
-                    });
-                    const data = await response.json();
-                    if (response.status === 403) {
-                        setMessage(data.error || 'Login failed. Account pending approval.');
-                        setTimeout(() => window.location.hash = '#pending-approval', 1500);
-                    } else if (response.ok) {
-                        localStorage.setItem('token', data.access);
-                        setToken(data.access);
-                        window.location.hash = '#cv-cards';
-                    } else {
-                        setMessage(data.error || 'Login failed');
-                    }
-                } catch (error) {
-                    setMessage('An error occurred. Please try again.');
-                }
-            };
-
-            return (
-                <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
-                    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <input
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                type="text"
-                                placeholder="Username"
-                                value={formData.username}
-                                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                                required
-                            />
-                            <input
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                type="password"
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                required
-                            />
-                            <button
-                                type="submit"
-                                className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-200"
-                            >
-                                Login
-                            </button>
-                            {message && <p className="mt-4 text-center text-red-600">{message}</p>}
-                            <p className="mt-2 text-center">
-                                <a href="#password-reset" className="text-blue-600 hover:underline">
-                                    Forgot Password?
-                                </a>
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            );
-        };
-
-        // CVCards Component (Aligned with CVListView API)
-        const CVCards = ({ token }) => {
-            const [cvs, setCvs] = useState([]);
-            const [loading, setLoading] = useState(true);
-            const [error, setError] = useState(null);
-
-            useEffect(() => {
-                const fetchCVs = async () => {
-                    try {
-                        console.log('Fetching CVs with token:', token);
-                        const response = await fetch('http://localhost:8000/cv/cards/', {
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        console.log('Response status:', response.status);
-                        if (!response.ok) {
-                            throw new Error(`Failed to fetch CVs. Status: ${response.status}`);
-                        }
-                        const data = await response.json();
-                        console.log('Fetched data:', data);
-                        setCvs(data); // Directly use the array from CVListView
-                    } catch (err) {
-                        console.error('Error fetching CVs:', err.message);
-                        setError(err.message);
-                    } finally {
-                        setLoading(false);
-                    }
-                };
-
-                if (token) {
-                    fetchCVs();
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch('http://localhost:8000/api/auth/signin/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+                const data = await response.json();
+                if (response.status === 403) {
+                    setMessage(data.error || 'Login failed. Account pending approval.');
+                    setTimeout(() => window.location.hash = '#pending-approval', 1500);
+                } else if (response.ok) {
+                    localStorage.setItem('token', data.access);
+                    setToken(data.access);
+                    window.location.hash = '#cv-cards';
                 } else {
-                    window.location.hash = '#login';
-                    console.log('No token, redirecting to login');
+                    setMessage(data.error || 'Login failed');
                 }
-            }, [token]);
-
-            if (loading) {
-                return (
-                    <div className="container mx-auto p-6 flex justify-center items-center min-h-screen">
-                        <div className="text-xl">Loading CVs...</div>
-                    </div>
-                );
+            } catch (error) {
+                setMessage('An error occurred. Please try again.');
             }
-
-            if (error) {
-                return (
-                    <div className="container mx-auto p-6 flex justify-center items-center min-h-screen">
-                        <div className="text-xl text-red-600">Error: {error}</div>
-                    </div>
-                );
-            }
-
-            return (
-                <div>
-                    <header className="header">
-                        <div className="header-title">UCA University of Central Asia</div>
-                        <nav className="header-nav">
-                            <a href="#">Home Page</a>
-                            <a href="#">About Us</a>
-                            <a href="#">Majors</a>
-                        </nav>
-                    </header>
-                    <main className="main-content">
-                        <h1 className="main-heading">Student Profiles</h1>
-                        <div className="card-container">
-                            {cvs.length > 0 ? (
-                                cvs.map((cv) => (
-                                    <a href={`/cv/detail/${cv.id}/`} className="student-card" key={cv.id}>
-                                        <div className="student-name">{cv.name} {cv.surname}</div>
-                                        <div className="student-major">{cv.major || 'N/A'}</div>
-                                        <div className="submitted-date">
-                                            <small>Submitted: {new Date(cv.submitted_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</small>
-                                        </div>
-                                    </a>
-                                ))
-                            ) : (
-                                <p className="text-gray-600">No CVs available.</p>
-                            )}
-                        </div>
-                    </main>
-                    <div className="chat-icon">
-                        <i className="fas fa-comment"></i>
-                    </div>
-                </div>
-            );
         };
 
-        // PasswordReset Component
-        const PasswordReset = () => {
-            const [formData, setFormData] = useState({ email: '' });
-            const [message, setMessage] = useState('');
+        return (
+            <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
+                <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+                    <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="Username" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} required />
+                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required />
+                        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">Login</button>
+                        {message && <p className="mt-4 text-center text-red-600">{message}</p>}
+                    </form>
+                </div>
+            </div>
+        );
+    };
 
-            const handleSubmit = async (e) => {
-                e.preventDefault();
+    const CVCards = ({ token, filters }) => {
+        const [allCvs, setAllCvs] = useState([]);
+        const [cvs, setCvs] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState(null);
+
+        useEffect(() => {
+            const fetchCVs = async () => {
                 try {
-                    const response = await fetch('http://localhost:8000/api/auth/password/reset/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData),
+                    const response = await fetch('http://localhost:8000/cv/cards/', {
+                        headers: { 'Authorization': `Bearer ${token}` }
                     });
+                    if (!response.ok) throw new Error(`Failed: ${response.status}`);
                     const data = await response.json();
-                    setMessage(data.message || data.error || 'Password reset link sent');
-                } catch (error) {
-                    setMessage('An error occurred. Please try again.');
+                    setAllCvs(data);
+                    setCvs(data);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
                 }
             };
+            fetchCVs();
+        }, [token]);
 
-            return (
-                <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
-                    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Reset Password</h2>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
-                            <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-200">Send Reset Link</button>
-                            {message && <p className="mt-4 text-center text-green-600">{message}</p>}
-                        </form>
-                    </div>
+        useEffect(() => {
+            let filtered = [...allCvs];
+            if (filters.category && filters.category !== 'all') {
+                filtered = filtered.filter(cv => (cv.major || '').toLowerCase().includes(filters.category.replace('-', ' ')));
+            }
+            if (filters.country) filtered = filtered.filter(cv => (cv.country || '').toLowerCase() === filters.country.toLowerCase());
+            if (filters.language) filtered = filtered.filter(cv => (cv.language || '').toLowerCase() === filters.language.toLowerCase());
+            if (filters.techSkill) filtered = filtered.filter(cv => (cv.technical_skills || '').toLowerCase().includes(filters.techSkill.toLowerCase()));
+            if (filters.nonTechSkill) filtered = filtered.filter(cv => (cv.non_technical_skills || '').toLowerCase().includes(filters.nonTechSkill.toLowerCase()));
+            if (filters.searchTerm) filtered = filtered.filter(cv => (`${cv.name} ${cv.surname}`).toLowerCase().includes(filters.searchTerm.toLowerCase()));
+            if (filters.sortOrder === 'A-Z') filtered.sort((a,b) => a.name.localeCompare(b.name));
+            if (filters.sortOrder === 'Z-A') filtered.sort((a,b) => b.name.localeCompare(a.name));
+            setCvs(filtered);
+        }, [filters, allCvs]);
+
+        if (loading) return <div>Loading...</div>;
+        if (error) return <div>Error: {error}</div>;
+
+        return (
+            <main className="main-content">
+                <h1 className="main-heading">Student Profiles</h1>
+                <div className="card-container">
+                    {cvs.map(cv => (
+                        <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card">
+                            <div className="student-name">{cv.name} {cv.surname}</div>
+                            <div className="student-major">{cv.major || 'N/A'}</div>
+                            <div className="submitted-date">
+                                <small>Submitted: {new Date(cv.submitted_at).toLocaleDateString()}</small>
+                            </div>
+                        </a>
+                    ))}
                 </div>
-            );
-        };
+            </main>
+        );
+    };
 
-        // PasswordResetConfirm Component
-        const PasswordResetConfirm = ({ uidb64, token }) => {
-            const [formData, setFormData] = useState({ new_password: '', confirm_password: '' });
-            const [message, setMessage] = useState('');
+    const App = () => {
+        const [token, setToken] = useState(localStorage.getItem('token'));
+        const [page, setPage] = useState(window.location.hash);
+        const [filters, setFilters] = useState({ category:'all', country:'', language:'', techSkill:'', nonTechSkill:'', sortOrder:'', searchTerm:'' });
 
-            const handleSubmit = async (e) => {
-                e.preventDefault();
-                if (formData.new_password !== formData.confirm_password) {
-                    setMessage('Passwords do not match');
-                    return;
-                }
-                try {
-                    const response = await fetch(`http://localhost:8000/api/auth/password/reset/confirm/${uidb64}/${token}/`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ new_password: formData.new_password }),
-                    });
-                    const data = await response.json();
-                    setMessage(data.message || data.error || 'Password reset successful');
-                    if (response.ok) {
-                        setTimeout(() => window.location.hash = '#login', 1500);
-                    }
-                } catch (error) {
-                    setMessage('An error occurred. Please try again.');
-                }
-            };
+        useEffect(() => {
+            const onHash = () => setPage(window.location.hash);
+            window.addEventListener('hashchange', onHash);
+            return () => window.removeEventListener('hashchange', onHash);
+        }, []);
 
-            return (
-                <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
-                    <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Confirm Password Reset</h2>
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" placeholder="New Password" value={formData.new_password} onChange={(e) => setFormData({ ...formData, new_password: e.target.value })} required />
-                            <input className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" placeholder="Confirm Password" value={formData.confirm_password} onChange={(e) => setFormData({ ...formData, confirm_password: e.target.value })} required />
-                            <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition duration-200">Reset Password</button>
-                            {message && <p className="mt-4 text-center text-green-600">{message}</p>}
-                        </form>
-                    </div>
-                </div>
-            );
-        };
+        return (
+            <div>
+                {page === '#cv-cards' && token ? (
+                    <>
+                        <header className="header">
+  <div className="header-bar">
+    <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
+    {/* right side utilities (FAQs…search) go here later if you want; keep empty for now */}
+  
 
-        // App Component
-        const App = () => {
-            const [token, setToken] = useState(localStorage.getItem('token'));
-            const [resetParams, setResetParams] = useState(null);
-            const [page, setPage] = useState(window.location.hash);
+  <nav className="header-nav">
+    <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Home Page</a>
+    <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>About Us</a>
+    <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Majors</a>
+  </nav>
+  </div>
+</header>
+                        <section className="filter-section">
+                            <div className="filter-tabs">
+                                <span className={`filter-tab ${filters.category==='all'?'active':''}`} onClick={()=>setFilters({...filters,category:'all'})}>ALL</span>
+                                <span className={`filter-tab ${filters.category==='computer-science'?'active':''}`} onClick={()=>setFilters({...filters,category:'computer-science'})}>COMPUTER SCIENCE</span>
+                            </div>
+                            <div className="filter-controls">
+                                <div className="filter-dropdowns">
+                                    <select className="dropdown" onChange={e=>setFilters({...filters,country:e.target.value})}>
+                                        <option value="">COUNTRY</option>
+                                        <option value="Kyrgyzstan">Kyrgyzstan</option>
+                                        <option value="Tajikistan">Tajikistan</option>
+                                    </select>
+                                    <select className="dropdown" onChange={e=>setFilters({...filters,language:e.target.value})}>
+                                        <option value="">LANGUAGE</option>
+                                        <option value="English">English</option>
+                                        <option value="Russian">Russian</option>
+                                    </select>
+                                    <select className="dropdown" onChange={e=>setFilters({...filters,techSkill:e.target.value})}>
+                                        <option value="">TECHNICAL SKILLS</option>
+                                        <option value="Programming">Programming</option>
+                                        <option value="Data Analysis">Data Analysis</option>
+                                    </select>
+                                    <select className="dropdown" onChange={e=>setFilters({...filters,nonTechSkill:e.target.value})}>
+                                        <option value="">NON-TECHNICAL SKILLS</option>
+                                        <option value="Communication">Communication</option>
+                                        <option value="Teamwork">Teamwork</option>
+                                    </select>
+                                    <select className="dropdown" onChange={e=>setFilters({...filters,sortOrder:e.target.value})}>
+                                        <option value="">Sort</option>
+                                        <option value="A-Z">A-Z</option>
+                                        <option value="Z-A">Z-A</option>
+                                    </select>
+                                </div>
+                                <div className="filter-search-sort">
+                                    <div className="search-bar">
+                                        <i className="fas fa-search"></i>
+                                        <input type="text" placeholder="Search" onChange={e=>setFilters({...filters,searchTerm:e.target.value})}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <CVCards token={token} filters={filters}/>
+                    </>
+                ) : (
+                    <>
+                        <NavBar token={token} setToken={setToken}/>
+                        {page === '#signup' && <SignUp />}
+                        {page === '#login' && <Login setToken={setToken} />}
+                        {page === '#pending-approval' && <PendingApproval />}
+                    </>
+                )}
+            </div>
+        );
+    };
 
-            useEffect(() => {
-                const handleHashChange = () => {
-                    const hash = window.location.hash;
-                    setPage(hash);
-                    if (hash.startsWith('#password-reset-confirm/')) {
-                        const parts = hash.split('/');
-                        const uidb64 = parts[1];
-                        const token = parts[2];
-                        setResetParams({ uidb64, token });
-                    } else {
-                        setResetParams(null);
-                    }
-                };
-                
-                window.addEventListener('hashchange', handleHashChange);
-                handleHashChange();
-                
-                return () => window.removeEventListener('hashchange', handleHashChange);
-            }, []);
-
-            // Redirect to login if no token and trying to access protected route
-            useEffect(() => {
-                if (!token && (page === '#cv-cards' || page === '' || page === '#')) {
-                    window.location.hash = '#login';
-                }
-            }, [token, page]);
-
-            return (
-                <div>
-                    <NavBar token={token} setToken={setToken} />
-                    {page === '#signup' && <SignUp />}
-                    {page === '#login' && <Login setToken={setToken} />}
-                    {page === '#password-reset' && <PasswordReset />}
-                    {resetParams && <PasswordResetConfirm uidb64={resetParams.uidb64} token={resetParams.token} />}
-                    {page === '#cv-cards' && token && <CVCards token={token} />}
-                    {page === '#pending-approval' && <PendingApproval />}
-                    
-                    {/* Default route handling */}
-                    {(!page || page === '#') && token && <CVCards token={token} />}
-                    {(!page || page === '#') && !token && <Login setToken={setToken} />}
-                </div>
-            );
-        };
-
-        // Render the App
-        ReactDOM.render(<App />, document.getElementById('root'));
-    </script>
+    ReactDOM.render(<App />, document.getElementById('root'));
+</script>
 </body>
 </html>
