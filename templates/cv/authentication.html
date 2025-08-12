@@ -50,54 +50,71 @@
 
 
 .header-bar{
-  position: sticky;            /* stays visible */
-  top: 0;
-  z-index: 50;
-  background: #ffffff;
+  position: relative;                 /* lets us center the nav cleanly */
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 14px 24px;
-  border-bottom: 1px solid #e8eef8;    /* subtle divider */
-  box-shadow: 0 2px 10px rgba(17, 34, 68, 0.04);
+  padding: 14px 22px;
+  border-bottom: 1px solid #e6eef6;   /* subtle line like the mock */
+  min-height: 78px;
+  background:#fff;
+}
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
 }
 /* ===== LOGO ===== */
 .header-logo{
-  height: 60px;                /* readable wordmark */
-  width: auto;
-  flex: 0 0 auto;
-  object-fit: contain;
+  width:auto;                         /* scale to match the screenshot feel */
+  height:65px;
+  object-fit:contain;
 }
 
 /* ===== NAVIGATION ===== */
 .header-nav{
-  margin-left: auto;           /* right-align the nav block */
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 6px;                /* creates a soft group */
-  background: #f6f9ff;         /* very light brand tint */
-  border: 1px solid #e6eefb;
-  border-radius: 9999px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap: 48px;                          /* spread like the sample */
 }
 
 .header-nav a{
-  position: relative;
-  display: inline-flex;
-  align-items: center;
+  font-family: "Georgia", serif;
   font-weight: 700;
-  color: #1f2a44;
-  text-decoration: none;
-  padding: 10px 16px;
-  border-radius: 9999px;
-  line-height: 1;
-  transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+  font-size: 16px;
+  color:#1e5b73;                      /* blue-green like your palette */
+  text-decoration:none;
+  transition: color .2s ease, transform .2s ease;
+  white-space:nowrap;
 }
 
 .header-nav a:hover{
-  background: #eaf1ff;
+  color:#184b5f;
+  transform: translateY(-1px);
 }
+/* right social pills */
+.header-social{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.header-social a{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  background:#000;
+  color:#fff;
+  border-radius:50%;
+  text-decoration:none;
+  transition: transform .15s ease, opacity .15s ease;
+}
+.header-social a:hover{ transform:translateY(-1px); opacity:.9; }
+.header-social i{ font-size:16px; }
 .header-nav a:focus-visible{
   outline: none;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .25);
@@ -121,12 +138,25 @@
   transform: scaleX(1);
 }
 
-@media (max-width: 768px){
-  .header-nav{
-    gap:22px;
-    flex-wrap:wrap;
+@media (max-width: 1024px){
+  .header-nav{ gap: 28px; }
+  .header-nav a{ font-size: 18px; }
+  .header-logo{ width:72px; }
+}
+
+@media (max-width: 720px){
+  .header-bar{
+    padding: 10px 12px;
+    min-height: 64px;
   }
-  .header-nav a{ font-size:18px; }
+  .header-nav{
+    position: static;
+    transform:none;
+    margin: 8px auto 0;
+    order: 3;
+  }
+  .header-nav a{ font-size: 16px; }
+  .header-left{ gap:10px; }
 }
 
 /* ======================================
@@ -607,17 +637,28 @@
             <div>
                 {page === '#cv-cards' && token ? (
                     <>
-                        <header className="header">
+                        <header>
   <div className="header-bar">
-    <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
-    {/* right side utilities (FAQs…search) go here later if you want; keep empty for now */}
-  
+    {/* Left: logo (your PNG) + optional wordmark text */}
+    <div className="header-left">
+      <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
+      {/* If your logo already contains the words, you can delete this span */}
+    </div>
 
-  <nav className="header-nav">
-    <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Home Page</a>
-    <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>About Us</a>
-    <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Majors</a>
-  </nav>
+    {/* Center: nav (kept your class name) */}
+    <nav className="header-nav">
+      <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Home Page</a>
+      <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>About</a>
+      <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>FAQ</a>
+      <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Contacts</a>
+    </nav>
+
+    {/* Right: socials (new small block) */}
+    <div className="header-social">
+      <a href="https://www.linkedin.com/in/uca-career-opportunities/" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
+      <a href="https://www.instagram.com/uca_career_opportunities/?igshid=YmMyMTA2M2Y%3D" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
+      <a href="https://www.youtube.com/@ucacareeropportunities1011" aria-label="YouTube"><i className="fab fa-youtube"></i></a>
+    </div>
   </div>
 </header>
                         <section className="filter-section">
