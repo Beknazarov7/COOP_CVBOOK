@@ -22,6 +22,7 @@ db.sqlite3
 # Django
 staticfiles/
 media/
+static/
 
 # Logs
 *.log
@@ -35,3 +36,14 @@ media/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Node / React
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+coverage/
+build/
+dist/
