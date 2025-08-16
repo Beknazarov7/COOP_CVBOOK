@@ -481,21 +481,21 @@ position: static;          /* sticks to bottom of viewport, inside the card */
 
 /* --- Compact Review (Step 10) --- */
 #step-10 {
-  width: 100vw;
+  width: 100%;
+  max-width: 1200px; /* keeps content within form bounds */
   min-height: 78vh;
-  margin: 0;
-  padding: 0;
+  margin: 0 auto; /* center it */
+  padding: 0 16px; /* side padding inside container */
   box-sizing: border-box;
 }
 .review-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(295px, 1fr));
   gap: 20px 24px;
-  width: 97vw;
+  width: 100%;
   margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
-  max-width: 1400px;
 }
 .review-section-card {
   background: #f8faff;
@@ -529,6 +529,7 @@ position: static;          /* sticks to bottom of viewport, inside the card */
   font-size: 0.97em;
   border-bottom: 1px dashed #e3e9fa;
 }
+
 .review-list li:last-child {
   border-bottom: none;
 }
@@ -545,11 +546,12 @@ position: static;          /* sticks to bottom of viewport, inside the card */
 }
 
 @media (max-width: 700px) {
+  #step-10 {
+    padding: 0 8px;
+  }
   .review-section {
     grid-template-columns: 1fr;
     gap: 12px 0;
-    width: 99vw;
-    padding: 0 1vw;
   }
   .review-section-card {
     padding: 11px 8px 7px 10px;

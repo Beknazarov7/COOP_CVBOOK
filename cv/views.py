@@ -13,7 +13,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib.styles import getSampleStyleSheet
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .models import CVSubmission
 logger = logging.getLogger(__name__)
@@ -128,6 +128,7 @@ def generate_pdf(cv):
 
 class CVSubmitView(APIView):
     parser_classes = [JSONParser]
+    permission_classes = [AllowAny]  # Added to bypass authentication
 
     def post(self, request):
         logger.info("CVSubmitView.post called with data: %s", request.data)
