@@ -1,0 +1,803 @@
+/* =========================================================
+   GLOBAL / SHARED
+   - Base typography, colors, small utilities
+   ========================================================= */
+
+:root {
+  --bg: #f7f8fb; /* page */
+  --card: #fff; /* white surfaces */
+  --text: #2c3e50; /* headings / body */
+  --muted: #6b7280; /* helper text */
+  --line: #e5e7eb; /* dividers */
+  --primary: #3498db; /* existing brand blue */
+  --primary-strong: #2563eb; /* slightly deeper blue for focus rings */
+  --success: #22c55e;
+  --ok: #16a34a;
+  --radius: 14px;
+  --shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9; /* default bg; CV form overrides to --bg */
+}
+
+html, body { height: 100%; }
+
+h2.form-title, 
+.modal-content > h2{
+  margin-bottom: 14px !important;
+}
+
+h1,
+h2,
+h3 {
+  color: #2c3e50;
+}
+
+.required {
+  color: red;
+}
+
+.upper {
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   CV FORM PAGE  (cv-form.html)
+   - Modal container
+   - Minimal progress stepper
+   - Fields + spacing
+   - Sticky action bar
+   - Review step cards
+   ========================================================= */
+
+/* --- Page & Card --- */
+.modal {
+  /* lighter look; remove dark overlay effect */
+  background-color: transparent;
+  background: transparent;
+  display: block;
+  position: static !important; /* was fixed */
+  inset: auto !important; /* reset */
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--card);
+  margin: 48px auto;
+  padding: 28px 28px 28px; /* extra space for sticky footer */
+  border-radius: 20px;
+  max-width: 960px;
+  width: min(94vw, 960px);
+  min-width: 340px;
+  height: auto;
+  max-height: none !important; /* allow full height */
+  overflow-y: visible !important; /* let page scroll, not modal */
+  overflow-x: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: calc(100vh - 96px); /* full height minus header/footer */
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+/* Page background (like your screenshot) */
+.cv-big {
+  /* use your own image path */
+  background: url("/CV-Book-for-Cooperative-Department/static/cv/foto1.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  background-position: center;
+  background-attachment: fixed; /* nice parallax feel */
+}
+
+body.cv-bg {
+  /* if you keep the url in CSS, use the absolute /static path */
+  background: url("/static/cv/foto1.jpg");
+  background-size: cover;
+  background-color: transparent !important;      /* beat earlier body bg */
+}
+
+/* Page wrapper: adds breathing room and enables page-level scroll */
+.site-wrap {
+  min-height: 100svh;
+  padding: 48px 16px;
+}
+
+/* Move scroll off the form: override previous fixed modal */
+.cv-big .modal {
+  position: static !important;          /* was fixed */
+  inset: auto !important;               /* reset */
+  background: transparent !important;   /* no dark overlay */
+}
+
+/* Let the page (not the card) handle scrolling */
+.cv-big .modal-content {
+  max-height: none !important;          /* was 92vh */
+  height: auto;
+  overflow: visible !important;         /* was overflow-y:auto */
+  margin: 0 auto;            /* centered card */
+  background: rgba(255,255,255,.92);             /* readable over photo */
+  backdrop-filter: blur(3px);
+}
+
+/* Optional: soften the card on busy backgrounds */
+.cv-big .modal-content {
+  background: rgba(255,255,255,0.9);
+   border-radius: 20px;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+}
+
+h2,
+.form-title {
+  margin-top: 0;
+  margin-bottom: 6px;
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.form-subtitle {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* --- Stepper: thin rail + soft dots --- */
+/* ===== NEW HORIZONTAL STEPPER (namespaced) ===== */
+.new-progress{
+  position: relative !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;        /* never stack vertically */
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  overflow: visible;
+}
+
+/* kill ALL old per-step connector lines hard */
+.new-progress .progress-step::after{
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* the gray track behind */
+.new-progress::before{
+  content: "";
+  position: absolute;
+  left: calc(var(--dot,30px)/2);
+  right: calc(var(--dot,30px)/2);
+  top: 50%;
+  height: 4px;
+  background: #e5e7eb;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+/* the growing fill (behind dots) */
+.new-progress .progress-fill{
+  position: absolute;
+  left: calc(var(--dot,30px)/2);
+  top: 50%;
+  height: 4px;
+  width: 0;                             /* JS sets this */
+  background: #22c55e;
+  transform: translateY(-50%);
+  z-index: 1;
+  transition: width .25s ease;
+}
+
+/* the dots */
+.new-progress .progress-step{
+  --dot: 30px;
+  flex: 0 0 auto;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  color: #94a3b8;
+  font-weight: 700;
+  margin: 0;                            /* prevent margins causing wrap */
+  z-index: 2;                           /* above the line */
+  transition: transform .2s, border-color .2s, background .2s, color .2s;
+}
+
+.new-progress .progress-step.active{
+  border-color:#2563eb; color:#2563eb; background:#eff6ff; transform:scale(1.04);
+}
+.new-progress .progress-step.completed{
+  border-color:#22c55e; color:#fff; background:#22c55e;
+}
+
+/* if the container gets too narrow, allow horizontal scroll rather than wrapping */
+.new-progress{ overflow-x: auto; scrollbar-width: thin; }
+
+.progress-bar {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  overflow: visible;
+  margin-top: 6px;
+  margin-bottom: 22px;
+}
+.progress-bar::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--dot,30px)/2);
+  right: calc(var(--dot,30px)/2);
+  top: 50%;
+  height: 4px;
+  background: #e5e7eb;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+.progress-step {
+  --dot: 30px;
+  flex: 0 0 auto;          /* ← do not shrink */
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 2px solid #e5e7eb;
+  color: #94a3b8;
+  font-weight: 700;
+  margin: 0;               /* ← kill extra margins that can cause wrap */
+  z-index: 2; 
+}
+/* the green/blue fill line that grows; stays behind dots */
+.progress-fill{
+  position: absolute;
+  left: calc(var(--dot,30px)/2);
+  top: 50%;
+  height: 4px;
+  width: 0;                /* JS updates this */
+  background: #22c55e;
+  transform: translateY(-50%);
+  z-index: 1;
+  transition: width .25s ease;
+}
+.progress-step.active {
+border-color:#2563eb; color:#2563eb; background:#eff6ff; transform:scale(1.04);
+}
+.progress-step.completed {
+border-color:#22c55e; color:#fff; background:#22c55e;
+}
+.progress-step::after,
+.progress-step.completed::after,
+.progress-step:not(:last-child)::after {
+  content:none !important;
+  display:none !important;
+} /* hide old big bar */
+.progress-text {
+  display: none;
+} /* hide "Step X of Y" */
+
+/* --- Form sections & headings --- */
+.form-step {
+  display: none;
+  padding-bottom: 18px;
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding-top: 18px;
+}
+.form-step:first-of-type {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+.form-step.active {
+  display: block;
+  opacity: 1;
+  transform: none;
+  padding-bottom: 18px;
+}
+
+.form-step h3 {
+  margin: 18px 0 12px;
+  font-size: 18px;
+  color: var(--text);
+}
+
+/* --- Grid rows (keep your flex but tidy) --- */
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+.form-group {
+  flex: 1 1 340px;
+  max-width: 460px;
+  min-width: 240px;
+  margin-bottom: 12px;
+}
+.form-group label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group label i {
+  margin-right: 8px;
+  color: #555; /* adjust icon color */
+  font-size: 1rem;
+}
+
+/* --- Inputs: remove leading icons for clean look --- */
+.input-group {
+  display: block;
+  border: none;
+  background: transparent;
+  min-height: auto;
+  width: 100%;
+}
+.input-group i {
+  display: none !important;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 8px 0 6px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px !important;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  box-sizing: border-box;
+}
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary-strong);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.error-message {
+  display: none;
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* --- Add / Remove buttons --- */
+.add-btn,
+.remove-btn {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #475569;
+}
+.add-btn {
+  color: var(--primary-strong);
+  border-color: rgba(37, 99, 235, 0.35);
+  background: #eff6ff;
+}
+.add-btn:hover,
+.remove-btn:hover {
+  opacity: 0.9;
+}
+
+/* --- Sticky footer actions --- */
+.form-navigation {
+position: static;          /* sticks to bottom of viewport, inside the card */
+  bottom: 0;                 
+  left: 0;
+  width: 100%;               /* take full row width */
+  margin-top: 20px;
+  padding: 10px 0;           /* align with card padding */
+
+  display: flex;
+  justify-content: flex-end; /* push buttons to the right */
+  gap: 12px;
+
+  /* blend with the card instead of separate bar */
+  background: transparent;
+  box-shadow: none;          /* remove floating look */
+  border-radius: 0;          /* inherit card edges visually */
+  z-index: 1;                /* just above fields, not over card edges */
+}
+
+
+#prevBtn {
+  background: #f3f4f6;
+  color: #111827;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+#nextBtn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+#clearFormBtn {
+  background: #e5e7eb;
+  color: #111827;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+.button-submit {
+  background: var(--ok);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+
+.modal-content,
+.form-step {
+  overflow-x: hidden;
+}
+
+/* --- Compact Review (Step 10) --- */
+#step-10 {
+  width: 100%;
+  max-width: 1200px; /* keeps content within form bounds */
+  min-height: 78vh;
+  margin: 0 auto; /* center it */
+  padding: 0 16px; /* side padding inside container */
+  box-sizing: border-box;
+}
+.review-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(295px, 1fr));
+  gap: 20px 24px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+.review-section-card {
+  background: #f8faff;
+  border-radius: 12px;
+  box-shadow: 0 2px 9px rgba(60, 72, 101, 0.06);
+  padding: 17px 22px 12px 18px;
+  border: 1px solid #ebedf2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.review-section-card h4 {
+  font-size: 1.07rem;
+  font-weight: 700;
+  color: #314689;
+  margin: 0 0 9px;
+  text-align: left;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid #e3e9fa;
+  padding-bottom: 4px;
+}
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.review-list li {
+  margin: 0 0 7px;
+  padding: 6px 0 3px;
+  font-size: 0.97em;
+  border-bottom: 1px dashed #e3e9fa;
+}
+
+.review-list li:last-child {
+  border-bottom: none;
+}
+.review-list-title {
+  display: block;
+  font-weight: 600;
+  color: #25335a;
+}
+.review-list-detail {
+  display: block;
+  font-size: 0.94em;
+  color: #5469a6;
+  margin-top: 1px;
+}
+
+@media (max-width: 700px) {
+  #step-10 {
+    padding: 0 8px;
+  }
+  .review-section {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+  }
+  .review-section-card {
+    padding: 11px 8px 7px 10px;
+  }
+}
+
+body,
+#step-10,
+.review-section {
+  overflow-x: hidden !important;
+}
+
+/* =========================================================
+   CV CARDS PAGE  (cv-cards.html)
+   - Header / filters / cards
+   ========================================================= */
+
+.header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-title {
+  font-size: 24px;
+}
+.header-nav a {
+  color: white;
+  margin-left: 20px;
+  text-decoration: none;
+}
+.header-nav a:hover {
+  text-decoration: underline;
+}
+
+.filter-section {
+  padding: 20px;
+  background-color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.filter-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.filter-tab {
+  padding: 5px 15px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.filter-tab.active {
+  background-color: var(--primary);
+  color: white;
+}
+.filter-controls {
+  display: flex;
+  justify-content: space-between;
+}
+.filter-dropdowns {
+  display: flex;
+  gap: 10px;
+}
+.dropdown {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.filter-search-sort {
+  display: flex;
+  align-items: center;
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.search-bar i {
+  padding: 5px;
+  color: var(--primary);
+}
+.search-bar input {
+  border: none;
+  padding: 5px;
+  outline: none;
+  width: 200px;
+}
+
+.main-content {
+  padding: 20px;
+}
+.main-heading {
+  margin-bottom: 20px;
+}
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+.student-card {
+  background-color: #ecf0f1;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.student-card:hover {
+  background-color: #dcdde1;
+}
+.student-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.student-major {
+  color: #7f8c8d;
+}
+
+/* Card actions */
+.card-actions {
+  margin-top: 10px;
+  text-align: center;
+}
+.action-btn {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 0 5px;
+  background-color: #2ecc71;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.action-btn:hover {
+  background-color: #27ae60;
+}
+
+/* Floating chat */
+.chat-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.chat-icon:hover {
+  background-color: #c0392b;
+}
+
+/* Navigation buttons (shared) */
+.navigation {
+  margin-top: 20px;
+  text-align: center;
+}
+.nav-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.nav-btn:hover {
+  background-color: #2980b9;
+}
+
+/* =========================================================
+   CV DETAIL PAGE  (cv-detail.html)
+   - Preview helpers (used in some review/preview)
+   ========================================================= */
+
+.cv-preview {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.25;
+}
+.cv-preview h4 {
+  letter-spacing: 1px;
+  font-size: 15px;
+  margin: 22px 0 6px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 2px;
+  text-transform: uppercase;
+}
+.cv-row {
+  display: flex;
+  justify-content: space-between;
+}
+.cv-small {
+  font-size: 12px;
+  color: #444;
+}
+.cv-section-block p {
+  margin: 2px 0 4px;
+}
+.cv-bullets {
+  margin: 2px 0 8px 16px;
+  padding: 0;
+}
+.cv-bullets li {
+  margin: 0 0 2px;
+}
+.cv-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+.cv-ref-col {
+  flex: 1 1 200px;
+}
+.cv-muted {
+  color: #555;
+}
+
+/* =========================================================
+   MESSAGES / FEEDBACK (shared)
+   ========================================================= */
+
+#message {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 3px;
+  display: none;
+}
+.success {
+  background-color: #dff0d8;
+  color: #3c763d;
+  display: block;
+}
+.error {
+  background-color: #f2dede;
+  color: #a94442;
+  display: block;
+}
+
+

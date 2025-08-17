@@ -19,11 +19,6 @@ ENV/
 # SQLite database
 db.sqlite3
 
-# Django
-staticfiles/
-media/
-static/
-
 # Logs
 *.log
 

@@ -354,14 +354,15 @@ body {
 }
 
         /* ------- Card typography ------- */
-.student-name{
+.student-name {
   font-size: 1.1rem;
   font-weight: 800;
   color: #1e293b;
-  margin-bottom: 6px;
+  margin-top: 15px;     /* NEW: push name a bit down */
+  margin-bottom: 8px;   /* slightly more spacing before major */
   line-height: 1.25;
 }
-.student-major{
+.student-major {
   display: inline-block;
   background: linear-gradient(135deg,#2563eb,#1d4ed8);
   color:#fff;
@@ -369,7 +370,8 @@ body {
   border-radius: 12px;
   font-size: .78rem;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-top: 5px;     /* NEW: extra gap from name */
+  margin-bottom: 14px; /* keep some breathing room */
 }
 .submitted-date{
   position: absolute;
@@ -433,114 +435,185 @@ body {
         </div>
     );
 
-    const SignUp = () => {
-        const [formData, setFormData] = useState({ username: '', email: '', password: '', first_name: '', last_name: '' });
-        const [message, setMessage] = useState('');
+    // ===== Sign Up (full-height glass panel) =====
+const SignUp = () => { 
+  const [formData, setFormData] = React.useState({
+    username: "", email: "", password: "", first_name: "", last_name: ""
+  });
+  const [message, setMessage] = React.useState("");
 
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-            try {
-                const response = await fetch('http://localhost:8000/api/auth/signup/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData),
-                });
-                const data = await response.json();
-                if (response.status === 201) {
-                    setMessage(data.message || 'Sign up successful. Awaiting approval.');
-                    setTimeout(() => window.location.hash = '#pending-approval', 1500);
-                } else {
-                    setMessage(data.error || 'Sign up failed.');
-                }
-            } catch (error) {
-                setMessage('An error occurred. Please try again.');
-            }
-        };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/api/auth/signup/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.status === 201) {
+        setMessage(data.message || "Sign up successful. Awaiting approval.");
+        setTimeout(() => (window.location.hash = "#pending-approval"), 1500);
+      } else {
+        setMessage(data.error || "Sign up failed.");
+      }
+    } catch {
+      setMessage("An error occurred. Please try again.");
+    }
+  };
 
-        return (
-          <>
-          <header>
-        <div className="header-bar">
-          <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
-          <nav className="header-nav">
-            <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Home Page</a>
-            <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>About Us</a>
-            <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Majors</a>
-          </nav>
-        </div>
-      </header>
-            <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                    <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Sign Up</h2>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="Username" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} required />
-                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="email" placeholder="Email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
-                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required />
-                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="First Name" value={formData.first_name} onChange={(e) => setFormData({ ...formData, first_name: e.target.value })} />
-                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="Last Name" value={formData.last_name} onChange={(e) => setFormData({ ...formData, last_name: e.target.value })} />
-                        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">Sign Up</button>
-                        {message && <p className={`mt-4 text-center ${message.includes('successful') ? 'text-green-600' : 'text-red-600'}`}>{message}</p>}
-                    </form>
-                </div>
+  return (
+    <div className="relative min-h-screen">
+      <img src="/static/cv/foto1.jpg" alt=""
+           className="absolute inset-0 h-full w-full object-cover -z-10" />
+      <div className="absolute inset-0 bg-black/20 -z-10" />
+
+      <section className="fixed left-0 top-0 h-screen w-full sm:w-[460px] md:w-[500px] lg:w-[520px]
+                          border-r border-white/30 bg-white/15 backdrop-blur-xl shadow-2xl">
+        <div className="h-full flex flex-col justify-center px-6 md:px-10">
+          <div className="flex justify-center mb-6">
+            {/* Bigger logo */}
+            <img src="/static/cv/uca_logo2.png" alt="UCA" className="h-36 w-auto" />
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
+                         text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="text" placeholder="Username" required
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+            />
+            <input
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
+                         text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="email" placeholder="Email" required
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
+                           text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text" placeholder="First name"
+                value={formData.first_name}
+                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+              />
+              <input
+                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
+                           text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text" placeholder="Last name"
+                value={formData.last_name}
+                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+              />
             </div>
-            </>
-        );
-    };
+            <input
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
+                         text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="password" placeholder="Password" required
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            />
 
-    const Login = ({ setToken }) => {
-        const [formData, setFormData] = useState({ username: '', password: '' });
-        const [message, setMessage] = useState('');
+            <button type="submit"
+                    className="w-full rounded-xl bg-[#3a7ccf] py-3 text-white font-semibold shadow hover:opacity-95 transition">
+              Sign up
+            </button>
 
-        const handleSubmit = async (e) => {
-            e.preventDefault();
-            try {
-                const response = await fetch('http://localhost:8000/api/auth/signin/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData),
-                });
-                const data = await response.json();
-                if (response.status === 403) {
-                    setMessage(data.error || 'Login failed. Account pending approval.');
-                    setTimeout(() => window.location.hash = '#pending-approval', 1500);
-                } else if (response.ok) {
-                    localStorage.setItem('token', data.access);
-                    setToken(data.access);
-                    window.location.hash = '#cv-cards';
-                } else {
-                    setMessage(data.error || 'Login failed');
-                }
-            } catch (error) {
-                setMessage('An error occurred. Please try again.');
-            }
-        };
+            {message && (
+              <p className={`text-center text-sm mt-1 ${message.includes("successful") ? "text-green-600" : "text-red-600"}`}>
+                {message}
+              </p>
+            )}
+          </form>
 
-        return (
-        <>
-        <header>
-        <div className="header-bar">
-          <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
-          <nav className="header-nav">
-            <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Home Page</a>
-            <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>About Us</a>
-            <a href="#cv-cards" onClick={(e)=>e.preventDefault()}>Majors</a>
-          </nav>
+          <div className="mt-6 text-center text-sm">
+            <span className="text-white">Already have an account? </span>
+            <a href="#login" className="text-white hover:underline">Log in</a>
+          </div>
         </div>
-      </header>
-            <div className="container mx-auto p-6 flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
-                    <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="text" placeholder="Username" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} required />
-                        <input className="w-full p-3 border border-gray-300 rounded-lg" type="password" placeholder="Password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required />
-                        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">Login</button>
-                        {message && <p className="mt-4 text-center text-red-600">{message}</p>}
-                    </form>
-                </div>
-            </div>
-            </>
-        );
-    };
+      </section>
+    </div>
+  );
+};
+
+
+// ===== Login (full-height glass panel) =====
+const Login = ({ setToken }) => {
+  const [formData, setFormData] = React.useState({ username: "", password: "" });
+  const [message, setMessage] = React.useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/api/auth/signin/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.status === 403) {
+        setMessage(data.error || "Login failed. Account pending approval.");
+        setTimeout(() => (window.location.hash = "#pending-approval"), 1500);
+      } else if (response.ok) {
+        localStorage.setItem("token", data.access);
+        setToken(data.access);
+        window.location.hash = "#cv-cards";
+      } else {
+        setMessage(data.error || "Login failed");
+      }
+    } catch {
+      setMessage("An error occurred. Please try again.");
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen">
+      <img src="/static/cv/foto1.jpg" alt=""
+           className="absolute inset-0 h-full w-full object-cover -z-10" />
+      <div className="absolute inset-0 bg-black/20 -z-10" />
+
+      <section className="fixed left-0 top-0 h-screen w-full sm:w-[460px] md:w-[500px] lg:w-[520px]
+                          border-r border-white/30 bg-white/15 backdrop-blur-xl shadow-2xl">
+        <div className="h-full flex flex-col justify-center px-6 md:px-10">
+          <div className="flex justify-center mb-6">
+            <img src="/static/cv/uca_logo2.png" alt="UCA" className="h-36 w-auto" />
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
+                         text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="text" placeholder="Username" required
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+            />
+            <input
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
+                         text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="password" placeholder="Password" required
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            />
+
+            <button type="submit"
+                    className="w-full rounded-xl bg-[#3a7ccf] py-3 text-white font-semibold shadow hover:opacity-95 transition">
+              Log in
+            </button>
+
+            {message && <p className="text-center text-red-600 text-sm">{message}</p>}
+          </form>
+
+          <div className="mt-6 flex items-center justify-between text-sm">
+            <a href="#" className="text-white hover:underline">Lost password?</a>
+            <a href="#signup" className="text-white hover:underline">Create account</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
 
     const CVCards = ({ token, filters }) => {
         const [allCvs, setAllCvs] = useState([]);
@@ -720,7 +793,7 @@ body {
                     </>
                 ) : (
                     <>
-                        <NavBar token={token} setToken={setToken}/>
+                        {/* <NavBar token={token} setToken={setToken}/> */}
                         {page === '#signup' && <SignUp />}
                         {page === '#login' && <Login setToken={setToken} />}
                         {page === '#pending-approval' && <PendingApproval />}
