@@ -800,4 +800,75 @@ body,
   display: block;
 }
 
+/* ===== Result Card Styles ===== */
+.result-card {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
 
+.result-card.success {
+  background-color: #e9f9f0;
+  border: 2px solid #34c759;
+}
+
+.result-card.error {
+  background-color: #fdecea;
+  border: 2px solid #ff3b30;
+}
+
+.result-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.success .result-icon {
+  color: #34c759;
+}
+
+.error .result-icon {
+  color: #ff3b30;
+}
+
+.result-card h3 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #222;
+}
+
+.result-card p {
+  font-size: 16px;
+  color: #444;
+}
+
+.result-card button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #34c759;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #28a745;
+}
+
+.btn-danger {
+  background-color: #ff3b30;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #e22b22;
+}

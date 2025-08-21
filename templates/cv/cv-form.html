@@ -536,7 +536,7 @@
                         placeholder="Enter project title"
                       />
                     </div>
-                    <div class="error-message"><i class="fas fa-calendar"></i>This field is required</div>
+                    <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
                     <label for="year1">Year *</label>
@@ -1023,6 +1023,29 @@
               <!-- Review content will be dynamically inserted here -->
             </div>
           </div>
+<!-- STEP 11: SUBMIT SUCCESS (full-screen card) -->
+<div class="form-step" id="step-11" style="display:none">
+  <div class="result-card success">
+    <div class="result-icon">✔</div>
+    <h3>Success!</h3>
+    <p>Your CV was submitted successfully.</p>
+    <button type="button" id="successContinueBtn" class="btn-primary">
+      Create another CV
+    </button>
+  </div>
+</div>
+
+<!-- STEP 12: SUBMIT ERROR (full-screen card) -->
+<div class="form-step" id="step-12" style="display:none">
+  <div class="result-card error">
+    <div class="result-icon">✖</div>
+    <h3>Oops!</h3>
+    <p id="resultErrorText">Something went wrong. Please try again.</p>
+    <button type="button" id="errorBackBtn" class="btn-danger">
+      Back to Review
+    </button>
+  </div>
+</div>
 
           <div class="form-navigation">
             <!--<button type="button" class="save-draft-btn" id="saveDraftBtn">
@@ -1088,23 +1111,131 @@
         if (clearFormBtn) clearFormBtn.addEventListener("click", clearForm);
         if (form && submitBtn) form.addEventListener("submit", submitForm);
         else console.error("submitBtn or cvForm not found");
+
+        const successContinueBtn = document.getElementById("successContinueBtn");
+if (successContinueBtn) successContinueBtn.addEventListener("click", startNewForm);
+
+const errorBackBtn = document.getElementById("errorBackBtn");
+if (errorBackBtn) errorBackBtn.addEventListener("click", backToReview);
+
       }
+/**
+ * Show the "result step" (success or error) as a full screen step.
+ * This hides progress UI and all other steps, like a step-11/12.
+ * 
+ * @param {"success"|"error"} kind 
+ * @param {string=} message optional error text
+ */
+function showResultStep(kind, message) {
+  // Hide all steps
+  document.querySelectorAll(".form-step").forEach(s => (s.style.display = "none"));
+
+  // Hide progress UI because result steps are not part of the 10-step flow
+  const progressBarEl  = document.getElementById("progressBar");
+  const progressTextEl = document.querySelector(".progress-text");
+  if (progressBarEl)  progressBarEl.style.display  = "none";
+  if (progressTextEl) progressTextEl.style.display = "none";
+
+  // Decide which step to show
+  const successEl = document.getElementById("step-11");
+  const errorEl   = document.getElementById("step-12");
+
+  if (kind === "success" && successEl) {
+    successEl.style.display = "block";
+    // optional: scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  } else if (kind === "error" && errorEl) {
+    if (message) {
+      const msgNode = document.getElementById("resultErrorText");
+      if (msgNode) msgNode.textContent = message;
+    }
+    errorEl.style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+/** From success step: start a new form and go back to step 1 */
+function startNewForm() {
+  // Reset form
+  const form = document.getElementById("cvForm");
+  if (form) form.reset();
+
+  // Reset dynamic counters if needed
+  formCounters = {
+    education: 1,
+    experience: 1,
+    competency: 1,
+    project: 1,
+    language: 1,
+    community: 1,
+    award: 1,
+  };
+
+  // Hide result steps
+  const s11 = document.getElementById("step-11");
+  const s12 = document.getElementById("step-12");
+  if (s11) s11.style.display = "none";
+  if (s12) s12.style.display = "none";
+
+  // Return to normal progress UI and show step 1
+  const progressBarEl  = document.getElementById("progressBar");
+  const progressTextEl = document.querySelector(".progress-text");
+  if (progressBarEl)  progressBarEl.style.display  = "";
+  if (progressTextEl) progressTextEl.style.display = "";
+
+  currentStep = 1;
+  showStep(currentStep);
+}
+
+/** From error step: go back to Review (step 10) to fix things */
+function backToReview() {
+  // Hide result steps
+  const s11 = document.getElementById("step-11");
+  const s12 = document.getElementById("step-12");
+  if (s11) s11.style.display = "none";
+  if (s12) s12.style.display = "none";
+
+  // Restore progress UI
+  const progressBarEl  = document.getElementById("progressBar");
+  const progressTextEl = document.querySelector(".progress-text");
+  if (progressBarEl)  progressBarEl.style.display  = "";
+  if (progressTextEl) progressTextEl.style.display = "";
+
+  // Show Review step again
+  currentStep = totalSteps; // 10
+  showStep(currentStep);
+}
+
 
 function showStep(step) {
   // Hide all steps
   document.querySelectorAll(".form-step").forEach(s => s.style.display = "none");
+
   // Show the current step
   const currentStepElement = document.getElementById(`step-${step}`);
   if (currentStepElement) {
     currentStepElement.style.display = "block";
-    updateStepIndicator(step); // (If you use this)
-    updateProgressBar(step);   // (If you use this)
   } else {
     console.error(`Step-${step} not found`);
   }
+
+  // Toggle progress UI (bar + "Step X of 10") for review step
+  const progressBarEl  = document.getElementById("progressBar");
+  const progressTextEl = document.querySelector(".progress-text");
+
   if (step === totalSteps) {
+    if (progressBarEl)  progressBarEl.style.display  = "none";
+    if (progressTextEl) progressTextEl.style.display = "none";
+    // Build review content
     populateReview();
+  } else {
+    if (progressBarEl)  progressBarEl.style.display  = "";
+    if (progressTextEl) progressTextEl.style.display = "";
   }
+
+  // Keep your existing indicators/progress logic
+  updateStepIndicator(step);
+  updateProgressBar(step);
 }
 
       function updateStepIndicator(step) {
@@ -2386,15 +2517,21 @@ function getCookie(name) {
   return cookieValue;
 }
 
-async function submitForm(e) {
-  e.preventDefault();
+function setSubmitting(isOn) {
+  const btn = document.getElementById("submitBtn");
+  if (!btn) return;
+  btn.disabled = isOn;
+  btn.textContent = isOn ? "Submitting..." : "Submit CV";
+}
 
-  const raw = buildCVData();                      // your rich data
-  const payload = toBackendPayload(raw);          // transform to backend schema
-  console.log("Submitting payload:", payload);
+async function submitForm(event) {
+  event.preventDefault();
 
+  const raw = buildCVData();
+  const payload = toBackendPayload(raw);
   const csrftoken = getCookie("csrftoken");
 
+  setSubmitting(true);
   try {
     const res = await fetch("/cv/submit/", {
       method: "POST",
@@ -2406,29 +2543,27 @@ async function submitForm(e) {
       body: JSON.stringify(payload)
     });
 
-    // Robust parse (handle HTML error pages)
     const text = await res.text();
     let json = null;
-    try { json = JSON.parse(text); } catch (e) { /* non-JSON -> leave null */ }
+    try { json = JSON.parse(text); } catch (_) {}
 
-    if (!res.ok) {
-      console.error("Server error response:", text);
-      const msg = (json && (json.error || json.detail)) ? JSON.stringify(json) : text.slice(0, 500);
-      alert("Failed to submit CV: " + msg);
-      return;
-    }
-
-    console.log("Server JSON:", json);
-    if (json && json.cv_id) {
-      alert("CV submitted successfully!");
-      // window.location.href = "/cv/cards/";
+    if (res.ok && json && (json.cv_id || json.success)) {
+      showResultStep("success");
     } else {
-      alert("Unexpected response: " + (json ? JSON.stringify(json) : text.slice(0, 500)));
+      const message =
+        (json && (json.error || json.detail)) ||
+        text.slice(0, 300) ||
+        "Something went wrong.";
+      showResultStep("error", message);
     }
-  } catch (err) {
-    alert("Network error: " + err);
+  } catch {
+    showResultStep("error", "Network error. Please try again.");
+  } finally {
+    setSubmitting(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
+
 function pick(obj, keys) {
   const out = {};
   keys.forEach(k => { if (obj[k] !== undefined && obj[k] !== null) out[k] = obj[k]; });
