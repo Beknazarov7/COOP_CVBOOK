@@ -1032,6 +1032,7 @@
     <button type="button" id="successContinueBtn" class="btn-primary">
       Create another CV
     </button>
+    <a href="#" class="download-btn" id="downloadPdfLink" download>Download PDF</a>
   </div>
 </div>
 
@@ -2129,7 +2130,6 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
       }
 
       function buildCVData() {
-  // Helper to get value or empty string
   const val = id => document.getElementById(id)?.value.trim() || "";
 
   // Gather Education entries
@@ -2139,14 +2139,26 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
     educations.push({
       degree_title: val(`degreeTitle${i}`),
       university: val(`university${i}`),
-      university_location: val(`universityLocation${i}`),
       start_date: val(`eduStartDate${i}`),
       expected_graduation: val(`eduEndDate${i}`),
-      gpa: val(`gpa${i}`),
-      honours: val(`honours${i}`),
-      courses: val(`courses${i}`)
-      // certificates: [] // Add if you implement certificates
+      university_location: val(`universityLocation${i}`),
+      gpa: val(`gpa${i}`) || null,
+      honours: val(`honours${i}`) || null,
+      courses: val(`courses${i}`) || null,
+      certificates: []
     });
+  });
+
+  // Gather Certificates (nested under educations if needed)
+  document.querySelectorAll("#certificatesContainer .certificate-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    if (educations[idx]) {
+      educations[idx].certificates.push({
+        certificate_title: val(`certificateTitle${i}`),
+        year: val(`certDate${i}`), // Matches the date input name
+        organization: val(`certificateOrg${i}`)
+      });
+    }
   });
 
   // Gather Experience entries
@@ -2157,12 +2169,14 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
       position_title: val(`positionTitle${i}`),
       company: val(`company${i}`),
       location: val(`location${i}`),
-      employment_type: val(`employmentType${i}`),
+      employment_type: val(`employmentType${i}`) || null,
       start_date: val(`expStartDate${i}`),
-      end_date: val(`expEndDate${i}`),
-      accomplishment1: val(`expAccomplishment${i}_1`),
-      accomplishment2: val(`expAccomplishment${i}_2`),
-      accomplishment3: val(`expAccomplishment${i}_3`)
+      end_date: val(`expEndDate${i}`) || null,
+      accomplishments: [
+        val(`expAccomplishment${i}_1`),
+        val(`expAccomplishment${i}_2`),
+        val(`expAccomplishment${i}_3`)
+      ].filter(Boolean).join("\n• ") || null
     });
   });
 
@@ -2172,7 +2186,11 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
     const i = idx + 1;
     competencies.push({
       competency_type: val(`competencyType${i}`),
-      key_accomplishments: val(`keyAccomplishments${i}`)
+      key_accomplishments: [
+        val(`compAccomplishment${i}_1`),
+        val(`compAccomplishment${i}_2`),
+        val(`compAccomplishment${i}_3`)
+      ].filter(Boolean).join("\n") || null
     });
   });
 
@@ -2182,62 +2200,12 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
     const i = idx + 1;
     projects.push({
       project_title: val(`projectTitle${i}`),
-      year: val(`year${i}`),
-      technologies_used: val(`technologiesUsed${i}`),
-      summary: val(`summary${i}`)
+      year: val(`year${i}`), // Matches the HTML name
+      summary: val(`summary${i}`) || null
     });
   });
 
-  // Gather Languages
-  const languages = [];
-  document.querySelectorAll("#languagesContainer .language-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    languages.push({
-      name: val(`language${i}`),
-      proficiency: val(`proficiency${i}`)
-    });
-  });
-
-  // Gather Community entries
-  const community_involvements = [];
-  document.querySelectorAll("#communityContainer .community-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    community_involvements.push({
-      position_title: val(`communityPosition${i}`),
-      organization: val(`communityOrg${i}`),
-      start_date: val(`communityStartDate${i}`),
-      end_date: val(`communityEndDate${i}`),
-      accomplishment: val(`communityAccomplishment${i}`)
-    });
-  });
-
-  // Gather Awards
-  const awards = [];
-  document.querySelectorAll("#awardsContainer .award-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    awards.push({
-      award_name: val(`awardName${i}`),
-      year: val(`awardYear${i}`),
-      presenting_organization: val(`awardOrg${i}`),
-      short_description: val(`awardDescription${i}`)
-    });
-  });
-
-  // Gather References
-  const references = [];
-  document.querySelectorAll("#referencesContainer .reference-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    references.push({
-      reference_name: val(`refName${i}`),
-      position: val(`refPosition${i}`),
-      company: val(`refCompany${i}`),
-      phone: val(`refPhone${i}`),
-      email: val(`refEmail${i}`),
-      relation: val(`refRelation${i}`)
-    });
-  });
-
-  // Technical Skills (single, not repeatable)
+  // Gather Technical Skills
   const technical_skills = {
     programming_languages: val("programmingLanguages"),
     frameworks_databases: val("frameworksDatabases"),
@@ -2248,7 +2216,56 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
     operating_systems: val("operatingSystems")
   };
 
-  // Build final data object
+  // Gather Language entries
+  const languages = [];
+  document.querySelectorAll("#languagesContainer .language-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    languages.push({
+      name: val(`language${i}`),
+      proficiency: val(`proficiency${i}`) || null
+    });
+  });
+
+  // Gather Community Involvement entries
+  const community_involvements = [];
+  document.querySelectorAll("#communityContainer .community-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    community_involvements.push({
+      position_title: val(`communityPosition${i}`),
+      organization: val(`communityOrg${i}`),
+      start_date: val(`communityStartDate${i}`) || null,
+      end_date: val(`communityEndDate${i}`) || null,
+      achievements: val(`communityAccomplishment${i}`) || null
+    });
+  });
+
+  // Gather Award entries
+  const awards = [];
+  document.querySelectorAll("#awardsContainer .award-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    awards.push({
+      award_name: val(`awardName${i}`),
+      year: val(`awardYear${i}`) || null,
+      short_description: val(`awardDescription${i}`) || null,
+      presenting_organization: val(`awardOrg${i}`) || null
+    });
+  });
+
+  // Gather Reference entries
+  const references = [];
+  document.querySelectorAll("#referencesContainer .reference-entry").forEach((entry, idx) => {
+    const i = idx + 1;
+    references.push({
+      reference_name: val(`refName${i}`),
+      position: val(`refPosition${i}`),
+      email: val(`refEmail${i}`),
+      phone: val(`refPhone${i}`),
+      company: val(`refCompany${i}`) || null,
+      relation: val(`refRelation${i}`) || null
+    });
+  });
+
+  // Compile CV data
   const cvData = {
     name: val("name"),
     surname: val("surname"),
@@ -2265,9 +2282,8 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
     references
   };
 
-  // LOG THE DATA HERE!
-  console.log("CV data about to be sent:", cvData);
-  return cvData;
+  console.log("CV data about to be sent:", cvData); // Debug log
+  return toBackendPayload(cvData); // Call toBackendPayload with cvData
 }
 
 function populateReview() {
@@ -2548,6 +2564,11 @@ async function submitForm(event) {
     try { json = JSON.parse(text); } catch (_) {}
 
     if (res.ok && json && (json.cv_id || json.success)) {
+      // Update the download link with the received cv_id
+      const downloadLink = document.querySelector("#step-11 .download-btn");
+      if (downloadLink) {
+        downloadLink.href = `{% url 'cv-download' cv_id=0 %}`.replace("0", json.cv_id);
+      }
       showResultStep("success");
     } else {
       const message =
@@ -2563,26 +2584,23 @@ async function submitForm(event) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 }
-
+// Ensure pick function is defined
 function pick(obj, keys) {
   const out = {};
   keys.forEach(k => { if (obj[k] !== undefined && obj[k] !== null) out[k] = obj[k]; });
   return out;
 }
-
+// Ensure toBackendPayload is defined (paste the previously provided version here)
 function toBackendPayload(cvData) {
   // ---- EDUCATIONS ----
-  // Backend accepts: degree_title, university, expected_graduation
   const educations = (cvData.educations || []).map(e => ({
     ...pick(e, ["degree_title", "university", "expected_graduation"]),
-    // keep certificates array for backend loop
     certificates: (e.certificates || []).map(c =>
       pick(c, ["certificate_title", "year", "organization"])
     )
   }));
 
   // ---- EXPERIENCES ----
-  // Backend accepts: position_title, company, dates, accomplishments
   const experiences = (cvData.experiences || []).map(x => {
     const start = x.start_date || "";
     const end = x.end_date || "Present";
@@ -2601,34 +2619,33 @@ function toBackendPayload(cvData) {
   });
 
   // ---- COMPETENCIES ----
-  // Backend: competency_type, key_accomplishments
   const competencies = (cvData.competencies || []).map(c =>
     pick(c, ["competency_type", "key_accomplishments"])
   );
 
   // ---- PROJECTS ----
-  // Backend: project_title, year, summary
   const projects = (cvData.projects || []).map(p =>
     pick(p, ["project_title", "year", "summary"])
   );
 
   // ---- TECHNICAL SKILLS ----
-  // Backend: programming_languages, frameworks_databases, tools
-  const ts = cvData.technical_skills || {};
+  const ts = cvData.technical_skills || {}; // Define ts here
   const technical_skills = pick(ts, [
     "programming_languages",
     "frameworks_databases",
-    "tools"
+    "tools",
+    "web_development",
+    "multimedia",
+    "network",
+    "operating_systems"
   ]);
 
   // ---- LANGUAGES ----
-  // Older template showed only name; to be safe, send just name
   const languages = (cvData.languages || []).map(l =>
     pick(l, ["name"])
   );
 
   // ---- COMMUNITY ----
-  // Backend: position_title, organization, dates, achievements
   const community_involvements = (cvData.community_involvements || []).map(ci => {
     const start = ci.start_date || "";
     const end = ci.end_date || "";
@@ -2645,13 +2662,11 @@ function toBackendPayload(cvData) {
   });
 
   // ---- AWARDS ----
-  // Backend: award_name, year, short_description, presenting_organization
   const awards = (cvData.awards || []).map(a =>
     pick(a, ["award_name", "year", "short_description", "presenting_organization"])
   );
 
   // ---- REFERENCES ----
-  // Backend (from error): DOES NOT accept company or relation. Use only: reference_name, position, email, phone
   const references = (cvData.references || []).map(r =>
     pick(r, ["reference_name", "position", "email", "phone"])
   );
@@ -2670,6 +2685,7 @@ function toBackendPayload(cvData) {
     references
   };
 }
+
 
 </script>
   </body>

@@ -677,15 +677,20 @@ const Login = ({ setToken }) => {
     };
 
     const App = () => {
-        const [token, setToken] = useState(localStorage.getItem('token'));
-        const [page, setPage] = useState(window.location.hash);
-        const [filters, setFilters] = useState({ category:'all', country:'', language:'', techSkill:'', nonTechSkill:'', sortOrder:'', searchTerm:'' });
+    const [token, setToken] = useState(localStorage.getItem('token'));
+    const [page, setPage] = useState(window.location.hash);
+    const [filters, setFilters] = useState({ category:'all', country:'', language:'', techSkill:'', nonTechSkill:'', sortOrder:'', searchTerm:'' });
 
-        useEffect(() => {
-            const onHash = () => setPage(window.location.hash);
-            window.addEventListener('hashchange', onHash);
-            return () => window.removeEventListener('hashchange', onHash);
-        }, []);
+    useEffect(() => {
+        // Default page = #login
+        if (!window.location.hash) {
+            window.location.hash = '#login';
+        }
+
+        const onHash = () => setPage(window.location.hash);
+        window.addEventListener('hashchange', onHash);
+        return () => window.removeEventListener('hashchange', onHash);
+    }, []); 
 
         return (
             <div>

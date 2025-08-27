@@ -9,4 +9,6 @@ urlpatterns = [
     path('cv/', include('cv.urls')),
     path('api/auth/', include('authentication.urls')),
     path('', TemplateView.as_view(template_name='cv/authentication.html'), name='home'),
+    path('', include('authentication.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

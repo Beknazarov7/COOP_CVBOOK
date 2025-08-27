@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending User Management</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .btn-success { background-color: #4CAF50; color: white; border: none; }
+        .btn-danger { background-color: #f44336; color: white; border: none; }
+        .alert { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .alert-success { background-color: #dff0d8; color: #3c763d; }
+        .alert-warning { background-color: #fcf8e3; color: #8a6d3b; }
+    </style>
+</head>
+<body>
+    <h1>Pending User Management</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% if pending_users %}
+        <form method="post">
+            {% csrf_token %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Approve</th>
+                        <th>Decline</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Date Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in pending_users %}
+                        <tr>
+                            <td><input type="checkbox" name="approve" value="{{ user.id }}"></td>
+                            <td><input type="checkbox" name="decline" value="{{ user.id }}"></td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.date_joined }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-success">Accept Selected</button>
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to reject selected users?')">Reject Selected</button>
+        </form>
+    {% else %}
+        <p>No pending users at this time.</p>
+    {% endif %}
+</body>
+</html>

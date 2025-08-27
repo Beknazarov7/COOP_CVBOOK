@@ -15,8 +15,9 @@ class Education(models.Model):
     cv = models.ForeignKey(CVSubmission, on_delete=models.CASCADE, related_name='educations')
     degree_title = models.CharField(max_length=200, blank=True, default='')
     university = models.CharField(max_length=200, blank=True, default='')
+    start_date = models.CharField(max_length=50, blank=True, default='')
     expected_graduation = models.CharField(max_length=50, blank=True, default='')
-
+    university_location = models.CharField(max_length=100, blank=True, null=True)  
     def __str__(self):
         return f"{self.degree_title} at {self.university}" if self.university else self.degree_title
 
@@ -61,10 +62,14 @@ class TechnicalSkill(models.Model):
     programming_languages = models.CharField(max_length=200, blank=True, default='')
     frameworks_databases = models.CharField(max_length=200, blank=True, default='')
     tools = models.CharField(max_length=200, blank=True, default='')
+    web_development = models.CharField(max_length=200, blank=True, default='')
+    multimedia = models.CharField(max_length=200, blank=True, default='')
+    network = models.CharField(max_length=200, blank=True, default='')
+    operating_systems = models.CharField(max_length=200, blank=True, default='')
 
     def __str__(self):
         return f"Skills for {self.cv.name} {self.cv.surname}"
-
+    
 class Language(models.Model):
     cv = models.ForeignKey(CVSubmission, on_delete=models.CASCADE, related_name='languages')
     name = models.CharField(max_length=100)

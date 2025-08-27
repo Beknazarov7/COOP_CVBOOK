@@ -196,7 +196,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='afzunov12@gmail.com')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='#Ubuntu2004')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='afzunov12@gmail.com')
 
 # Internationalization

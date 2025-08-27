@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .models import CVSubmission
 logger = logging.getLogger(__name__)
+
 def generate_pdf(cv):
     logger.info("Preparing context for PDF generation")
     from .models import Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
@@ -47,6 +48,8 @@ def generate_pdf(cv):
         for edu in educations:
             edu_text = f"{edu.degree_title or 'N/A'} at {edu.university or 'N/A'}, Expected: {edu.expected_graduation or 'N/A'}"
             story.append(Paragraph(edu_text, styles['Normal']))
+            story.append(Paragraph(f"Location: {edu.university_location or 'N/A'}", styles['Normal']))
+            story.append(Paragraph(f"Start Date: {edu.start_date or 'N/A'}", styles['Normal']))
             for cert in edu.certificates.all():
                 cert_text = f"- {cert.certificate_title or 'N/A'} ({cert.year or 'N/A'}, {cert.organization or 'N/A'})"
                 story.append(Paragraph(cert_text, styles['Normal']))
@@ -86,14 +89,18 @@ def generate_pdf(cv):
         for proj in projects:
             story.append(Paragraph(f"{proj.project_title or 'N/A'} ({proj.year or 'N/A'}): {proj.summary or 'N/A'}", styles['Normal']))
         story.append(Spacer(1, 12))
-
+    
     if technical_skills:
         story.append(Paragraph("Technical Skills", styles['Heading2']))
         story.append(Paragraph(f"Languages: {technical_skills.programming_languages or 'N/A'}", styles['Normal']))
         story.append(Paragraph(f"Frameworks: {technical_skills.frameworks_databases or 'N/A'}", styles['Normal']))
         story.append(Paragraph(f"Tools: {technical_skills.tools or 'N/A'}", styles['Normal']))
+        story.append(Paragraph(f"Web Development: {technical_skills.web_development or 'N/A'}", styles['Normal']))
+        story.append(Paragraph(f"Multimedia: {technical_skills.multimedia or 'N/A'}", styles['Normal']))
+        story.append(Paragraph(f"Network: {technical_skills.network or 'N/A'}", styles['Normal']))
+        story.append(Paragraph(f"Operating Systems: {technical_skills.operating_systems or 'N/A'}", styles['Normal']))
         story.append(Spacer(1, 12))
-
+    
     if languages:
         story.append(Paragraph("Languages", styles['Heading2']))
         for lang in languages:
@@ -128,7 +135,7 @@ def generate_pdf(cv):
 
 class CVSubmitView(APIView):
     parser_classes = [JSONParser]
-    permission_classes = [AllowAny]  # Added to bypass authentication
+    permission_classes = [AllowAny]
 
     def post(self, request):
         logger.info("CVSubmitView.post called with data: %s", request.data)
@@ -142,14 +149,12 @@ class CVSubmitView(APIView):
             return Response({"error": "name, surname, and email are required"}, status=status.HTTP_400_BAD_REQUEST)
 
         from .models import CVSubmission
-        # Get or create CV, update if exists
         cv, created = CVSubmission.objects.get_or_create(email=email, defaults={'name': name, 'surname': surname, 'major': major})
         if not created:
             cv.name = name
             cv.surname = surname
             cv.major = major
             cv.save()
-            # Clear existing related data to update
             cv.educations.all().delete()
             cv.experiences.all().delete()
             cv.competencies.all().delete()
@@ -213,13 +218,12 @@ class CVSubmitView(APIView):
             Language.objects.create(cv=cv, **lang_data)
 
         for comm_data in data.get('community_involvements', []):
-            valid_fields = {k: v for k, v in comm_data.items() if k in ['organization', 'role', 'description']}
+            valid_fields = {k: v for k, v in comm_data.items() if k in ['organization', 'position_title', 'dates', 'achievements']}
             valid_fields['cv'] = cv
             CommunityInvolvement.objects.create(**valid_fields)
 
         for award_data in data.get('awards', []):
-            # Filter out unexpected fields (e.g., presenting_organization)
-            valid_fields = {k: v for k, v in award_data.items() if k in ['award_name', 'year']}  # Adjust based on your model
+            valid_fields = {k: v for k, v in award_data.items() if k in ['award_name', 'year', 'short_description']}
             valid_fields['cv'] = cv
             Award.objects.create(**valid_fields)
 
@@ -273,7 +277,9 @@ class CVEditView(APIView):
                         "id": edu.id,
                         "degree_title": edu.degree_title,
                         "university": edu.university,
+                        "start_date": edu.start_date,
                         "expected_graduation": edu.expected_graduation,
+                        "university_location": edu.university_location,
                         "certificates": [
                             {
                                 "id": cert.id,
@@ -362,7 +368,6 @@ class CVEditView(APIView):
             cv.major = data.get('major', cv.major)
             cv.save()
 
-            # Update or create educations and certificates
             for edu_data in data.get('educations', []):
                 edu_id = edu_data.get('id')
                 if edu_id:
@@ -371,7 +376,6 @@ class CVEditView(APIView):
                         if key != 'id' and key != 'certificates':
                             setattr(education, key, value)
                     education.save()
-                    # Delete existing certificates and recreate
                     education.certificates.all().delete()
                     for cert_data in edu_data.get('certificates', []):
                         cert_id = cert_data.get('id')
@@ -388,7 +392,6 @@ class CVEditView(APIView):
                     for cert_data in edu_data.get('certificates', []):
                         Certificate.objects.create(education=education, **{k: v for k, v in cert_data.items() if k != 'id'})
 
-            # Update or create other related models similarly
             for exp_data in data.get('experiences', []):
                 exp_id = exp_data.get('id')
                 if exp_id:
@@ -507,7 +510,9 @@ class CVDetailView(APIView):
                     {
                         "degree_title": edu.degree_title,
                         "university": edu.university,
+                        "start_date": edu.start_date,
                         "expected_graduation": edu.expected_graduation,
+                        "university_location": edu.university_location,
                         "certificates": [
                             {
                                 "certificate_title": cert.certificate_title,
@@ -575,7 +580,7 @@ class CVDetailView(APIView):
             return Response({"error": "CV not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CVListView(APIView):
-    permission_classes = [IsAuthenticated]  # Restrict to authenticated users
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         logger.info("CVListView.get called")
@@ -588,7 +593,7 @@ class CVListView(APIView):
                 'surname': cv.surname,
                 'email': cv.email,
                 'major': cv.major,
-                'submitted_at': cv.submitted_at.isoformat(),  # Ensure datetime is string for frontend
+                'submitted_at': cv.submitted_at.isoformat(),
                 'technical_skills': [
                     {
                         'programming_languages': ts.programming_languages,
@@ -605,10 +610,9 @@ class CVListView(APIView):
 
 def cv_cards_view(request):
     from .models import CVSubmission
-    cvs = CVSubmission.objects.all().order_by('-submitted_at')  # Use submitted_at instead of created_at
-    print(f"Number of CVs: {cvs.count()}")  # Debug output
-    return render(request, 'cv/cv-cards.html', {'cvs': cvs})  # Render the template with CV data
-
+    cvs = CVSubmission.objects.all().order_by('-submitted_at')
+    print(f"Number of CVs: {cvs.count()}")
+    return render(request, 'cv/cv-cards.html', {'cvs': cvs})
 
 def cv_detail_view(request, cv_id):
     from .models import CVSubmission, Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
