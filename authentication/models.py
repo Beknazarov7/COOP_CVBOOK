@@ -21,6 +21,4 @@ class CustomUser(AbstractUser):
     def reject(self):
         self.is_pending = False
         self.rejected_at = timezone.now()
-        self.accepted_at = None
-        self.is_active = False  # Deactivate the user
         self.save()
