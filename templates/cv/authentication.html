@@ -12,158 +12,148 @@
 <style>
 /* Existing styles remain largely intact with minor tweaks */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-    min-height: 100vh;
-    color: #333;
-    margin: 0;
-    padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  line-height: 1.6;
+}
+.header {
+  background: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 .header-title, .header-nav, .filter-section, .main-content {
     max-width: 1200px;
     margin: 0 auto;
 }
-.main-heading {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #fff;
-    margin: 0 auto 22px;
-    text-align: center;
-    text-shadow: 0 4px 8px rgba(0,0,0,0.20);
-}
-.main-content {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 12px; /* Added padding for responsiveness */
-}
-.header {
-    background: #fff;
-    border-bottom: 2px solid #223b84;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
 .header-bar {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 14px 22px;
-    border-bottom: 1px solid #e6eef6;
-    min-height: 78px;
-    background: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  border: 0;           /* remove old divider */
+  min-height: auto;    /* lighter */
+  background: #fff;
+
 }
 .header-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+display: flex; align-items: center; gap: 1rem;
 }
 .header-logo {
-    width: auto;
-    height: 65px;
-    object-fit: contain;
+    height: 48px; width: 48px; object-fit: contain;
 }
 .header-nav {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 48px;
+  position: static; transform: none;
+  display: flex; align-items: center; gap: 2rem;
 }
 .header-nav a {
-    font-family: "Georgia", serif;
-    font-weight: 700;
-    font-size: 16px;
-    color: #1e5b73;
-    text-decoration: none;
-    transition: color .2s ease, transform .2s ease;
-    white-space: nowrap;
+  color: #495057; font-weight: 500; text-decoration: none;
+  padding: .5rem 0; border-bottom: 2px solid transparent;
+  transition: color .2s ease, border-color .2s ease;
 }
-.header-nav a:hover {
-    color: #184b5f;
-    transform: translateY(-1px);
-}
-.header-social {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
+.header-nav a:hover { color: #2c5aa0; border-bottom-color: #2c5aa0; }
+.header-social { display: flex; gap: .5rem; margin-left: 1.25rem; }
 .header-social a {
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    background: #000;
-    color: #fff;
-    border-radius: 50%;
-    text-decoration: none;
-    transition: transform .15s ease, opacity .15s ease;
+  width: 36px; height: 36px; border-radius: 6px;
+  display: grid; place-items: center; text-decoration: none;
+  background: #f8f9fa; border: 1px solid #dee2e6; color: #495057;
+  transition: all .2s ease;
 }
-.header-social a:hover {
-    transform: translateY(-1px);
-    opacity: 0.9;
+.header-social a:hover { background: #e9ecef; border-color: #adb5bd; }
+
+
+/* === Page title === */
+.main-content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.main-heading { /* convert to new title */
+  font-size: 2rem; font-weight: 600; color: #212529; text-align: center; margin-bottom: .5rem;
+  text-shadow: none;
 }
-.header-social i { font-size: 16px; }
-.header-nav a:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, .25);
-}
-.header-nav a::after {
-    content: "";
-    position: absolute;
-    left: 16px;
-    right: 16px;
-    bottom: 7px;
-    height: 2px;
-    background: #1f4db7;
-    opacity: 0;
-    transform: scaleX(.4);
-    transform-origin: center;
-    transition: transform .18s ease, opacity .18s ease;
-}
-.header-nav a:hover::after {
-    opacity: 1;
-    transform: scaleX(1);
-}
-@media (max-width: 1024px) {
-    .header-nav { gap: 28px; }
-    .header-nav a { font-size: 18px; }
-    .header-logo { width: 72px; }
-}
-@media (max-width: 720px) {
-    .header-bar { padding: 10px 12px; min-height: 64px; }
-    .header-nav {
-        position: static;
-        transform: none;
-        margin: 8px auto 0;
-        order: 3;
-    }
-    .header-nav a { font-size: 16px; }
-    .header-left { gap: 10px; }
-}
+.page-subtitle { text-align: center; color: #6c757d; margin-bottom: 2rem; }
+
 /* Filter section and CV cards styles remain unchanged */
-.filter-section { /* ... existing styles ... */ }
-.card-container { /* ... existing styles ... */ }
-.student-card { /* ... existing styles ... */ }
-.chat-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #3a7ccf;
-    color: #ffffff;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: background-color 0.3s;
+.filter-section {
+  background: #fff; border: 1px solid #dee2e6; border-radius: 8px;
+  padding: 1.5rem; margin-bottom: 2rem; box-shadow: none;
 }
-.chat-icon:hover {
-    background-color: #2e639f;
+.filter-tabs {
+  display: flex; gap: .5rem; flex-wrap: wrap; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1.5rem;
+}
+.filter-tab {
+  padding: .5rem 1rem; background: transparent; color: #6c757d;
+  border: 1px solid #dee2e6; border-radius: 6px; cursor: pointer; font-size: .875rem; font-weight: 500;
+  transition: all .2s ease;
+}
+.filter-tab.active { background: #2c5aa0; color: #fff; border-color: #2c5aa0; }
+.filter-tab:not(.active):hover { background: #f8f9fa; border-color: #adb5bd; }
+
+.filter-controls { display: grid; gap: 1rem; }
+.filter-dropdowns {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 1rem;
+}
+.dropdown {
+  width: 100%; padding: .5rem .75rem; background: #fff; color: #495057;
+  border: 1px solid #ced4da; border-radius: 6px; font-size: .875rem; cursor: pointer;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.dropdown:focus { outline: none; border-color: #2c5aa0; box-shadow: 0 0 0 2px rgba(44,90,160,.1); }
+
+.filter-search-sort { display: flex; gap: 1rem; align-items: end; }
+.search-bar { flex: 1; display: flex; gap: .5rem; align-items: center; }
+.search-bar i { color: #6c757d; }
+.search-bar input {
+  width: 100%; padding: .5rem .75rem; border: 1px solid #ced4da; border-radius: 6px; font-size: .875rem;
+}
+.search-bar input:focus { outline: none; border-color: #2c5aa0; box-shadow: 0 0 0 2px rgba(44,90,160,.1); }
+/* === Profiles grid & card (new look) === */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+.card-container { /* becomes profiles-grid */
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;
+}
+.student-card { /* transform to profile-card style */
+  background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; text-decoration: none; color: inherit;
+  transition: all .2s ease; position: relative;
+}
+.student-card:hover { border-color: #2c5aa0; box-shadow: 0 4px 12px rgba(44,90,160,.1); transform: translateY(-1px); }
+
+.student-name { font-size: 1.125rem; font-weight: 600; color: #212529; margin-bottom: .25rem; }
+.student-id { color: #6c757d; font-size: .875rem; font-family: 'Courier New', monospace; }
+.student-major { display: inline-block; margin-top: .75rem; margin-bottom: .75rem; padding: .25rem .75rem; border-radius: 16px; font-size: .75rem; font-weight: 500; background: #e3f2fd; color: #1976d2; }
+.student-major.cs { background: #e8f5e8; color: #2e7d32; }
+.student-major.cm { background: #fff3e0; color: #f57c00; }
+.student-major.es { background: #e0f2f1; color: #00695c; }
+.student-major.ge { background: #fce4ec; color: #c2185b; }
+
+.meta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: .75rem; font-size: .875rem; color: #6c757d; }
+.submitted-date { color: #6c757d; font-size: .75rem; background: #f8f9fa; padding: .25rem .5rem; border-radius: 4px; }
+
+.skill-strip { display: flex; flex-wrap: wrap; gap: .5rem; }
+.skill-tag { background: #f8f9fa; color: #495057; border: 1px solid #dee2e6; padding: .125rem .5rem; border-radius: 12px; font-size: .75rem; }
+
+/* floating action button (optional visual — no logic change) */
+.fab-add {
+  position: fixed; bottom: 2rem; right: 2rem; background: #2c5aa0; color: #fff; border: none;
+  border-radius: 50%; width: 56px; height: 56px; font-size: 1.5rem; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(44,90,160,.3); transition: all .2s ease; z-index: 1000;
+}
+.fab-add:hover { background: #1a4480; transform: scale(1.05); }
+
+@media (max-width: 768px) {
+  .header-bar { flex-direction: column; gap: 1rem; padding: 0 1rem; }
+  .header-nav { flex-wrap: wrap; justify-content: center; }
+  .main-content { padding: 1rem; }
+  .filter-dropdowns { grid-template-columns: 1fr; }
+  .filter-search-sort { flex-direction: column; align-items: stretch; }
 }
 </style>
 </head>
@@ -172,38 +162,51 @@ body {
 <script type="text/babel">
 const { useState, useEffect } = React;
 
-const NavBar = ({ token, setToken }) => (
+// If you previously had: export default NavBar;  ← REMOVE this line
+
+const NavBar = ({ token, setToken }) => {
+  const currentHash = window.location.hash;
+  if (currentHash === '#login' || currentHash === '#signup') return null;
+
+  return (
     <nav className="header">
-        <div className="header-bar">
-            <div className="header-left">
-                <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
-            </div>
-            <nav className="header-nav">
-                <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>Home Page</a>
-                <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>About</a>
-                <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>FAQ</a>
-                <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>Contacts</a>
-            </nav>
-            <div className="header-social">
-                <a href="https://www.linkedin.com/in/uca-career-opportunities/" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
-                <a href="https://www.instagram.com/uca_career_opportunities/?igshid=YmMyMTA2M2Y%3D" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
-                <a href="https://www.youtube.com/@ucacareeropportunities1011" aria-label="YouTube"><i className="fab fa-youtube"></i></a>
-            </div>
-            <div>
-                {token ? (
-                    <>
-                        <button onClick={() => { localStorage.removeItem('token'); setToken(null); window.location.hash = '#login'; }} className="mr-4 text-white hover:text-gray-300">Logout</button>
-                    </>
-                ) : (
-                    <>
-                        <button onClick={() => window.location.hash = '#signup'} className="mr-4 text-white hover:text-gray-300">Sign Up</button>
-                        <button onClick={() => window.location.hash = '#login'} className="mr-4 text-white hover:text-gray-300">Login</button>
-                    </>
-                )}
-            </div>
+      <div className="header-bar">
+        <div className="header-left">
+          <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
         </div>
+        <nav className="header-nav">
+          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>Home Page</a>
+          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>About</a>
+          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>FAQ</a>
+          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>Contacts</a>
+        </nav>
+        <div className="header-social">
+          <a href="https://www.linkedin.com/in/uca-career-opportunities/" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
+          <a href="https://www.instagram.com/uca_career_opportunities/?igshid=YmMyMTA2M2Y%3D" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
+          <a href="https://www.youtube.com/@ucacareeropportunities1011" aria-label="YouTube"><i className="fab fa-youtube"></i></a>
+        </div>
+        <div>
+          {token ? (
+            <button
+              onClick={() => { localStorage.removeItem('token'); setToken(null); window.location.hash = '#login'; }}
+              className="mr-4 text-white hover:text-gray-300"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <button onClick={() => window.location.hash = '#signup'} className="mr-4 text-white hover:text-gray-300">Sign Up</button>
+              <button onClick={() => window.location.hash = '#login'} className="mr-4 text-white hover:text-gray-300">Login</button>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
-);
+  );
+};
+
+// Optional: expose globally if other scripts need it
+window.NavBar = NavBar;
 
 const PendingApproval = () => (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
@@ -406,143 +409,260 @@ const Login = ({ setToken }) => {
     );
 };
 
-const CVCards = ({ token, filters }) => {
-    const [allCvs, setAllCvs] = useState([]);
-    const [cvs, setCvs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+/* ---------------- CVCards (filters fixed) ---------------- */
+const CVCards = ({ token, filters, setFilters }) => {
+  const [allCvs, setAllCvs] = useState([]);
+  const [cvs, setCvs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchCVs = async () => {
-            try {
-                const response = await fetch('http://localhost:8000/cv/cards/', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (!response.ok) throw new Error(`Failed: ${response.status}`);
-                const data = await response.json();
-                setAllCvs(data);
-                setCvs(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchCVs();
-    }, [token]);
+  // helpers for matching
+  const normalize = (v) => String(v ?? "").toLowerCase().trim();
+  const splitList = (v) =>
+    Array.isArray(v)
+      ? v.map(normalize).filter(Boolean)
+      : String(v ?? "")
+          .split(/[,;|]/)
+          .map(normalize)
+          .filter(Boolean);
 
-    useEffect(() => {
-        let filtered = [...allCvs];
-        if (filters.category && filters.category !== 'all') {
-            filtered = filtered.filter(cv => (cv.major || '').toLowerCase().includes(filters.category.replace(/-/g, ' ')));
-        }
-        if (filters.country) filtered = filtered.filter(cv => (cv.country || '').toLowerCase() === filters.country.toLowerCase());
-        if (filters.language) filtered = filtered.filter(cv => (cv.language || '').toLowerCase() === filters.language.toLowerCase());
-        if (filters.techSkill) filtered = filtered.filter(cv => (cv.technical_skills || '').toLowerCase().includes(filters.techSkill.toLowerCase()));
-        if (filters.nonTechSkill) filtered = filtered.filter(cv => (cv.non_technical_skills || '').toLowerCase().includes(filters.nonTechSkill.toLowerCase()));
-        if (filters.searchTerm) filtered = filtered.filter(cv => (`${cv.name} ${cv.surname}`).toLowerCase().includes(filters.searchTerm.toLowerCase()));
-        if (filters.sortOrder === 'A-Z') filtered.sort((a, b) => a.name.localeCompare(b.name));
-        if (filters.sortOrder === 'Z-A') filtered.sort((a, b) => b.name.localeCompare(a.name));
-        setCvs(filtered);
-    }, [filters, allCvs]);
+  const majorMatches = (major, cat) => {
+    if (!cat || cat === "all") return true;
+    const m = normalize(major);
+    const map = {
+      "computer-science": ["computer science", "cs", "comp sci"],
+      "communication-and-media": ["communication and media", "communication", "media"],
+      "global-economics": ["global economics", "economics", "econ"],
+      "earth-and-environmental-sciences": ["earth and environmental sciences", "earth", "environmental"],
+    };
+    const needles = map[cat] || [normalize(cat.replace(/-/g, " "))];
+    return needles.some((n) => m.includes(n));
+  };
 
-    if (loading) return <div className="text-center text-white mt-10">Loading...</div>;
-    if (error) return <div className="text-center text-red-600 mt-10">Error: {error}</div>;
-    return (
-        <main className="main-content">
-            <h1 className="main-heading">Student Profiles</h1>
-            <section className="filter-section">
-                <div className="filter-tabs">
-                    {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
-                        <span
-                            key={cat}
-                            className={`filter-tab ${filters.category === cat ? 'active' : ''}`}
-                            onClick={() => setFilters({ ...filters, category: cat })}
-                        >
-                            {cat === 'all' ? 'ALL' : cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' & ')}
-                        </span>
-                    ))}
-                </div>
-                <div className="filter-controls">
-                    <div className="filter-dropdowns">
-                        <select className="dropdown" onChange={e => setFilters({ ...filters, country: e.target.value })} value={filters.country}>
-                            <option value="">COUNTRY</option>
-                            <option value="Kyrgyzstan">Kyrgyzstan</option>
-                            <option value="Tajikistan">Tajikistan</option>
-                        </select>
-                        <select className="dropdown" onChange={e => setFilters({ ...filters, language: e.target.value })} value={filters.language}>
-                            <option value="">LANGUAGE</option>
-                            <option value="English">English</option>
-                            <option value="Russian">Russian</option>
-                        </select>
-                        <select className="dropdown" onChange={e => setFilters({ ...filters, techSkill: e.target.value })} value={filters.techSkill}>
-                            <option value="">TECHNICAL SKILLS</option>
-                            <option value="Programming">Programming</option>
-                            <option value="Data Analysis">Data Analysis</option>
-                        </select>
-                        <select className="dropdown" onChange={e => setFilters({ ...filters, nonTechSkill: e.target.value })} value={filters.nonTechSkill}>
-                            <option value="">NON-TECHNICAL SKILLS</option>
-                            <option value="Communication">Communication</option>
-                            <option value="Teamwork">Teamwork</option>
-                        </select>
-                        <select className="dropdown" onChange={e => setFilters({ ...filters, sortOrder: e.target.value })} value={filters.sortOrder}>
-                            <option value="">Sort</option>
-                            <option value="A-Z">A-Z</option>
-                            <option value="Z-A">Z-A</option>
-                        </select>
-                    </div>
-                    <div className="filter-search-sort">
-                        <div className="search-bar">
-                            <i className="fas fa-search"></i>
-                            <input type="text" placeholder="Search" onChange={e => setFilters({ ...filters, searchTerm: e.target.value })} value={filters.searchTerm} />
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div className="card-container">
-                {cvs.map(cv => (
-                    <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card">
-                        <div className="student-name">{cv.name} {cv.surname}</div>
-                        <div className="student-major">{cv.major || 'N/A'}</div>
-                        <div className="submitted-date">
-                            <small>Submitted: {new Date(cv.submitted_at).toLocaleDateString()}</small>
-                        </div>
-                    </a>
-                ))}
-            </div>
-        </main>
-    );
-};
+  useEffect(() => {
+    const fetchCVs = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/cv/cards/', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error(`Failed: ${response.status}`);
+        const data = await response.json();
+        const arr = Array.isArray(data) ? data : [];
+        setAllCvs(arr);
+        setCvs(arr);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCVs();
+  }, [token]);
 
-const App = () => {
-    const [token, setToken] = useState(localStorage.getItem('token'));
-    const [page, setPage] = useState(window.location.hash || '#login');
-    const [filters, setFilters] = useState({ category: 'all', country: '', language: '', techSkill: '', nonTechSkill: '', sortOrder: '', searchTerm: '' });
+  useEffect(() => {
+    let filtered = [...allCvs];
 
-    useEffect(() => {
-        const onHash = () => setPage(window.location.hash || '#login');
-        window.addEventListener('hashchange', onHash);
-        return () => window.removeEventListener('hashchange', onHash);
-    }, []);
+    // Category -> major
+    if (filters.category && filters.category !== 'all') {
+      filtered = filtered.filter(cv => majorMatches(cv.major, filters.category));
+    }
 
-    return (
-        <div>
-            <NavBar token={token} setToken={setToken} />
-            {page === '#cv-cards' && token ? (
-                <CVCards token={token} filters={filters} />
-            ) : (
-                <>
-                    {page === '#signup' && <SignUp />}
-                    {page === '#login' && <Login setToken={setToken} />}
-                    {page === '#pending-approval' && <PendingApproval />}
-                </>
-            )}
-            <div className="chat-icon" onClick={() => window.location.href = 'https://x.ai/grok'}>
-                <i className="fas fa-comment"></i>
-            </div>
+    // Country (strict equality, case-insensitive)
+    if (filters.country) {
+      const needle = normalize(filters.country);
+      filtered = filtered.filter(cv => normalize(cv.country) === needle);
+    }
+
+    // Language (allow CSV/array)
+    if (filters.language) {
+      const needle = normalize(filters.language);
+      filtered = filtered.filter(cv => splitList(cv.language).includes(needle));
+    }
+
+    // Technical skill contains
+    if (filters.techSkill) {
+      const needle = normalize(filters.techSkill);
+      filtered = filtered.filter(cv => splitList(cv.technical_skills).some(s => s.includes(needle)));
+    }
+
+    // Non-technical skill contains
+    if (filters.nonTechSkill) {
+      const needle = normalize(filters.nonTechSkill);
+      filtered = filtered.filter(cv => splitList(cv.non_technical_skills).some(s => s.includes(needle)));
+    }
+
+    // Search by full name
+    if (filters.searchTerm) {
+      const q = normalize(filters.searchTerm);
+      filtered = filtered.filter(cv => (`${normalize(cv.name)} ${normalize(cv.surname)}`).includes(q));
+    }
+
+    // Sort
+    if (filters.sortOrder === 'A-Z') {
+      filtered.sort((a, b) => normalize(a.name).localeCompare(normalize(b.name)));
+    } else if (filters.sortOrder === 'Z-A') {
+      filtered.sort((a, b) => normalize(b.name).localeCompare(normalize(a.name)));
+    }
+
+    setCvs(filtered);
+  }, [filters, allCvs]);
+
+  if (loading) return <div className="text-center text-white mt-10">Loading...</div>;
+  if (error) return <div className="text-center text-red-600 mt-10">Error: {error}</div>;
+
+  return (
+    <main className="main-content">
+      <h1 className="main-heading">Student Profiles</h1>
+      <p className="page-subtitle">Browse and search through our diverse student community</p>
+
+      <section className="filter-section">
+        <div className="filter-tabs">
+          {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
+            <span
+              key={cat}
+              className={`filter-tab ${filters.category === cat ? 'active' : ''}`}
+              onClick={() => setFilters({ ...filters, category: cat })}
+            >
+              {cat === 'all' ? 'All' : cat.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')}
+            </span>
+          ))}
         </div>
-    );
+
+        <div className="filter-controls">
+          <div className="filter-dropdowns">
+            <select className="dropdown" onChange={e => setFilters({ ...filters, country: e.target.value })} value={filters.country || ''}>
+              <option value="">All Countries</option>
+              <option value="Kyrgyzstan">Kyrgyzstan</option>
+              <option value="Tajikistan">Tajikistan</option>
+              <option value="Kazakhstan">Kazakhstan</option>
+            </select>
+
+            <select className="dropdown" onChange={e => setFilters({ ...filters, language: e.target.value })} value={filters.language || ''}>
+              <option value="">All Languages</option>
+              <option value="English">English</option>
+              <option value="Russian">Russian</option>
+            </select>
+
+            <select className="dropdown" onChange={e => setFilters({ ...filters, techSkill: e.target.value })} value={filters.techSkill || ''}>
+              <option value="">Technical Skills</option>
+              <option value="Programming">Programming</option>
+              <option value="Data Analysis">Data Analysis</option>
+              <option value="Design">Design</option>
+            </select>
+
+            <select className="dropdown" onChange={e => setFilters({ ...filters, nonTechSkill: e.target.value })} value={filters.nonTechSkill || ''}>
+              <option value="">Non-technical Skills</option>
+              <option value="Communication">Communication</option>
+              <option value="Teamwork">Teamwork</option>
+              <option value="Leadership">Leadership</option>
+            </select>
+
+            <select className="dropdown" onChange={e => setFilters({ ...filters, sortOrder: e.target.value })} value={filters.sortOrder || ''}>
+              <option value="">Sort</option>
+              <option value="A-Z">Name A-Z</option>
+              <option value="Z-A">Name Z-A</option>
+            </select>
+          </div>
+
+          <div className="filter-search-sort">
+            <div className="search-bar">
+              <i className="fas fa-search" />
+              <input
+                type="text"
+                placeholder="Search by name…"
+                onChange={e => setFilters({ ...filters, searchTerm: e.target.value })}
+                value={filters.searchTerm || ''}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="card-container">
+        {cvs.map(cv => {
+          const deptClass =
+            (cv.major || '').toLowerCase().includes('computer') ? 'cs' :
+            (cv.major || '').toLowerCase().includes('communication') ? 'cm' :
+            (cv.major || '').toLowerCase().includes('earth') ? 'es' :
+            (cv.major || '').toLowerCase().includes('econom') ? 'ge' : '';
+
+          const skills = [
+            ...(cv.technical_skills ? String(cv.technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
+            ...(cv.non_technical_skills ? String(cv.non_technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
+          ].slice(0, 4);
+
+          return (
+            <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card">
+              <div className="profile-header">
+                <div className="profile-info">
+                  <div className="student-name">{cv.name} {cv.surname}</div>
+                  <div className="student-id">Student ID: UCA{String(cv.id).padStart(6,'0')}</div>
+                </div>
+                <div className="submitted-date">
+                  {cv.submitted_at ? new Date(cv.submitted_at).toLocaleDateString() : '—'}
+                </div>
+              </div>
+
+              <div className={`student-major ${deptClass}`}>{cv.major || 'Department'}</div>
+
+              <div className="meta-row">
+                <span>📍 {cv.country || 'Country'}</span>
+                <span>🗣️ {cv.language || 'Language'}</span>
+                <span>🎓 {cv.graduation_year ? `Class of ${cv.graduation_year}` : 'Class year'}</span>
+              </div>
+
+              <div className="skill-strip">
+                {skills.length
+                  ? skills.map((s, i) => <span key={i} className="skill-tag">{s}</span>)
+                  : <span className="skill-tag">Skills</span>}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      <button type="button" className="fab-add" aria-label="Add New Student">+</button>
+    </main>
+  );
 };
+
+
+/* ---------------- App (passes filters + setFilters) ---------------- */
+const App = () => {
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [page, setPage] = useState(window.location.hash || '#login');
+  const [filters, setFilters] = useState({
+    category: 'all',
+    country: '',
+    language: '',
+    techSkill: '',
+    nonTechSkill: '',
+    sortOrder: '',
+    searchTerm: ''
+  });
+
+  useEffect(() => {
+    const onHash = () => setPage(window.location.hash || '#login');
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  return (
+    <div>
+      {/* Keep using your existing NavBar if it’s already defined in your file */}
+      <NavBar token={token} setToken={setToken} />
+
+      {page === '#cv-cards' && token ? (
+        <CVCards token={token} filters={filters} setFilters={setFilters} />
+      ) : null}
+
+      <div className="chat-icon" onClick={() => window.location.href = 'https://x.ai/grok'}>
+        <i className="fas fa-comment"></i>
+      </div>
+    </div>
+  );
+};
+
 
 function getCookie(name) {
     let cookieValue = null;
