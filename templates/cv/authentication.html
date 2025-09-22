@@ -13,10 +13,158 @@
 /* Existing styles remain largely intact with minor tweaks */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, #d9e6f9 0%, #a0bae4 100%);
   color: #212529;
   line-height: 1.6;
 }
+/* Background polish 
+body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}*/
+
+/* Hero */
+.hero-section {
+  background: #fff; border-radius: 16px; padding: 2rem; margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,.1); position: relative; overflow: hidden;
+}
+.hero-section::before {
+  content:""; position:absolute; top:0; right:0; width:200px; height:200px;
+  background: linear-gradient(135deg,#2c5aa0,#4a90e2); opacity:.1; border-radius:50%;
+  transform: translate(50%,-50%);
+}
+.hero-content { text-align:center; }
+.hero-content h1 { font-size: 2.25rem; font-weight: 800; color:#2c5aa0; margin-bottom:.75rem; }
+.hero-content p { color:#6c757d; max-width: 640px; margin: 0 auto 1.5rem; }
+.stats-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap:1rem; }
+.stat-item { text-align:center; background: linear-gradient(135deg,#f8f9ff,#e8f2ff); border:1px solid rgba(44,90,160,.1); border-radius:12px; padding:1rem; }
+.stat-number { font-size:1.75rem; font-weight:800; color:#2c5aa0; }
+
+/* Filters panel */
+.filters-section {
+  background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:16px; padding:2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,.1); position:relative; overflow:hidden; margin-bottom: 2rem;
+}
+.filters-section::before {
+  content:""; position:absolute; left:0; right:0; top:0; height:4px;
+  background: linear-gradient(90deg,#2c5aa0,#4a90e2,#6bb6ff);
+}
+.filters-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:1.25rem; padding-bottom:1rem; border-bottom:2px solid #f8f9fa;
+}
+.filters-title { font-size:1.125rem; font-weight:700; color:#2c5aa0; }
+.active-filters { display:flex; gap:.5rem; flex-wrap:wrap; }
+.filter-badge {
+  background:#e3f2fd; color:#1976d2; padding:.25rem .75rem; border-radius:16px; font-size:.75rem; font-weight:600;
+}
+
+.department-tabs.filter-tabs {
+  padding: 1rem;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(44,90,160,.12);
+}
+.tab {
+  padding: .75rem 1.1rem; border: 2px solid #dee2e6; border-radius: 8px;
+  font-weight: 600; background: #fff; transition: .2s;
+}
+.tab.active {
+  background: linear-gradient(135deg, #2c5aa0 0%, #1e3d72 100%);
+  border-color: #2c5aa0; color: #fff; box-shadow: 0 4px 12px rgba(44,90,160,.28);
+  transform: translateY(-1px);
+}
+.tab:not(.active):hover { background:#f8f9fa; border-color:#2c5aa0; transform: translateY(-1px); }
+
+.filters-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.25rem;
+}
+.filter-group label { display:block; font-size:.875rem; font-weight:700; color:#495057; margin-bottom:.5rem; }
+.filter-select.dropdown {
+  width: 100%; padding: .75rem 1rem; border-radius: 8px; font-size:.875rem;
+  background: linear-gradient(135deg,#ffffff 0%,#f8f9ff 100%); border: 2px solid #e9ecef;
+}
+.filter-select.dropdown:focus {
+  outline:none; border-color:#2c5aa0; box-shadow:0 0 0 3px rgba(44,90,160,.12); background:#fff;
+}
+
+/* Full-width search with no inline styles */
+.search-container { grid-column: 1 / -1; }
+.search-inner { position: relative; }
+.search-input {
+  width:100%; padding:1rem 1rem 1rem 3rem; border:2px solid #e9ecef; border-radius:12px;
+  background: linear-gradient(135deg,#fff,#f8f9ff); transition:.2s;
+}
+.search-input:focus { outline:none; border-color:#2c5aa0; box-shadow:0 0 0 3px rgba(44,90,160,.1); background:#fff; }
+.search-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#6c757d; }
+
+/* Results header */
+.results-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:1.5rem; padding:1rem 1.25rem; background:#fff;
+  border:1px solid rgba(0,0,0,.1); border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,.08);
+}
+.results-info { display:flex; align-items:center; gap:1rem; }
+.results-count { font-weight:700; color:#2c5aa0; }
+.view-toggle { display:flex; gap:.5rem; background:#f8f9fa; padding:.25rem; border-radius:8px; }
+.view-btn { padding:.5rem 1rem; border:none; border-radius:6px; background:transparent; font-weight:600; }
+.view-btn.active { background:#2c5aa0; color:#fff; }
+.sort-select {
+  padding:.65rem 1rem; background:#fff; border:2px solid #e9ecef; border-radius:8px; color:#495057;
+}
+.sort-select:focus { outline:none; border-color:#2c5aa0; box-shadow:0 0 0 2px rgba(44,90,160,.1); }
+
+/* Grid SIZE UNCHANGED */
+.card-container.profiles-grid { grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 1.5rem; }
+
+/* Card look without changing padding/size */
+.profile-card.student-card {
+  background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  position: relative; overflow: hidden;
+}
+.profile-card.student-card::before {
+  content:""; position:absolute; left:0; right:0; top:0; height:4px; background:linear-gradient(90deg,#2c5aa0,#4a90e2);
+}
+.profile-card.student-card:hover { transform: translateY(-4px); box-shadow: 0 12px 38px rgba(44,90,160,.15); border-color:#2c5aa0; }
+
+.profile-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1rem; }
+.student-name { font-size: 1.15rem; font-weight: 700; color: #212529; }
+.submitted-date {
+  color:#155724; background:#d4edda; border:1px solid #c3e6cb; padding:.375rem .75rem; border-radius:16px; font-size:.75rem; font-weight:600;
+}
+
+/* Department badge hues */
+.student-major {
+  display:inline-block; margin:.75rem 0 1rem 0; padding:.5rem 1rem; border-radius:20px; font-size:.875rem; font-weight:700; border:1px solid transparent;
+}
+.student-major.cs { background: linear-gradient(135deg,#e8f5e8,#d4edda); color:#155724; border-color:#c3e6cb; }
+.student-major.cm { background: linear-gradient(135deg,#fff3e0,#ffeaa7); color:#e65100; border-color:#ffcc80; }
+.student-major.es { background: linear-gradient(135deg,#e0f2f1,#b2dfdb); color:#004d40; border-color:#80cbc4; }
+.student-major.ge { background: linear-gradient(135deg,#fce4ec,#f8bbd9); color:#880e4f; border-color:#f48fb1; }
+
+/* Meta & skills */
+.profile-meta.meta-row {
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:.75rem;
+  margin-bottom:1.25rem; padding:.9rem; background: linear-gradient(135deg,#f8f9ff,#e8f2ff);
+  border:1px solid rgba(44,90,160,.12); border-radius:8px; color:#495057;
+}
+.profile-meta span { display:inline-flex; align-items:center; gap:.35rem; }
+
+.profile-skills .skills-label { font-size:.875rem; font-weight:700; color:#495057; margin-bottom:.5rem; }
+.skills-list { display:flex; flex-wrap:wrap; gap:.5rem; }
+.skill-tag {
+  background: linear-gradient(135deg, #f8f9ff, #e3f2fd); color:#1976d2; border:1px solid #bbdefb;
+  padding:.375rem .75rem; border-radius:16px; font-size:.75rem; font-weight:600; transition: transform .15s ease, box-shadow .15s ease;
+}
+.skill-tag:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+
+/* FAB */
+.add-student-btn.fab-add {
+  background: linear-gradient(135deg, #2c5aa0, #1e3d72);
+  box-shadow: 0 8px 24px rgba(44,90,160,.4);
+}
+.add-student-btn.fab-add:hover { transform: scale(1.07); box-shadow: 0 12px 32px rgba(44,90,160,.5); }
+
 .header {
   background: #ffffff;
   border-bottom: 1px solid #dee2e6;
@@ -25,10 +173,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
+  
+  /* ✅ Center header and limit width */
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 12px;
 }
-.header-title, .header-nav, .filter-section, .main-content {
-    max-width: 1200px;
-    margin: 0 auto;
+.header-title, .header-nav, .filters-section, .main-content {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 .header-bar {
   max-width: 1200px;
@@ -46,7 +199,7 @@ body {
 display: flex; align-items: center; gap: 1rem;
 }
 .header-logo {
-    height: 48px; width: 48px; object-fit: contain;
+    height: 100px; width: 200px; object-fit: contain;
 }
 .header-nav {
   position: static; transform: none;
@@ -70,19 +223,14 @@ display: flex; align-items: center; gap: 1rem;
 
 /* === Page title === */
 .main-content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-.main-heading { /* convert to new title */
-  font-size: 2rem; font-weight: 600; color: #212529; text-align: center; margin-bottom: .5rem;
-  text-shadow: none;
-}
-.page-subtitle { text-align: center; color: #6c757d; margin-bottom: 2rem; }
 
 /* Filter section and CV cards styles remain unchanged */
 .filter-section {
   background: #fff; border: 1px solid #dee2e6; border-radius: 8px;
-  padding: 1.5rem; margin-bottom: 2rem; box-shadow: none;
+  padding: 1.5rem; margin-bottom: 5rem; box-shadow: none;
 }
 .filter-tabs {
-  display: flex; gap: .5rem; flex-wrap: wrap; border-bottom: 1px solid #dee2e6; padding-bottom: 1rem; margin-bottom: 1.5rem;
+  display: flex; gap: .5rem; flex-wrap: wrap;
 }
 .filter-tab {
   padding: .5rem 1rem; background: transparent; color: #6c757d;
@@ -92,10 +240,6 @@ display: flex; align-items: center; gap: 1rem;
 .filter-tab.active { background: #2c5aa0; color: #fff; border-color: #2c5aa0; }
 .filter-tab:not(.active):hover { background: #f8f9fa; border-color: #adb5bd; }
 
-.filter-controls { display: grid; gap: 1rem; }
-.filter-dropdowns {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 1rem;
-}
 .dropdown {
   width: 100%; padding: .5rem .75rem; background: #fff; color: #495057;
   border: 1px solid #ced4da; border-radius: 6px; font-size: .875rem; cursor: pointer;
@@ -103,13 +247,7 @@ display: flex; align-items: center; gap: 1rem;
 }
 .dropdown:focus { outline: none; border-color: #2c5aa0; box-shadow: 0 0 0 2px rgba(44,90,160,.1); }
 
-.filter-search-sort { display: flex; gap: 1rem; align-items: end; }
-.search-bar { flex: 1; display: flex; gap: .5rem; align-items: center; }
-.search-bar i { color: #6c757d; }
-.search-bar input {
-  width: 100%; padding: .5rem .75rem; border: 1px solid #ced4da; border-radius: 6px; font-size: .875rem;
-}
-.search-bar input:focus { outline: none; border-color: #2c5aa0; box-shadow: 0 0 0 2px rgba(44,90,160,.1); }
+
 /* === Profiles grid & card (new look) === */
 .profile-header {
   display: flex;
@@ -118,7 +256,7 @@ display: flex; align-items: center; gap: 1rem;
   margin-bottom: 1rem;
 }
 .card-container { /* becomes profiles-grid */
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 2rem;
 }
 .student-card { /* transform to profile-card style */
   background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; text-decoration: none; color: inherit;
@@ -126,19 +264,12 @@ display: flex; align-items: center; gap: 1rem;
 }
 .student-card:hover { border-color: #2c5aa0; box-shadow: 0 4px 12px rgba(44,90,160,.1); transform: translateY(-1px); }
 
-.student-name { font-size: 1.125rem; font-weight: 600; color: #212529; margin-bottom: .25rem; }
-.student-id { color: #6c757d; font-size: .875rem; font-family: 'Courier New', monospace; }
-.student-major { display: inline-block; margin-top: .75rem; margin-bottom: .75rem; padding: .25rem .75rem; border-radius: 16px; font-size: .75rem; font-weight: 500; background: #e3f2fd; color: #1976d2; }
-.student-major.cs { background: #e8f5e8; color: #2e7d32; }
-.student-major.cm { background: #fff3e0; color: #f57c00; }
-.student-major.es { background: #e0f2f1; color: #00695c; }
-.student-major.ge { background: #fce4ec; color: #c2185b; }
+
 
 .meta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: .75rem; font-size: .875rem; color: #6c757d; }
-.submitted-date { color: #6c757d; font-size: .75rem; background: #f8f9fa; padding: .25rem .5rem; border-radius: 4px; }
 
 .skill-strip { display: flex; flex-wrap: wrap; gap: .5rem; }
-.skill-tag { background: #f8f9fa; color: #495057; border: 1px solid #dee2e6; padding: .125rem .5rem; border-radius: 12px; font-size: .75rem; }
+
 
 /* floating action button (optional visual — no logic change) */
 .fab-add {
@@ -165,8 +296,14 @@ const { useState, useEffect } = React;
 // If you previously had: export default NavBar;  ← REMOVE this line
 
 const NavBar = ({ token, setToken }) => {
-  const currentHash = window.location.hash;
-  if (currentHash === '#login' || currentHash === '#signup') return null;
+const currentHash = window.location.hash || '#login';
+
+  // ✅ Hide NavBar on login, signup, or pending-approval pages
+  if (['#login', '#signup', '#pending-approval'].includes(currentHash)) {
+    return null;
+  }
+  //const currentHash = window.location.hash;
+  //if (currentHash === '#login' || currentHash === '#signup') return null;
 
   return (
     <nav className="header">
@@ -511,126 +648,197 @@ const CVCards = ({ token, filters, setFilters }) => {
   if (error) return <div className="text-center text-red-600 mt-10">Error: {error}</div>;
 
   return (
-    <main className="main-content">
-      <h1 className="main-heading">Student Profiles</h1>
-      <p className="page-subtitle">Browse and search through our diverse student community</p>
+  <main className="main-content">
+    {/* Hero */}
+    <section className="hero-section">
+      <div className="hero-content">
+        <h1>Student Profiles</h1>
+        <p>Discover the diverse talents and backgrounds of our exceptional student community across Central Asia</p>
 
-      <section className="filter-section">
-        <div className="filter-tabs">
-          {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
-            <span
-              key={cat}
-              className={`filter-tab ${filters.category === cat ? 'active' : ''}`}
-              onClick={() => setFilters({ ...filters, category: cat })}
-            >
-              {cat === 'all' ? 'All' : cat.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')}
-            </span>
-          ))}
+        <div className="stats-row">
+          <div className="stat-item">
+            <span className="stat-number">{cvs.length}</span>
+            <span className="stat-label">Active Students</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">4</span>
+            <span className="stat-label">Departments</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">3</span>
+            <span className="stat-label">Countries</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">12</span>
+            <span className="stat-label">Languages</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Filters */}
+    <section className="filters-section">
+      <div className="filters-header">
+        <h2 className="filters-title">🔍 Search &amp; Filter Students</h2>
+        <div className="active-filters">
+          <span className="filter-badge">
+            {filters.category === 'all'
+              ? 'All Departments'
+              : filters.category.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+          </span>
+          {filters.country && <span className="filter-badge">Country: {filters.country}</span>}
+          {filters.language && <span className="filter-badge">Language: {filters.language}</span>}
+          {filters.techSkill && <span className="filter-badge">Tech: {filters.techSkill}</span>}
+          {filters.nonTechSkill && <span className="filter-badge">Soft: {filters.nonTechSkill}</span>}
+        </div>
+      </div>
+
+      <div className="department-tabs filter-tabs">
+        {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
+          <button
+            key={cat}
+            className={`tab filter-tab ${filters.category === cat ? 'active' : ''}`}
+            onClick={() => setFilters({ ...filters, category: cat })}
+            type="button"
+          >
+            {cat === 'all' ? 'All Programs' : cat.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+          </button>
+        ))}
+      </div>
+
+      <div className="filters-grid">
+        <div className="filter-group">
+          <label>🌍 Country</label>
+          <select
+            className="filter-select dropdown"
+            onChange={e => setFilters({ ...filters, country: e.target.value })}
+            value={filters.country || ''}
+          >
+            <option value="">All Countries</option>
+            <option value="Kyrgyzstan">Kyrgyzstan</option>
+            <option value="Tajikistan">Tajikistan</option>
+            <option value="Kazakhstan">Kazakhstan</option>
+          </select>
         </div>
 
-        <div className="filter-controls">
-          <div className="filter-dropdowns">
-            <select className="dropdown" onChange={e => setFilters({ ...filters, country: e.target.value })} value={filters.country || ''}>
-              <option value="">All Countries</option>
-              <option value="Kyrgyzstan">Kyrgyzstan</option>
-              <option value="Tajikistan">Tajikistan</option>
-              <option value="Kazakhstan">Kazakhstan</option>
-            </select>
+        <div className="filter-group">
+          <label>💬 Language</label>
+          <select
+            className="filter-select dropdown"
+            onChange={e => setFilters({ ...filters, language: e.target.value })}
+            value={filters.language || ''}
+          >
+            <option value="">All Languages</option>
+            <option value="English">English</option>
+            <option value="Russian">Russian</option>
+          </select>
+        </div>
 
-            <select className="dropdown" onChange={e => setFilters({ ...filters, language: e.target.value })} value={filters.language || ''}>
-              <option value="">All Languages</option>
-              <option value="English">English</option>
-              <option value="Russian">Russian</option>
-            </select>
+        <div className="filter-group">
+          <label>⚡ Technical Skills</label>
+          <select
+            className="filter-select dropdown"
+            onChange={e => setFilters({ ...filters, techSkill: e.target.value })}
+            value={filters.techSkill || ''}
+          >
+            <option value="">Technical Skills</option>
+            <option value="Programming">Programming</option>
+            <option value="Data Analysis">Data Analysis</option>
+            <option value="Design">Design</option>
+          </select>
+        </div>
 
-            <select className="dropdown" onChange={e => setFilters({ ...filters, techSkill: e.target.value })} value={filters.techSkill || ''}>
-              <option value="">Technical Skills</option>
-              <option value="Programming">Programming</option>
-              <option value="Data Analysis">Data Analysis</option>
-              <option value="Design">Design</option>
-            </select>
+        <div className="filter-group">
+          <label>🤝 Non-technical Skills</label>
+          <select
+            className="filter-select dropdown"
+            onChange={e => setFilters({ ...filters, nonTechSkill: e.target.value })}
+            value={filters.nonTechSkill || ''}
+          >
+            <option value="">Non-technical Skills</option>
+            <option value="Communication">Communication</option>
+            <option value="Teamwork">Teamwork</option>
+            <option value="Leadership">Leadership</option>
+          </select>
+        </div>
 
-            <select className="dropdown" onChange={e => setFilters({ ...filters, nonTechSkill: e.target.value })} value={filters.nonTechSkill || ''}>
-              <option value="">Non-technical Skills</option>
-              <option value="Communication">Communication</option>
-              <option value="Teamwork">Teamwork</option>
-              <option value="Leadership">Leadership</option>
-            </select>
-
-            <select className="dropdown" onChange={e => setFilters({ ...filters, sortOrder: e.target.value })} value={filters.sortOrder || ''}>
-              <option value="">Sort</option>
-              <option value="A-Z">Name A-Z</option>
-              <option value="Z-A">Name Z-A</option>
-            </select>
+        {/* Full-width search (no inline style) */}
+        <div className="search-container">
+          <label>🔎 Search Students</label>
+          <div className="search-inner">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search by name…"
+              onChange={e => setFilters({ ...filters, searchTerm: e.target.value })}
+              value={filters.searchTerm || ''}
+            />
           </div>
+        </div>
+      </div>
+    </section>
 
-          <div className="filter-search-sort">
-            <div className="search-bar">
-              <i className="fas fa-search" />
-              <input
-                type="text"
-                placeholder="Search by name…"
-                onChange={e => setFilters({ ...filters, searchTerm: e.target.value })}
-                value={filters.searchTerm || ''}
-              />
+    {/* Results header */}
+    
+
+    {/* Profiles grid — SIZE UNCHANGED */}
+    <div className="card-container profiles-grid">
+      {cvs.map(cv => {
+        const deptClass =
+          (cv.major || '').toLowerCase().includes('computer') ? 'cs' :
+          (cv.major || '').toLowerCase().includes('communication') ? 'cm' :
+          (cv.major || '').toLowerCase().includes('earth') ? 'es' :
+          (cv.major || '').toLowerCase().includes('econom') ? 'ge' : '';
+
+        const skills = [
+          ...(cv.technical_skills ? String(cv.technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
+          ...(cv.non_technical_skills ? String(cv.non_technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
+        ].slice(0, 4);
+
+        return (
+          <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card profile-card">
+            <div className="profile-header">
+              <div className="profile-info">
+                <div className="student-name">{cv.name} {cv.surname}</div>
+              </div>
+              <span className="submitted-date">✅ Submitted</span>
             </div>
-          </div>
-        </div>
-      </section>
 
-      <div className="card-container">
-        {cvs.map(cv => {
-          const deptClass =
-            (cv.major || '').toLowerCase().includes('computer') ? 'cs' :
-            (cv.major || '').toLowerCase().includes('communication') ? 'cm' :
-            (cv.major || '').toLowerCase().includes('earth') ? 'es' :
-            (cv.major || '').toLowerCase().includes('econom') ? 'ge' : '';
+            <div className={`student-major ${deptClass}`}>{cv.major || 'Department'}</div>
 
-          const skills = [
-            ...(cv.technical_skills ? String(cv.technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
-            ...(cv.non_technical_skills ? String(cv.non_technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
-          ].slice(0, 4);
+            <div className="meta-row profile-meta">
+              <span>🌍 {cv.country || 'Country'}</span>
+              <span>🗣️ {cv.language || 'Language'}</span>
+              <span>🎓 {cv.graduation_year ? `Class of ${cv.graduation_year}` : 'Class year'}</span>
+            </div>
 
-          return (
-            <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card">
-              <div className="profile-header">
-                <div className="profile-info">
-                  <div className="student-name">{cv.name} {cv.surname}</div>
-                  <div className="student-id">Student ID: UCA{String(cv.id).padStart(6,'0')}</div>
-                </div>
-                <div className="submitted-date">
-                  {cv.submitted_at ? new Date(cv.submitted_at).toLocaleDateString() : '—'}
-                </div>
-              </div>
-
-              <div className={`student-major ${deptClass}`}>{cv.major || 'Department'}</div>
-
-              <div className="meta-row">
-                <span>📍 {cv.country || 'Country'}</span>
-                <span>🗣️ {cv.language || 'Language'}</span>
-                <span>🎓 {cv.graduation_year ? `Class of ${cv.graduation_year}` : 'Class year'}</span>
-              </div>
-
-              <div className="skill-strip">
+            <div className="skill-strip profile-skills">
+              <div className="skills-label">💻 Skills</div>
+              <div className="skills-list">
                 {skills.length
                   ? skills.map((s, i) => <span key={i} className="skill-tag">{s}</span>)
                   : <span className="skill-tag">Skills</span>}
               </div>
-            </a>
-          );
-        })}
-      </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
 
-      <button type="button" className="fab-add" aria-label="Add New Student">+</button>
-    </main>
-  );
+    <button type="button" className="fab-add add-student-btn" aria-label="Add New Student">+</button>
+  </main>
+);
+
 };
 
 
 /* ---------------- App (passes filters + setFilters) ---------------- */
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [page, setPage] = useState(window.location.hash || '#login');
+  const [page, setPage] = useState('#login');
+
+
   const [filters, setFilters] = useState({
     category: 'all',
     country: '',
@@ -642,23 +850,48 @@ const App = () => {
   });
 
   useEffect(() => {
-    const onHash = () => setPage(window.location.hash || '#login');
+    const onHash = () => setPage(window.location.hash || (token ? '#cv-cards' : '#login'));
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
-  }, []);
+  }, [token]);
+
+  // Redirect helpers to keep URLs sensible
+  useEffect(() => {
+    if (token && (page === '#login' || page === '#signup' || page === '' )) {
+      window.location.hash = '#cv-cards';
+    }
+    if (!token && (page === '#cv-cards' || page === '')) {
+      window.location.hash = '#login';
+    }
+  }, [token, page]);
 
   return (
     <div>
-      {/* Keep using your existing NavBar if it’s already defined in your file */}
       <NavBar token={token} setToken={setToken} />
 
-      {page === '#cv-cards' && token ? (
-        <CVCards token={token} filters={filters} setFilters={setFilters} />
-      ) : null}
+      {/* Route by hash */}
+      {(() => {
+        if (!token) {
+          if (page === '#signup') return <SignUp />;
+          if (page === '#pending-approval') return <PendingApproval />;
+          // default for unauthenticated = login
+          return <Login setToken={setToken} />;
+        }
 
-      <div className="chat-icon" onClick={() => window.location.href = 'https://x.ai/grok'}>
-        <i className="fas fa-comment"></i>
-      </div>
+        // Authenticated routes
+        if (page === '#cv-cards') return (
+          <CVCards
+            token={token}
+            filters={filters}
+            setFilters={setFilters}
+          />
+        );
+        if (page === '#pending-approval') return <PendingApproval />;
+
+        // Fallback (unknown hash)
+        return <CVCards token={token} filters={filters} setFilters={setFilters} />;
+      })()}
+
     </div>
   );
 };
