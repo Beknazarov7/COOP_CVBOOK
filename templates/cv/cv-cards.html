@@ -1,311 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UCA CV Book</title>
-    <link rel="stylesheet" href="styles_student_cards.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVBook - Student CVs</title>
     <style>
-      /* Reset & Base Styles */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-      }
-
-      body {
-        background: linear-gradient(to bottom, #e6f0ff, #ffffff);
-        color: #333333;
-        line-height: 1.6;
-      }
-
-      /* Header */
-      .header {
-        background-color: #6bb9e0;
-        padding: 20px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .header-title {
-        color: #ffffff;
-        font-size: 24px;
-        font-weight: bold;
-        text-transform: uppercase;
-      }
-
-      .header-nav a {
-        color: #ffffff;
-        text-decoration: none;
-        margin-left: 20px;
-        font-size: 14px;
-        text-transform: uppercase;
-      }
-
-      .header-nav a:hover {
-        text-decoration: underline;
-      }
-
-      /* Filter Section */
-      .filter-section {
-        background: linear-gradient(to bottom, #e6f0ff, #ffffff);
-        padding: 30px 40px;
-        margin: 0;
-        border-radius: 0;
-      }
-
-      .filter-tabs {
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-        margin-bottom: 20px;
-      }
-
-      .filter-tab {
-        color: #333333;
-        text-transform: uppercase;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: bold;
-        transition: color 0.3s;
-      }
-
-      .filter-tab.active {
-        color: #73afe4;
-      }
-
-      .filter-tab:hover {
-        color: #73afe4;
-      }
-
-      .filter-controls {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: wrap;
-      }
-
-      .filter-dropdowns {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-      }
-
-      .dropdown,
-      .search-bar {
-        border: 2px solid #6bb9e0;
-        background-color: #ffffff;
-        padding: 10px 15px;
-        border-radius: 6px;
-        color: #333333;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        cursor: pointer;
-      }
-
-      .search-bar i {
-        color: #4b5563;
-        font-size: 16px;
-      }
-
-      .search-bar input {
-        border: none;
-        outline: none;
-        background: transparent;
-        color: #333333;
-        font-size: 14px;
-        width: 150px;
-      }
-
-      /* Main Content Area */
-      .main-content {
-        padding: 40px;
-      }
-
-      .main-heading {
-        font-size: 36px;
-        font-weight: bold;
-        color: #333333;
-        margin-bottom: 30px;
-        text-align: center;
-      }
-
-      /* CARD CONTAINER FROM CURRENT CODE */
-      .card-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 20px;
-      }
-
-      /* CARD STYLE FROM CURRENT CODE, WITH VISUAL UPGRADE */
-      .student-card {
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-        padding: 20px;
-        width: 100%;
-        max-width: 300px;
-        text-align: center;
-        transition: transform 0.3s, box-shadow 0.3s;
-        text-decoration: none;
-        color: inherit;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .student-card:hover {
-        transform: scale(1.03);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-        background-color: #f8fbff;
-        cursor: pointer;
-      }
-
-      .student-name {
-        font-size: 18px;
-        font-weight: bold;
-        color: #1e3a8a;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-      }
-
-      .student-major {
-        font-size: 14px;
-        color: #555555;
-        font-style: italic;
-      }
-
-      .submitted-date small {
-        font-size: 12px;
-        color: #888888;
-      }
-
-      /* Chat Icon */
-      .chat-icon {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #3a7ccf;
-        color: #ffffff;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      .chat-icon:hover {
-        background-color: #2e639f;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .cv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .cv-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cv-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .cv-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .cv-header {
+            margin-bottom: 1.5rem;
+        }
+        
+        .cv-name {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .cv-email {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cv-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-value {
+            font-size: 0.95rem;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .cv-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-secondary::before {
+            content: "⬇";
+            margin-right: 6px;
+            font-size: 16px;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6);
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: white;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-state h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+        
+        .stats {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        
+        .stats span {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+        }
     </style>
-  </head>
-  <body>
-    <!-- Header -->
-    <header class="header">
-      <div class="header-title">UCA University of Central Asia</div>
-      <nav class="header-nav">
-        <a href="#">Home Page</a>
-        <a href="#">About Us</a>
-        <a href="#">Majors</a>
-      </nav>
-    </header>
-
-    <!-- Filter Section -->
-    <section class="filter-section">
-      <div class="filter-tabs">
-        <span class="filter-tab active" data-filter="all">ALL</span>
-        <span class="filter-tab" data-filter="computer-science"
-          >COMPUTER SCIENCE</span
-        >
-        <span class="filter-tab" data-filter="communication-media"
-          >COMMUNICATION AND MEDIA</span
-        >
-        <span class="filter-tab" data-filter="earth-environment"
-          >EARTH AND ENVIRONMENTAL SCIENCES</span
-        >
-        <span class="filter-tab" data-filter="global-economics"
-          >GLOBAL ECONOMICS</span
-        >
-      </div>
-
-      <div class="filter-controls">
-        <div class="filter-dropdowns">
-          <select class="dropdown">
-            <option>COUNTRY</option>
-            <option>Kyrgyzstan</option>
-            <option>Tajikistan</option>
-          </select>
-          <select class="dropdown">
-            <option>LANGUAGE</option>
-            <option>English</option>
-            <option>Russian</option>
-          </select>
-          <select class="dropdown">
-            <option>TECHNICAL SKILLS</option>
-            <option>Programming</option>
-            <option>Data Analysis</option>
-          </select>
-          <select class="dropdown">
-            <option>NON-TECHNICAL SKILLS</option>
-            <option>Communication</option>
-            <option>Teamwork</option>
-          </select>
-          <select class="dropdown">
-            <option>A-Z</option>
-            <option>Z-A</option>
-          </select>
-        </div>
-        <div class="filter-search-sort">
-          <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <h1 class="main-heading">Student Profiles</h1>
-      <div class="student-grid">
-        {% if cvs %} {% for cv in cvs %}
-        <a
-          href="{% url 'cv_detail' cv.id %}"
-          class="student-card"
-          data-category="{{ cv.major|slugify }}"
-        >
-          <div class="student-name">{{ cv.name }} {{ cv.surname }}</div>
-          <div class="student-major">{{ cv.major|default:"N/A" }}</div>
-          <div class="submitted-date">
-            <small>Submitted: {{ cv.submitted_at|date:"F d, Y" }}</small>
-          </div>
-        </a>
-        {% endfor %} {% else %}
-        <p>No CVs available.</p>
-        {% endif %}
-      </div>
-    </main>
-
-    <!-- Chat Icon -->
-    <div class="chat-icon">
-      <i class="fas fa-comment"></i>
+</head>
+<body>
+    <div class="header">
+        <h1>CVBook</h1>
+        <p>Discover talented students from University of Central Asia</p>
     </div>
-
-    <script src="cv-cards.js"></script>
-  </body>
+    
+    {% if cvs %}
+        <div class="stats">
+            <span>{{ cvs|length }} CV{{ cvs|length|pluralize }} available</span>
+        </div>
+        
+        <div class="cv-grid">
+            {% for cv in cvs %}
+            <div class="cv-card">
+                <div class="cv-header">
+                    <h3 class="cv-name">{{ cv.name }} {{ cv.surname }}</h3>
+                    <p class="cv-email">{{ cv.email }}</p>
+                </div>
+                
+                <div class="cv-info">
+                    <div class="info-item">
+                        <span class="info-label">Major</span>
+                        <span class="info-value">{{ cv.major|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Country</span>
+                        <span class="info-value">{{ cv.country|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Class Year</span>
+                        <span class="info-value">{{ cv.graduation_year|default:"Not specified" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status</span>
+                        <span class="info-value">{{ cv.status_preference|default:"Not specified" }}</span>
+                    </div>
+                </div>
+                
+                <div class="cv-actions">
+                    <a href="/cv/detail/{{ cv.id }}/" class="btn btn-primary">View Details</a>
+                    <a href="/cv/{{ cv.id }}/download/" class="btn btn-secondary">Download PDF</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h2>No CVs Available</h2>
+            <p>There are currently no student CVs published to the CVBook.</p>
+        </div>
+    {% endif %}
+</body>
 </html>
+
+
+
+
+

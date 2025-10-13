@@ -3,55 +3,141 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
+from django.utils import timezone
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from django.conf import settings
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 import logging
 import sys
+import re
+import sqlite3
+import os
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
 class SignupView(APIView):
     permission_classes = [AllowAny]
+    
+    def validate_password_strength(self, password):
+        """Validate password strength"""
+        if len(password) < 8:
+            return "Password must be at least 8 characters long."
+        
+        if not re.search(r'[A-Z]', password):
+            return "Password must contain at least one uppercase letter."
+        
+        if not re.search(r'[a-z]', password):
+            return "Password must contain at least one lowercase letter."
+        
+        if not re.search(r'\d', password):
+            return "Password must contain at least one number."
+        
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+            return "Password must contain at least one special character (!@#$%^&*(),.?\":{}|<>)."
+        
+        return None
+    
+    def check_email_exists_in_management_system(self, email):
+        """Check if email exists in the management system database"""
+        try:
+            # Path to the management system database
+            management_db_path = os.path.join(settings.BASE_DIR, '..', 'UCA-Co-op-Website-main', 'db.sqlite3')
+            if os.path.exists(management_db_path):
+                conn = sqlite3.connect(management_db_path)
+                cursor = conn.cursor()
+                
+                # Check if email exists in main user table
+                cursor.execute("SELECT COUNT(*) FROM users WHERE email = ?", (email,))
+                main_user_exists = cursor.fetchone()[0] > 0
+                
+                # Check if email exists in CVBook users table
+                cursor.execute("SELECT COUNT(*) FROM cvbook_users WHERE email = ?", (email,))
+                cvbook_user_exists = cursor.fetchone()[0] > 0
+                
+                conn.close()
+                return main_user_exists or cvbook_user_exists
+        except Exception as e:
+            logger.error(f"Error checking email in management system: {str(e)}")
+            return False
+        
+        return False
+    
     def post(self, request):
         username = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
         first_name = request.data.get('first_name', '')
         last_name = request.data.get('last_name', '')
+        auto_approve = request.data.get('auto_approve', False)
         
         if not all([username, email, password]):
             return Response({'error': 'Username, email, and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate email format
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response({'error': 'Please enter a valid email address.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate password strength
+        password_error = self.validate_password_strength(password)
+        if password_error:
+            return Response({'error': password_error}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if username already exists
         if CustomUser.objects.filter(username=username).exists():
             return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if email already exists in CVBook
         if CustomUser.objects.filter(email=email).exists():
             return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
         
+        # Check if email exists in management system (only for regular signups, not admin-created users)
+        if not auto_approve and self.check_email_exists_in_management_system(email):
+            return Response({'error': 'Email already exists in the system. Please use a different email or login if you have an account.'}, status=status.HTTP_400_BAD_REQUEST)
+        
         try:
+            # Create user with appropriate approval status
+            is_pending = not auto_approve
             user = CustomUser.objects.create_user(
                 username=username,
                 email=email,
                 password=password,
                 first_name=first_name,
                 last_name=last_name,
-                is_pending=True
+                is_pending=is_pending,
+                is_active=True
             )
-            logger.info(f"User created: {username}, awaiting approval")
+            
+            # If auto-approved, set approval timestamp
+            if auto_approve:
+                user.accepted_at = timezone.now()
+                user.save()
+                logger.info(f"User created and auto-approved: {username}")
+                message = 'Account created and approved. User can login immediately.'
+            else:
+                logger.info(f"User created: {username}, awaiting approval")
+                message = 'Account created. Awaiting admin approval.'
+            
             return Response({
-                'message': 'Account created. Awaiting admin approval.',
+                'message': message,
                 'user': {
                     'id': user.id,
                     'username': user.username,
                     'email': user.email,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
-                    'is_pending': user.is_pending
+                    'is_pending': user.is_pending,
+                    'is_approved': not user.is_pending
                 }
             }, status=status.HTTP_201_CREATED)
         except Exception as e:
@@ -156,3 +242,78 @@ class PasswordResetConfirmView(APIView):
         user.save()
         logger.info(f"Password reset successful for user: {user.username}")
         return Response({"message": "Password has been reset successfully.", "redirect": "#login"}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])  # Allow access for management system
+def users_list_api(request):
+    """
+    API endpoint to list external users for management system
+    """
+    try:
+        # Get all users (external users are those who signed up through CVBook)
+        users = CustomUser.objects.all().order_by('-date_joined')
+        
+        users_data = []
+        for user in users:
+            users_data.append({
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'company': getattr(user, 'company', ''),  # If company field exists
+                'is_approved': not user.is_pending,  # Use is_pending field (inverted)
+                'date_joined': user.date_joined.isoformat() if user.date_joined else None,
+            })
+        
+        return Response(users_data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Error in users_list_api: {str(e)}")
+        return Response({'error': 'Failed to fetch users'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Allow access for management system
+def user_management_action(request):
+    """
+    Handle user management actions from admin panel
+    """
+    try:
+        action = request.data.get('action')
+        user_id = request.data.get('user_id')
+        
+        if not user_id or not action:
+            return Response({'success': False, 'message': 'Missing required parameters'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
+        
+        user = CustomUser.objects.get(id=user_id)
+        
+        if action == 'approve':
+            user.is_pending = False
+            user.is_active = True
+            user.accepted_at = timezone.now()
+            user.rejected_at = None
+            user.save()
+            return Response({'success': True, 'message': 'User approved successfully'})
+            
+        elif action == 'reject':
+            user.is_pending = False
+            user.is_active = False
+            user.rejected_at = timezone.now()
+            user.save()
+            return Response({'success': True, 'message': 'User rejected successfully'})
+            
+        elif action == 'delete':
+            user.delete()
+            return Response({'success': True, 'message': 'User deleted successfully'})
+            
+        else:
+            return Response({'success': False, 'message': 'Invalid action'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
+            
+    except CustomUser.DoesNotExist:
+        return Response({'success': False, 'message': 'User not found'}, 
+                      status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        logger.error(f"Error in user_management_action: {str(e)}")
+        return Response({'success': False, 'message': str(e)}, 
+                      status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -2,15 +2,21 @@ import re
 import os
 from pathlib import Path
 from datetime import timedelta
-from decouple import config
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv(BASE_DIR / '.env')
+
 # Security settings
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
+SECRET_KEY = 'django-insecure-temporary-key-for-development'
+DEBUG = True
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Allow embedding in iframes from localhost
+X_FRAME_OPTIONS = 'ALLOWALL'
 
 # Application definition
 INSTALLED_APPS = [
@@ -23,10 +29,10 @@ INSTALLED_APPS = [
     
     # Third-party apps
     'rest_framework',
-    'rest_framework_simplejwt',
-    'corsheaders',
-    'whitenoise',
-    'django_tex',
+    # 'rest_framework_simplejwt',
+    # 'corsheaders',
+    # 'whitenoise',
+    # 'django_tex',
     
     # Local apps
     'authentication',
@@ -35,8 +41,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -60,15 +66,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    },
-    {
-        'NAME': 'tex',
-        'BACKEND': 'django_tex.engine.TeXEngine',
-        'DIRS': [
-            BASE_DIR / 'cv' / 'templates',
-            BASE_DIR / 'templates' / 'tex',
-        ],
-        'APP_DIRS': True,
     },
 ]
 
@@ -159,6 +156,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://localhost:8001",
+    "http://127.0.0.1:8001",
+    "http://localhost:8002",
+    "http://127.0.0.1:8002",
 ]
 
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS.copy()
@@ -195,9 +196,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '').replace(' ', '')  # Remove spaces from app password
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'admin@localhost')
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
@@ -219,7 +220,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # LaTeX/PDF settings
-TEX_OUTPUT_DIR = BASE_DIR / 'media' / 'pdfs'
+# TEX_OUTPUT_DIR = BASE_DIR / 'media' / 'pdfs'
 TEX_INPUT_DIR = BASE_DIR / 'cv' / 'templates'
 LATEX_INTERPRETER = 'pdflatex'
 

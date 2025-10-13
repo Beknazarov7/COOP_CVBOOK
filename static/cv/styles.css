@@ -15,16 +15,36 @@
   --ok: #16a34a;
   --radius: 14px;
   --shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+
+  --radius-xl: 18px;
+  --shadow-xl: 0 10px 25px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
+  --card-bg: #fff;
+  --text-strong: #0b1220;
+  --text-muted: #5b6472;
+
+  /* semantic accents */
+  --ok: #16a34a;            /* green-600 */
+  --ok-100: #eaf7ee;
+  --err: #e11d48;           /* rose-600 */
+  --err-100: #feecef;
 }
 
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9; /* default bg; CV form overrides to --bg */
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
 }
 
-html, body { height: 100%; }
+html {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+}
+
+html, body { 
+  min-height: 100vh;
+}
 
 h2.form-title, 
 .modal-content > h2{
@@ -36,6 +56,48 @@ h2,
 h3 {
   color: #2c3e50;
 }
+/* small spacing polish for the accomplishments section */
+.accomplishments-section h5 {
+  margin: 12px 0 8px;
+  font-weight: 700;
+}
+
+.required-star {
+  color: red !important;
+  font-weight: 700;
+  margin-left: 3px;
+}
+
+/* ✅ Any label text that contains a literal * */
+label {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Make the * itself red */
+label:has(*):not(:has(span)) {
+  color: #0f172a;
+}
+label:has(*):not(:has(span)) * {
+  color: red;
+}
+
+/* === Make all required stars red === */
+.required-star,
+label span.required-star,
+label span:contains("*") {
+  color: red !important;
+}
+
+/* Optional: add space before * for neatness */
+label .required-star {
+  margin-left: 4px;
+}
+label:has(*):after {
+  color: red;
+}
+
+
 
 .required {
   color: red;
@@ -55,6 +117,62 @@ h3 {
    ========================================================= */
 
 /* --- Page & Card --- */
+/* Remove white background container when error is shown */
+/* 1) Let the card shrink to its content */
+#cvFormModal .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: auto;              /* <- critical */
+  min-height: 0;             /* cancel any 70–80vh defaults */
+  padding-bottom: 16px;      /* slightly tighter bottom padding */
+}
+
+/* If any ancestors force height/min-height, neutralize them */
+.cv-big, .cv-big .site-wrap, #cvFormModal {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+/* 2) Compact spacing inside steps so layout is tighter overall */
+.form-step { margin-bottom: 10px; }
+.row { margin-bottom: 10px; }        /* if you have it */
+.form-group { margin-bottom: 10px; } /* if you have it */
+
+/* 3) Keep the footer where it belongs, without extra space */
+.form-navigation {
+  margin-top: 12px;      /* right after the last field */
+  align-self: flex-end;  /* keeps buttons aligned right */
+  padding-bottom: 0;
+}
+
+/* OPTIONAL: make buttons sticky only when content is long */
+@media (min-width: 640px) {
+  .form-navigation.is-sticky {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(255,255,255,.96), rgba(255,255,255,0));
+    backdrop-filter: blur(4px);
+    padding-top: 8px;
+  }
+}
+
+
+
+#step-12 {
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 auto;
+}
+
+/* Center the error card properly */
+#errorCard {
+  max-width: 600px;
+  margin: 60px auto;
+}
+
 .modal {
   /* lighter look; remove dark overlay effect */
   background-color: transparent;
@@ -92,21 +210,17 @@ h3 {
   border-radius: 3px;
 }
 
-/* Page background (like your screenshot) */
+/* Page background - Clean gradient */
 .cv-big {
-  /* use your own image path */
-  background: url("/CV-Book-for-Cooperative-Department/static/cv/foto1.jpg") no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   min-height: 100vh;
-  background-position: center;
-  background-attachment: fixed; /* nice parallax feel */
+  width: 100%;
 }
 
 body.cv-bg {
-  /* if you keep the url in CSS, use the absolute /static path */
-  background: url("/static/cv/foto1.jpg");
-  background-size: cover;
-  background-color: transparent !important;      /* beat earlier body bg */
+  /* Clean gradient background */
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background-color: #f8fafc;
 }
 
 /* Page wrapper: adds breathing room and enables page-level scroll */
@@ -226,6 +340,21 @@ h2,
 .new-progress .progress-step.completed{
   border-color:#22c55e; color:#fff; background:#22c55e;
 }
+/* put under your CV FORM styles */
+.inline-checkbox{
+  display: inline-flex; 
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;     /* sits just below the end-date input */
+  font-weight: 600;     /* matches your label weight */
+  color: #0f172a;       /* same label color */
+}
+
+.inline-checkbox input[type="checkbox"]{
+  /* keep default box size but ensure alignment */
+  transform: translateY(0); 
+}
+
 
 /* if the container gets too narrow, allow horizontal scroll rather than wrapping */
 .new-progress{ overflow-x: auto; scrollbar-width: thin; }
@@ -337,20 +466,128 @@ border-color:#22c55e; color:#fff; background:#22c55e;
   min-width: 240px;
   margin-bottom: 12px;
 }
-.form-group label {
+/* only the FIRST, direct label (e.g., "Start Date", "End Date") */
+.form-group > label {
   display: flex;
   align-items: center;
   font-weight: 600;
   margin-bottom: 5px;
 }
 
+
 .form-group label i {
   margin-right: 8px;
   color: #555; /* adjust icon color */
   font-size: 1rem;
 }
+.inline-end-date {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+.inline-end-date input.js-date {
+  flex: 1;
+  min-width: 70%;
+}
+.inline-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;            /* smaller text so date input gets more space */
+  white-space: nowrap;         /* keep text on one line */
+  margin: 0;                   /* no extra vertical spacing */
+}
+.inline-checkbox input[type="checkbox"] {
+  transform: scale(0.9);
+  margin: 0;
+}
+.inline-end-date .inline-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #1e293b;
+  margin-top: 0;
+}
+
+/* Make checkbox a bit smaller and aligned */
+.inline-end-date .inline-checkbox input[type="checkbox"] {
+  transform: scale(0.9);
+  margin: 0;
+}
 
 /* --- Inputs: remove leading icons for clean look --- */
+/* the checkbox+text row under the input */
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* spacing between date and checkbox */
+}
+.inline-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.875rem;  /* smaller text */
+  font-weight: 500;
+  color: #0f172a;
+  white-space: nowrap;  /* keep text on one line */
+}
+.inline-checkbox input[type="checkbox"] {
+  transform: scale(1.1); /* slightly larger for visibility */
+  margin: 0;
+}
+.input-group .inline-checkbox{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;     /* space under the end-date input */
+  margin-bottom: 0;     /* don't inherit extra bottom margin */
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* keep the generic label rule from overriding */
+.input-group .inline-checkbox label { all: unset; }
+/* put the input and the checkbox on one line */
+.input-group.with-checkbox{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* let the date input take the row, checkbox hugs the right */
+.input-group.with-checkbox > input,
+.input-group.with-checkbox > .flatpickr-input {
+  flex: 1 1 auto;
+  min-width: 0;  /* prevents overflow in narrow containers */
+}
+
+/* keep the checkbox tidy; no extra top margin */
+.input-group.with-checkbox .inline-checkbox{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;             /* override any global label margins */
+  white-space: nowrap;   /* keep text on one line */
+}
+
+/* make the "title" label (End Date) styling apply only to the first label in a form-group */
+.form-group > label{
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 640px){
+  .input-group.with-checkbox{ flex-wrap: wrap; }
+  .input-group.with-checkbox .inline-checkbox{ margin-top: 8px; }
+}
+
 .input-group {
   display: block;
   border: none;
@@ -392,6 +629,33 @@ textarea:focus {
   border-color: var(--primary-strong);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
 }
+/* === ERROR ONLY SCREEN === */
+.error-only-screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #fdf2f2; /* soft red backdrop */
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-only-screen .result-card.error {
+  background: #fef2f2;
+  border: 2px solid #dc2626;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 40px 32px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.error-only-screen .result-icon {
+  color: #dc2626;
+  font-size: 60px;
+  margin-bottom: 16px;
+}
+
 
 .error-message {
   display: none;
@@ -802,28 +1066,131 @@ body,
 
 /* ===== Result Card Styles ===== */
 .result-card {
-  max-width: 500px;
-  margin: 40px auto;
-  padding: 30px;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  width: min(640px, 92vw);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  background: var(--card-bg);
+  padding: 28px 28px 24px;
+  border: 1px solid rgba(0,0,0,.06);
+  transform: translateY(6px);
+  animation: card-in 260ms cubic-bezier(.21,.9,.32,1.2) both;
+}
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(12px) scale(.98) }
+  to   { opacity: 1; transform: translateY(0)   scale(1) }
 }
 
-.result-card.success {
-  background-color: #e9f9f0;
-  border: 2px solid #34c759;
+.result-card.success { 
+  border-color: var(--ok);
+  background:
+    linear-gradient(180deg, rgba(22,163,74,0.06), transparent 40%),
+    var(--card-bg);
 }
-
 .result-card.error {
-  background-color: #fdecea;
-  border: 2px solid #ff3b30;
+  border-color: var(--err);
+  background:
+    linear-gradient(180deg, rgba(225,29,72,0.06), transparent 40%),
+    var(--card-bg);
 }
 
 .result-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  margin: 6px auto 12px;
+  font-size: 32px;
+  line-height: 1;
+  box-shadow: inset 0 0 0 1.5px rgba(0,0,0,.06);
+}
+.result-card.success .result-icon {
+  color: var(--ok);
+  background: var(--ok-100);
+}
+
+.result-card.error .result-icon {
+  color: var(--err);
+  background: var(--err-100);
+  animation: subtle-pulse 1400ms ease-in-out infinite;
+}
+
+@keyframes subtle-pulse {
+  0%, 100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(225,29,72,.18); }
+  50%      { transform: scale(1.04); box-shadow: 0 0 0 10px rgba(225,29,72,0); }
+}
+
+/* Title + message */
+.result-title {
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-strong);
+  font-size: 1.25rem;
+  margin-top: 4px;
+}
+
+.result-sub {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: .98rem;
+  margin: 6px auto 14px;
+  max-width: 46ch;
+}
+
+/* Actions */
+.result-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.btn-primary, .btn-secondary {
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+}
+
+.btn-primary { 
+  background: var(--ok);
+  color: #fff;
+}
+.btn-primary:hover { transform: translateY(-1px) }
+.btn-primary:active { transform: translateY(0) scale(.99) }
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #111827;
+}
+.btn-secondary:hover { transform: translateY(-1px) }
+
+/* Optional: details block for verbose errors */
+.result-details {
+  margin: 8px auto 0;
+  width: 100%;
+  max-width: 520px;
+  font-size: .9rem;
+  color: #6b7280;
+  background: #f8fafc;
+  border: 1px dashed #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.result-details summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Respect small screens */
+@media (max-width: 420px) {
+  .result-card { padding: 22px 18px 18px }
+  .result-title { font-size: 1.1rem }
+  .result-sub { font-size: .95rem }
 }
 
 .success .result-icon {
@@ -871,4 +1238,438 @@ body,
 
 .btn-danger:hover {
   background-color: #e22b22;
+}
+/* Full-page host for result cards */
+#result-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(17, 24, 39, 0.35);          /* dim background */
+  backdrop-filter: blur(6px) saturate(110%);   /* tasteful blur */
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  z-index: 999999;                             /* above everything */
+  animation: overlay-fade 220ms ease-out both;
+}
+
+@keyframes overlay-fade {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+/* ===== Backdrop with subtle grid + radial focus ===== */
+#result-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  overflow: auto;
+}
+
+#result-overlay .result-shell{
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  padding: 24px;
+  min-height: 100vh;
+
+  /* Clean white background with subtle gradient */
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+
+#result-overlay .result-shell::before{
+  content:none;
+  position:absolute; inset:0;
+  /* soft light grid */
+  background-image:
+    linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px;
+  opacity: .6;
+  pointer-events:none;
+}
+
+/* ===== Card with gradient border + glass ===== */
+.result-card.fancy{
+  width: min(720px, 94vw);
+  border-radius: 24px;
+  position: relative;
+  padding: 32px 28px 28px;
+  background: rgba(255,255,255,.92);
+  box-shadow:
+    0 40px 80px rgba(0,0,0,.18),
+    0 12px 24px rgba(0,0,0,.1),
+    0 4px 8px rgba(0,0,0,.06);
+  border: 1px solid rgba(255,255,255,.8);
+  backdrop-filter: blur(10px);
+}
+.result-card.fancy::before{
+  /* gradient ring */
+  content:"";
+  position:absolute; inset: -1px;
+  border-radius: 21px;
+  background: conic-gradient(from 220deg, #fecaca, #fda4af 25%, #fecaca 60%, #fca5a5);
+  filter: blur(10px); opacity:.35;
+  z-index:-1;
+}
+
+/* error variant tint */
+.result-card.fancy.error{
+  background:
+    linear-gradient(180deg, rgba(254,226,226,.55), rgba(255,255,255,.88) 26%),
+    rgba(255,255,255,.85);
+}
+
+/* success variant tint */
+.result-card.fancy.success{
+  background:
+    linear-gradient(180deg, rgba(209,250,229,.65), rgba(255,255,255,.92) 30%),
+    rgba(255,255,255,.95);
+}
+.result-card.fancy.success::before{
+  background: conic-gradient(from 220deg, #d1fae5, #6ee7b7 25%, #a7f3d0 60%, #86efac);
+  filter: blur(12px); opacity:.5;
+}
+
+/* Header badge + animated cross */
+.result-header{ text-align:center; margin-top: 8px; margin-bottom: 12px; }
+.result-badge{
+  width: 72px; height: 72px; margin: 0 auto 10px;
+  display:grid; place-items:center;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(225,29,72,.18), inset 0 0 0 1.5px #fecaca;
+  animation: floaty 3s ease-in-out infinite;
+}
+
+/* Success badge styling */
+.result-badge.success-badge{
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  box-shadow: 
+    0 12px 32px rgba(16,185,129,.35),
+    0 6px 16px rgba(16,185,129,.25),
+    inset 0 0 0 3px rgba(16,185,129,.4);
+  animation: success-pulse 2s ease-in-out infinite;
+}
+
+.result-badge.success-badge svg {
+  width: 36px;
+  height: 36px;
+}
+
+@keyframes success-pulse{
+  0%, 100%{ 
+    transform: scale(1);
+    box-shadow: 
+      0 8px 24px rgba(16,185,129,.3),
+      0 4px 12px rgba(16,185,129,.2),
+      inset 0 0 0 2px rgba(16,185,129,.4);
+  }
+  50%{ 
+    transform: scale(1.05);
+    box-shadow: 
+      0 12px 32px rgba(16,185,129,.4),
+      0 6px 16px rgba(16,185,129,.3),
+      inset 0 0 0 2px rgba(16,185,129,.5);
+  }
+}
+@keyframes floaty{
+  0%,100%{ transform: translateY(0) }
+  50%{ transform: translateY(-3px) }
+}
+.b-circle{ fill:#fee2e2 }
+.b-cross{ stroke:#e11d48 }
+
+/* Title + message */
+.result-title{
+  font-weight: 800; letter-spacing: .2px;
+  font-size: 1.6rem; margin: 8px 0 6px; color:#0f172a;
+  text-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.result-sub{
+  color:#64748b; margin: 0 auto 12px; max-width: 48ch;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+/* Tips list (small checklist to reduce "emptiness") */
+.result-tips{
+  margin: 10px auto 12px; padding: 0 6px; max-width: 560px;
+  list-style: none; color:#475569; font-size:.95rem;
+}
+.result-tips li{
+  display:flex; gap:8px; align-items:flex-start; margin: 6px 0;
+}
+.result-tips li::before{
+  content:""; flex: 0 0 14px; height:14px; margin-top: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 55% 40%, #ef4444 0 34%, #fca5a5 35% 100%);
+  box-shadow: 0 2px 6px rgba(239,68,68,.35);
+}
+
+/* Actions */
+.result-actions{
+  display:flex; justify-content:center; gap:12px; margin: 16px 0 10px;
+  flex-wrap: wrap;
+}
+.btn-primary,.btn-secondary{
+  appearance:none; border:0; cursor:pointer;
+  padding: 12px 24px; border-radius: 10px; font-weight:600;
+  font-size: 1rem;
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+}
+.btn-primary{ 
+  background: linear-gradient(135deg, #10b981, #059669); 
+  color:#fff; 
+}
+.btn-primary:hover{ 
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(16,185,129,.35);
+}
+.btn-primary:active{ 
+  transform: translateY(0) scale(1);
+}
+.btn-secondary{ 
+  background:#f3f4f6; 
+  color:#374151;
+  border: 1px solid #e5e7eb;
+}
+.btn-secondary:hover{ 
+  transform: translateY(-2px);
+  background:#e5e7eb;
+  box-shadow: 0 6px 16px rgba(0,0,0,.15);
+}
+
+/* Details */
+.result-details{
+  margin: 10px auto 0; max-width: 560px; width:100%;
+  background:#fafafa; border:1px dashed #e5e7eb; border-radius: 12px;
+  padding: 8px 12px; color:#6b7280; font-size:.9rem;
+}
+.result-details[open]{ background:#f8fafc }
+.result-details summary{ cursor:pointer; font-weight:600 }
+
+/* Responsive */
+@media (max-width: 640px){
+  .result-card.fancy{ 
+    padding: 24px 20px 20px;
+    width: 96vw;
+  }
+  .result-badge{
+    width: 64px;
+    height: 64px;
+  }
+  .result-badge.success-badge svg {
+    width: 32px;
+    height: 32px;
+  }
+  .result-title{ font-size: 1.4rem }
+  .result-sub{ font-size: 1rem }
+  .result-actions{
+    flex-direction: column;
+  }
+  .result-actions .download-btn,
+  .result-actions .btn-primary,
+  .result-actions .btn-secondary{
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 420px){
+  .result-card.fancy{ padding: 20px 16px 16px }
+  .result-title{ font-size: 1.3rem }
+  .result-sub{ font-size: .95rem }
+  .download-btn{
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+
+/* The card itself uses your existing .result-card styles.
+   If needed, slightly constrain width here too: */
+#result-overlay .result-card {
+  max-width: 640px;
+  width: calc(100vw - 48px);
+}
+
+/* Enhanced Download Button Styling - Original (for cv-detail pages) */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.download-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.download-btn:hover::after {
+  opacity: 1;
+}
+
+.download-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.7);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.download-btn:active {
+  transform: translateY(-1px) scale(1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+}
+
+.download-btn::before {
+  content: "⬇";
+  font-size: 20px;
+  animation: bounce-download 2s ease-in-out infinite;
+}
+
+@keyframes bounce-download {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Success Message Buttons - Clean Design */
+.btn-download-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #10b981;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  flex: 1;
+  min-width: 160px;
+  max-width: 220px;
+}
+
+.btn-download-success:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.btn-download-success:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.btn-download-success svg {
+  flex-shrink: 0;
+}
+
+.btn-dashboard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #f8fafc;
+  color: #334155;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  flex: 1;
+  min-width: 160px;
+  max-width: 220px;
+}
+
+.btn-dashboard:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: #cbd5e1;
+}
+
+.btn-dashboard:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn-dashboard svg {
+  flex-shrink: 0;
+}
+
+/* When overlay is shown, hide the entire modal (white block) */
+.body-result-only .modal {
+  display: none !important;
+}
+
+.body-result-only .modal-content {
+  display: none !important;
+}
+
+/* Also hide the progress and nav while overlay is up (safety) */
+.body-result-only #progressBar,
+.body-result-only .progress-text,
+.body-result-only .form-navigation {
+  display: none !important;
+}
+
+/* Result-only mode: remove the big white card completely */
+.result-only .modal-content,
+.result-only.cv-big .modal-content,
+.cv-big.result-only .modal-content {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+}
+
+/* Hide all the normal chrome in result-only mode */
+.result-only #progressBar,
+.result-only .progress-text,
+.result-only .form-navigation,
+.result-only .modal-content > h2 {
+  display: none !important;
+}
+
+/* Make the result card the only visible block and center it */
+.result-only #step-11,
+.result-only #step-12 {
+  display: block !important;
+  max-width: 640px;
+  margin: 60px auto !important;
+  /* no extra background around them */
+}
+
+/* Make sure other steps are gone */
+.result-only .form-step {
+  display: none !important;
 }

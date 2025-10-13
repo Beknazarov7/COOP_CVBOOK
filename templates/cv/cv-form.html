@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<lang="en">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CV Builder Form</title>
+    <title>CV Builder Form - FIXED VERSION</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'cv/styles.css' %}" />
     <link
@@ -105,6 +105,60 @@
                       Earth and Environmental Sciences
                     </option>
                     <option value="Global Economics">Global Economics</option>
+                  </select>
+                </div>
+                <div class="error-message">This field is required</div>
+              </div>
+            </div>
+            <!-- NEW: Country / Class Year / Status -->
+            <div class="row">
+              <!-- Country -->
+              <div class="form-group">
+                <label for="country">
+                  <i class="fas fa-globe"></i>
+                  Country <span class="required">*</span>
+                </label>
+                <div class="input-group">
+                  <select id="country" name="country" required>
+                    <option value="">Select Country</option>
+                    <!-- options populated by JS -->
+                  </select>
+                </div>
+                <div class="error-message">This field is required</div>
+              </div>
+
+              <!-- Class Year -->
+              <div class="form-group">
+                <label for="graduationYear">
+                  <i class="fas fa-calendar-alt"></i>
+                  Class Year <span class="required">*</span>
+                </label>
+                <div class="input-group">
+                  <select id="graduationYear" name="graduationYear" required>
+                    <option value="">Select Year</option>
+                    <!-- options populated by JS -->
+                  </select>
+                </div>
+                <div class="error-message">This field is required</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Status -->
+              <div class="form-group" style="max-width: 420px;">
+                <label for="status">
+                  <i class="fas fa-briefcase"></i>
+                  Status <span class="required">*</span>
+                </label>
+                <div class="input-group">
+                  <select id="status" name="status" required>
+                    <option value="">Select Status</option>
+                    <option value="Open to internships">Open to internships</option>
+                    <option value="Open to full-time">Open to full-time</option>
+                    <option value="Open to part-time">Open to part-time</option>
+                    <option value="Open to remote">Open to remote</option>
+                    <option value="Open to contract">Open to contract</option>
+                    <option value="Not currently seeking">Not currently seeking</option>
                   </select>
                 </div>
                 <div class="error-message">This field is required</div>
@@ -1119,7 +1173,141 @@ if (successContinueBtn) successContinueBtn.addEventListener("click", startNewFor
 const errorBackBtn = document.getElementById("errorBackBtn");
 if (errorBackBtn) errorBackBtn.addEventListener("click", backToReview);
 
+        // Initialize new dropdown fields
+        populateCountryDropdown();
+        populateGraduationYearDropdown();
+        
+        // Auto-fill user data from URL parameters (for UCA students)
+        autoFillUserData();
       }
+
+      // Populate country dropdown
+      function populateCountryDropdown() {
+        const countrySelect = document.getElementById("country");
+        if (!countrySelect) return;
+
+        const countries = [
+          "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia",
+          "Austria", "Azerbaijan", "Bahrain", "Bangladesh", "Belarus", "Belgium", "Belize", "Benin",
+          "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
+          "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic",
+          "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba",
+          "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
+          "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland",
+          "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala",
+          "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India",
+          "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+          "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
+          "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar",
+          "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius",
+          "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
+          "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger",
+          "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine",
+          "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar",
+          "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
+          "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles",
+          "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
+          "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland",
+          "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga",
+          "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine",
+          "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu",
+          "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+        ];
+
+        countries.forEach(country => {
+          const option = document.createElement("option");
+          option.value = country;
+          option.textContent = country;
+          countrySelect.appendChild(option);
+        });
+      }
+
+      // Populate graduation year dropdown
+      function populateGraduationYearDropdown() {
+        const yearSelect = document.getElementById("graduationYear");
+        if (!yearSelect) return;
+
+        const currentYear = new Date().getFullYear();
+        const startYear = currentYear - 5; // 5 years back
+        const endYear = currentYear + 10; // 10 years forward
+
+        for (let year = startYear; year <= endYear; year++) {
+          const option = document.createElement("option");
+          option.value = year;
+          option.textContent = year;
+          yearSelect.appendChild(option);
+        }
+      }
+
+      // Auto-fill user data from URL parameters (for UCA students)
+      function autoFillUserData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Check if this is a student from UCA main website
+        if (urlParams.get('user_type') === 'student') {
+          const nameField = document.getElementById('name');
+          const surnameField = document.getElementById('surname');
+          const emailField = document.getElementById('email');
+          const majorField = document.getElementById('major');
+          
+          // Auto-fill and disable editing for name, surname, and email
+          if (urlParams.get('name') && nameField) {
+            nameField.value = urlParams.get('name');
+            nameField.disabled = true;
+            nameField.style.backgroundColor = '#f8f9fa';
+            nameField.style.cursor = 'not-allowed';
+          }
+          
+          if (urlParams.get('surname') && surnameField) {
+            surnameField.value = urlParams.get('surname');
+            surnameField.disabled = true;
+            surnameField.style.backgroundColor = '#f8f9fa';
+            surnameField.style.cursor = 'not-allowed';
+          }
+          
+          if (urlParams.get('email') && emailField) {
+            emailField.value = urlParams.get('email');
+            emailField.disabled = true;
+            emailField.style.backgroundColor = '#f8f9fa';
+            emailField.style.cursor = 'not-allowed';
+          }
+          
+          // Auto-fill major if available
+          if (urlParams.get('major') && majorField) {
+            // Wait for the select options to be available
+            setTimeout(() => {
+              majorField.value = urlParams.get('major');
+            }, 100);
+          }
+          
+          // Add visual indicators for UCA students
+          addUCAStudentIndicators();
+        }
+      }
+      
+      function addUCAStudentIndicators() {
+        // Add a notice at the top of the form for UCA students
+        const formStep1 = document.getElementById('step-1');
+        if (formStep1) {
+          const notice = document.createElement('div');
+          notice.className = 'uca-student-notice';
+          notice.innerHTML = `
+            <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #17a2b8;">
+              <div style="display: flex; align-items: center;">
+                <i class="fas fa-university" style="color: #17a2b8; margin-right: 10px; font-size: 18px;"></i>
+                <div>
+                  <strong style="color: #0c5460;">UCA Student Account Detected</strong>
+                  <div style="color: #155160; font-size: 14px; margin-top: 5px;">
+                    Your personal information has been automatically filled from your UCA account and cannot be edited.
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          formStep1.insertBefore(notice, formStep1.querySelector('h3').nextSibling);
+        }
+      }
+
 /**
  * Show the "result step" (success or error) as a full screen step.
  * This hides progress UI and all other steps, like a step-11/12.
@@ -2283,7 +2471,7 @@ window.addEventListener('resize', () => updateProgressBar(currentStep));
   };
 
   console.log("CV data about to be sent:", cvData); // Debug log
-  return toBackendPayload(cvData); // Call toBackendPayload with cvData
+  return cvData; // Return raw CV data
 }
 
 function populateReview() {
@@ -2307,7 +2495,10 @@ function populateReview() {
         <span class="review-list-title">${val("name")} ${val("surname")}</span>
         <span class="review-list-detail">
           Email: ${val("email")}<br>
-          Major: ${val("major")}
+          Major: ${val("major")}<br>
+          Country: ${val("country")}<br>
+          Class Year: ${val("graduationYear")}<br>
+          Status: ${val("status")}
         </span>
       </li>
     </ul>
@@ -2567,7 +2758,7 @@ async function submitForm(event) {
       // Update the download link with the received cv_id
       const downloadLink = document.querySelector("#step-11 .download-btn");
       if (downloadLink) {
-        downloadLink.href = `{% url 'cv-download' cv_id=0 %}`.replace("0", json.cv_id);
+        downloadLink.href = `{% url 'cv:cv-download' cv_id=0 %}`.replace("0", json.cv_id);
       }
       showResultStep("success");
     } else {
@@ -2671,9 +2862,9 @@ function toBackendPayload(cvData) {
     pick(r, ["reference_name", "position", "email", "phone"])
   );
 
-  // ---- ROOT ----
+  // ---- ROOT ---- (Updated 2025-09-29 11:58)
   return {
-    ...pick(cvData, ["name", "surname", "email", "major"]),
+    ...pick(cvData, ["name", "surname", "email", "major", "country", "graduationYear", "status"]),
     educations,
     experiences,
     competencies,

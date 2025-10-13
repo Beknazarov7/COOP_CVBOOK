@@ -6,243 +6,348 @@ from django.conf import settings
 import os
 import logging
 from django.http import FileResponse
+import subprocess
+import tempfile
+from django.template.loader import render_to_string
 
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
+from django.shortcuts import redirect
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from .models import CVSubmission
 logger = logging.getLogger(__name__)
 
 def generate_pdf(cv):
-    logger.info("Preparing context for PDF generation")
+    """
+    Generate a PDF from the CV using LaTeX template
+    """
+    logger.info(f"Generating PDF for CV ID {cv.id} using LaTeX")
     from .models import Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
     
+    # Gather all related data
     educations = cv.educations.all()
     experiences = cv.experiences.all()
     competencies = cv.competencies.all()
     projects = cv.projects.all()
-    technical_skills = cv.technical_skills.first()
+    technical_skills = cv.technical_skills.all()
     languages = cv.languages.all()
     community_involvements = cv.community_involvements.all()
     awards = cv.awards.all()
     references = cv.references.all()
 
-    pdf_path = os.path.join(settings.TEX_OUTPUT_DIR, f'cv_{cv.id}.pdf')
-    os.makedirs(settings.TEX_OUTPUT_DIR, exist_ok=True)
-    doc = SimpleDocTemplate(pdf_path, pagesize=letter)
-    styles = getSampleStyleSheet()
-    story = []
-
-    story.append(Paragraph(f"CV for {cv.name} {cv.surname}", styles['Heading1']))
-    story.append(Paragraph(f"Email: {cv.email}", styles['Normal']))
-    story.append(Paragraph(f"Submitted on: {cv.submitted_at.isoformat()}", styles['Normal']))
-    story.append(Spacer(1, 12))
-
-    if educations:
-        story.append(Paragraph("Education", styles['Heading2']))
-        for edu in educations:
-            edu_text = f"{edu.degree_title or 'N/A'} at {edu.university or 'N/A'}, Expected: {edu.expected_graduation or 'N/A'}"
-            story.append(Paragraph(edu_text, styles['Normal']))
-            story.append(Paragraph(f"Location: {edu.university_location or 'N/A'}", styles['Normal']))
-            story.append(Paragraph(f"Start Date: {edu.start_date or 'N/A'}", styles['Normal']))
-            for cert in edu.certificates.all():
-                cert_text = f"- {cert.certificate_title or 'N/A'} ({cert.year or 'N/A'}, {cert.organization or 'N/A'})"
-                story.append(Paragraph(cert_text, styles['Normal']))
-        story.append(Spacer(1, 12))
-
-    if experiences:
-        story.append(Paragraph("Professional Experience", styles['Heading2']))
-        table_data = [["Position", "Company", "Dates", "Accomplishments"]]
-        for exp in experiences:
-            table_data.append([exp.position_title or "N/A", exp.company or "N/A", exp.dates or "N/A", exp.accomplishments or "N/A"])
-        table = Table(table_data)
-        table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 14),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
-            ('ALIGN', (0, 1), (-1, -1), 'LEFT'),
-            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-            ('FONTSIZE', (0, 1), (-1, -1), 12),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black),
-        ]))
-        story.append(table)
-        story.append(Spacer(1, 12))
-
-    if competencies:
-        story.append(Paragraph("Competencies", styles['Heading2']))
-        for comp in competencies:
-            story.append(Paragraph(f"{comp.competency_type or 'N/A'}: {comp.key_accomplishments or 'N/A'}", styles['Normal']))
-        story.append(Spacer(1, 12))
-
-    if projects:
-        story.append(Paragraph("Projects", styles['Heading2']))
-        for proj in projects:
-            story.append(Paragraph(f"{proj.project_title or 'N/A'} ({proj.year or 'N/A'}): {proj.summary or 'N/A'}", styles['Normal']))
-        story.append(Spacer(1, 12))
+    # Prepare context for template
+    context = {
+        'cv': cv,
+        'educations': educations,
+        'experiences': experiences,
+        'competencies': competencies,
+        'projects': projects,
+        'technical_skills': technical_skills,
+        'languages': languages,
+        'community_involvements': community_involvements,
+        'awards': awards,
+        'references': references,
+    }
     
-    if technical_skills:
-        story.append(Paragraph("Technical Skills", styles['Heading2']))
-        story.append(Paragraph(f"Languages: {technical_skills.programming_languages or 'N/A'}", styles['Normal']))
-        story.append(Paragraph(f"Frameworks: {technical_skills.frameworks_databases or 'N/A'}", styles['Normal']))
-        story.append(Paragraph(f"Tools: {technical_skills.tools or 'N/A'}", styles['Normal']))
-        story.append(Paragraph(f"Web Development: {technical_skills.web_development or 'N/A'}", styles['Normal']))
-        story.append(Paragraph(f"Multimedia: {technical_skills.multimedia or 'N/A'}", styles['Normal']))
-        story.append(Paragraph(f"Network: {technical_skills.network or 'N/A'}", styles['Normal']))
-        story.append(Paragraph(f"Operating Systems: {technical_skills.operating_systems or 'N/A'}", styles['Normal']))
-        story.append(Spacer(1, 12))
+    # Render LaTeX template
+    latex_content = render_to_string('cv.tex', context)
     
-    if languages:
-        story.append(Paragraph("Languages", styles['Heading2']))
-        for lang in languages:
-            story.append(Paragraph(f"- {lang.name or 'N/A'}", styles['Normal']))
-        story.append(Spacer(1, 12))
-
-    if community_involvements:
-        story.append(Paragraph("Community Involvement", styles['Heading2']))
-        for ci in community_involvements:
-            story.append(Paragraph(f"{ci.position_title or 'N/A'} at {ci.organization or 'N/A'}, {ci.dates or 'N/A'}: {ci.achievements or 'N/A'}", styles['Normal']))
-        story.append(Spacer(1, 12))
-
-    if awards:
-        story.append(Paragraph("Awards", styles['Heading2']))
-        for award in awards:
-            story.append(Paragraph(f"{award.award_name or 'N/A'} ({award.year or 'N/A'}): {award.short_description or 'N/A'}", styles['Normal']))
-        story.append(Spacer(1, 12))
-
-    if references:
-        story.append(Paragraph("References", styles['Heading2']))
-        for ref in references:
-            story.append(Paragraph(f"{ref.reference_name or 'N/A'}, {ref.position or 'N/A'}, {ref.email or 'N/A'}, {ref.phone or 'N/A'}", styles['Normal']))
-        story.append(Spacer(1, 12))
-
-    try:
-        doc.build(story)
-        relative_path = os.path.relpath(pdf_path, settings.MEDIA_ROOT).replace(os.sep, '/')
-        return f'/media/{relative_path}'
-    except Exception as e:
-        logger.error(f"Failed to generate PDF for cv_id {cv.id}: {str(e)}")
-        raise
+    # Create output directory for PDFs
+    pdf_output_dir = os.path.join(settings.MEDIA_ROOT, 'pdfs')
+    os.makedirs(pdf_output_dir, exist_ok=True)
+    
+    # Create temporary directory for LaTeX compilation
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Write .tex file
+        tex_path = os.path.join(tmpdir, f'cv_{cv.id}.tex')
+        with open(tex_path, 'w', encoding='utf-8') as f:
+            f.write(latex_content)
+        
+        # Compile LaTeX to PDF
+        try:
+            # Check if pdflatex is available
+            check_latex = subprocess.run(
+                ['which', 'pdflatex'],
+                capture_output=True,
+                text=True
+            )
+            
+            if check_latex.returncode != 0:
+                error_msg = (
+                    "pdflatex is not installed. Please install it using:\n"
+                    "sudo apt-get update && sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended"
+                )
+                logger.error(error_msg)
+                raise Exception(error_msg)
+            
+            # Run pdflatex twice to ensure proper rendering of references and page numbers
+            for run_number in range(2):
+                result = subprocess.run(
+                    ['pdflatex', '-interaction=nonstopmode', f'cv_{cv.id}.tex'],
+                    cwd=tmpdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=30
+                )
+                
+                # Only check for errors on the final run
+                # LaTeX often has warnings but still produces a valid PDF
+                if run_number == 1:  # Second (final) run
+                    temp_pdf_check = os.path.join(tmpdir, f'cv_{cv.id}.pdf')
+                    if not os.path.exists(temp_pdf_check):
+                        logger.error(f"LaTeX compilation failed - no PDF produced")
+                        logger.error(f"LaTeX stderr: {result.stderr}")
+                        logger.error(f"LaTeX stdout: {result.stdout}")
+                        raise Exception(f"LaTeX compilation failed - no PDF file was generated")
+            
+            # Move the generated PDF to the media directory
+            temp_pdf_path = os.path.join(tmpdir, f'cv_{cv.id}.pdf')
+            final_pdf_path = os.path.join(pdf_output_dir, f'cv_{cv.id}.pdf')
+            
+            if os.path.exists(temp_pdf_path):
+                import shutil
+                shutil.copy2(temp_pdf_path, final_pdf_path)
+                logger.info(f"PDF successfully generated at {final_pdf_path}")
+                
+                # Return relative path for URL
+                relative_path = os.path.relpath(final_pdf_path, settings.MEDIA_ROOT).replace(os.sep, '/')
+                return f'/media/{relative_path}'
+            else:
+                raise Exception("PDF file was not generated")
+                
+        except subprocess.TimeoutExpired:
+            logger.error("LaTeX compilation timed out")
+            raise Exception("PDF generation timed out")
+        except Exception as e:
+            logger.error(f"Failed to generate PDF for cv_id {cv.id}: {str(e)}")
+            raise
 
 class CVSubmitView(APIView):
     parser_classes = [JSONParser]
     permission_classes = [AllowAny]
 
     def post(self, request):
-        logger.info("CVSubmitView.post called with data: %s", request.data)
-        data = request.data
-        name = data.get('name')
-        surname = data.get('surname')
-        email = data.get('email')
-        major = data.get('major', '')
-        if not all([name, surname, email]):
-            logger.error("Missing required fields: name, surname, or email")
-            return Response({"error": "name, surname, and email are required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            logger.info("CVSubmitView.post called with data: %s", request.data)
+            data = request.data
+            name = data.get('name')
+            surname = data.get('surname')
+            email = data.get('email')
+            major = data.get('major', '')
+            country = data.get('country', '')
+            city = data.get('city', '')
+            phone = data.get('phone', '')
+            linkedin = data.get('linkedin', '')
+            github = data.get('github', '')
+            graduation_year = data.get('graduationYear', '')
+            status_preference = data.get('status', '')
+            
+            # Student-specific fields
+            user_type = data.get('user_type', '')
+            cohort_status = data.get('cohort_status', '')
+            is_uca_student = user_type == 'student'
+            
+            if not all([name, surname, email]):
+                logger.error("Missing required fields: name, surname, or email")
+                return Response({"error": "name, surname, and email are required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        from .models import CVSubmission
-        cv, created = CVSubmission.objects.get_or_create(email=email, defaults={'name': name, 'surname': surname, 'major': major})
-        if not created:
-            cv.name = name
-            cv.surname = surname
-            cv.major = major
-            cv.save()
-            cv.educations.all().delete()
-            cv.experiences.all().delete()
-            cv.competencies.all().delete()
-            cv.projects.all().delete()
-            cv.technical_skills.all().delete()
-            cv.languages.all().delete()
-            cv.community_involvements.all().delete()
-            cv.awards.all().delete()
-            cv.references.all().delete()
-
-        from .models import Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
-        for edu_data in data.get('educations', []):
-            required_fields = ['degree_title', 'university']
-            if not all(edu_data.get(k) for k in required_fields):
-                logger.error("Invalid education data: %s", edu_data)
-                return Response({"error": "Invalid education data: degree_title and university are required"}, status=status.HTTP_400_BAD_REQUEST)
-            education = Education.objects.create(cv=cv, **{k: v for k, v in edu_data.items() if k != 'certificates'})
-            for cert_data in edu_data.get('certificates', []):
-                if not cert_data.get('certificate_title'):
-                    logger.error("Invalid certificate data: %s", cert_data)
-                    return Response({"error": "Invalid certificate data"}, status=status.HTTP_400_BAD_REQUEST)
-                Certificate.objects.create(education=education, **cert_data)
-
-        for exp_data in data.get('experiences', []):
-            required_fields = ['position_title', 'company']
-            if not all(exp_data.get(k) for k in required_fields):
-                logger.error("Invalid experience data: %s", exp_data)
-                return Response({"error": "Invalid experience data: position_title and company are required"}, status=status.HTTP_400_BAD_REQUEST)
-            ProfessionalExperience.objects.create(cv=cv, **exp_data)
-
-        for comp_data in data.get('competencies', []):
-            if not comp_data.get('competency_type') and not comp_data.get('key_accomplishments'):
-                logger.info("Skipping competency as both competency_type and key_accomplishments are empty: %s", comp_data)
-                continue
-            if not any([comp_data.get(k) for k in ['competency_type', 'key_accomplishments']]):
-                logger.error("Invalid competency data: %s", comp_data)
-                return Response({"error": "Invalid competency data: at least one of competency_type or key_accomplishments is required"}, status=status.HTTP_400_BAD_REQUEST)
-            ProfessionalCompetency.objects.create(cv=cv, **comp_data)
-
-        for proj_data in data.get('projects', []):
-            if not all([proj_data.get(k) for k in ['project_title', 'year']]):
-                logger.error("Invalid project data: %s", proj_data)
-                return Response({"error": "Invalid project data"}, status=status.HTTP_400_BAD_REQUEST)
-            Project.objects.create(cv=cv, **proj_data)
-
-        if 'technical_skills' in data:
-            tech_skills = data['technical_skills']
-            if any(tech_skills.get(k) for k in ['programming_languages', 'frameworks_databases', 'tools']):
-                if not any([tech_skills.get(k) for k in ['programming_languages', 'frameworks_databases', 'tools']]):
-                    logger.error("Invalid technical skills data: %s", tech_skills)
-                    return Response({"error": "Invalid technical skills data: at least one field (programming_languages, frameworks_databases, or tools) must be provided"}, status=status.HTTP_400_BAD_REQUEST)
-                TechnicalSkill.objects.update_or_create(cv=cv, defaults=tech_skills)
-            elif all(not tech_skills.get(k) for k in ['programming_languages', 'frameworks_databases', 'tools']):
-                logger.info("Skipping technical skills as all fields are empty")
+            from .models import CVSubmission
+            
+            # Determine if CV should be auto-published to CVBook (only for Senior students)
+            auto_publish = is_uca_student and cohort_status == 'Senior'
+            
+            cv, created = CVSubmission.objects.get_or_create(
+                email=email, 
+                defaults={
+                    'name': name, 
+                    'surname': surname, 
+                    'major': major,
+                    'country': country,
+                    'city': city,
+                    'phone': phone,
+                    'linkedin': linkedin,
+                    'github': github,
+                    'graduation_year': graduation_year,
+                    'status_preference': status_preference,
+                    'is_uca_student': is_uca_student,
+                    'cohort_status': cohort_status,
+                    'is_published_to_cvbook': auto_publish,
+                    'admin_approved': auto_publish  # Auto-approve senior students
+                }
+            )
+            if not created:
+                cv.name = name
+                cv.surname = surname
+                cv.major = major
+                cv.country = country
+                cv.city = city
+                cv.phone = phone
+                cv.linkedin = linkedin
+                cv.github = github
+                cv.graduation_year = graduation_year
+                cv.status_preference = status_preference
+                cv.is_uca_student = is_uca_student
+                cv.cohort_status = cohort_status
+                
+                # Update publication status if it's a senior student
+                if is_uca_student and cohort_status == 'Senior':
+                    cv.is_published_to_cvbook = True
+                    cv.admin_approved = True
+                
+                cv.save()
+                cv.educations.all().delete()
+                cv.experiences.all().delete()
+                cv.competencies.all().delete()
+                cv.projects.all().delete()
                 cv.technical_skills.all().delete()
+                cv.languages.all().delete()
+                cv.community_involvements.all().delete()
+                cv.awards.all().delete()
+                cv.references.all().delete()
 
-        for lang_data in data.get('languages', []):
-            if not lang_data.get('name'):
-                logger.info("Skipping language as name is empty: %s", lang_data)
-                continue
-            Language.objects.create(cv=cv, **lang_data)
+            from .models import Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
+            for edu_data in data.get('educations', []):
+                # Skip empty education entries
+                if not edu_data.get('degree_title') and not edu_data.get('university'):
+                    logger.info("Skipping empty education entry: %s", edu_data)
+                    continue
+                    
+                required_fields = ['degree_title', 'university']
+                if not all(edu_data.get(k) for k in required_fields):
+                    logger.warning("Incomplete education data (missing degree_title or university): %s", edu_data)
+                    # Continue anyway with what we have
+                    if not edu_data.get('degree_title'):
+                        edu_data['degree_title'] = 'Degree'
+                    if not edu_data.get('university'):
+                        edu_data['university'] = 'University'
+                
+                # Filter only valid Education fields
+                valid_edu_fields = {k: v for k, v in edu_data.items() if k in ['degree_title', 'university', 'start_date', 'expected_graduation', 'university_location', 'honors', 'relevant_courses']}
+                education = Education.objects.create(cv=cv, **valid_edu_fields)
+                
+                for cert_data in edu_data.get('certificates', []):
+                    if not cert_data.get('certificate_title'):
+                        logger.info("Skipping certificate with no title: %s", cert_data)
+                        continue
+                    
+                    # Filter only valid Certificate fields
+                    valid_cert_fields = {k: v for k, v in cert_data.items() if k in ['certificate_title', 'organization', 'year']}
+                    try:
+                        Certificate.objects.create(education=education, **valid_cert_fields)
+                    except Exception as e:
+                        logger.error("Error creating certificate: %s. Data: %s - Skipping this certificate", str(e), cert_data)
+                        # Don't fail the entire submission, just skip this certificate
+                        continue
 
-        for comm_data in data.get('community_involvements', []):
-            valid_fields = {k: v for k, v in comm_data.items() if k in ['organization', 'position_title', 'dates', 'achievements']}
-            valid_fields['cv'] = cv
-            CommunityInvolvement.objects.create(**valid_fields)
+            for exp_data in data.get('experiences', []):
+                # Skip empty experience entries
+                if not exp_data.get('position_title') and not exp_data.get('company'):
+                    logger.info("Skipping empty experience entry: %s", exp_data)
+                    continue
+                    
+                required_fields = ['position_title', 'company']
+                if not all(exp_data.get(k) for k in required_fields):
+                    logger.warning("Incomplete experience data: %s", exp_data)
+                    # Continue anyway with what we have
+                    if not exp_data.get('position_title'):
+                        exp_data['position_title'] = 'Position'
+                    if not exp_data.get('company'):
+                        exp_data['company'] = 'Company'
+                
+                # Filter only valid ProfessionalExperience fields
+                valid_exp_fields = {k: v for k, v in exp_data.items() if k in ['position_title', 'company', 'dates', 'accomplishments']}
+                ProfessionalExperience.objects.create(cv=cv, **valid_exp_fields)
 
-        for award_data in data.get('awards', []):
-            valid_fields = {k: v for k, v in award_data.items() if k in ['award_name', 'year', 'short_description']}
-            valid_fields['cv'] = cv
-            Award.objects.create(**valid_fields)
+            for comp_data in data.get('competencies', []):
+                if not comp_data.get('competency_type') and not comp_data.get('key_accomplishments'):
+                    logger.info("Skipping competency as both competency_type and key_accomplishments are empty: %s", comp_data)
+                    continue
+                if not comp_data.get('competency_type'):
+                    logger.warning("Competency missing type, using default: %s", comp_data)
+                    comp_data['competency_type'] = 'Competency'
+                
+                # Filter only valid ProfessionalCompetency fields
+                valid_comp_fields = {k: v for k, v in comp_data.items() if k in ['competency_type', 'key_accomplishments']}
+                ProfessionalCompetency.objects.create(cv=cv, **valid_comp_fields)
 
-        for ref_data in data.get('references', []):
-            if not all([ref_data.get(k) for k in ['reference_name', 'email']]):
-                logger.error("Invalid reference data: %s", ref_data)
-                return Response({"error": "Invalid reference data"}, status=status.HTTP_400_BAD_REQUEST)
-            Reference.objects.create(cv=cv, **ref_data)
+            for proj_data in data.get('projects', []):
+                if not proj_data.get('project_title'):
+                    logger.info("Skipping project with no title: %s", proj_data)
+                    continue
+                
+                # Filter only valid Project fields
+                valid_proj_fields = {k: v for k, v in proj_data.items() if k in ['project_title', 'year', 'technologies_used', 'summary', 'accomplishment']}
+                Project.objects.create(cv=cv, **valid_proj_fields)
 
-        logger.info("Generating PDF for cv_id: %s", cv.id)
-        pdf_path = generate_pdf(cv)
-        logger.info("PDF generated at: %s", pdf_path)
+            if 'technical_skills' in data:
+                tech_skills = data['technical_skills']
+                # Filter only valid TechnicalSkill fields
+                valid_tech_fields = {k: v for k, v in tech_skills.items() if k in [
+                    'programming_languages', 'frameworks_databases', 'tools', 
+                    'web_development', 'multimedia', 'network', 'operating_systems'
+                ]}
+                
+                if any(valid_tech_fields.values()):
+                    TechnicalSkill.objects.update_or_create(cv=cv, defaults=valid_tech_fields)
+                else:
+                    logger.info("Skipping technical skills as all fields are empty")
+                    cv.technical_skills.all().delete()
 
-        return Response({
-            "message": f"CV {'created' if created else 'updated'} successfully",
-            "cv_id": cv.id,
-            "pdf_url": pdf_path,
-            "submitted_at": cv.submitted_at.isoformat()
-        }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+            for lang_data in data.get('languages', []):
+                if not lang_data.get('name'):
+                    logger.info("Skipping language as name is empty: %s", lang_data)
+                    continue
+                
+                # Filter only valid Language fields
+                valid_lang_fields = {k: v for k, v in lang_data.items() if k in ['name', 'proficiency']}
+                Language.objects.create(cv=cv, **valid_lang_fields)
+
+            for comm_data in data.get('community_involvements', []):
+                # Skip if all fields are empty
+                if not any([comm_data.get(k) for k in ['organization', 'position_title', 'dates', 'achievements']]):
+                    logger.info("Skipping empty community involvement: %s", comm_data)
+                    continue
+                
+                valid_fields = {k: v for k, v in comm_data.items() if k in ['organization', 'position_title', 'dates', 'achievements']}
+                CommunityInvolvement.objects.create(cv=cv, **valid_fields)
+
+            for award_data in data.get('awards', []):
+                # Skip if no award name
+                if not award_data.get('award_name'):
+                    logger.info("Skipping award with no name: %s", award_data)
+                    continue
+                
+                valid_fields = {k: v for k, v in award_data.items() if k in ['award_name', 'year', 'presenting_organization', 'short_description']}
+                Award.objects.create(cv=cv, **valid_fields)
+
+            for ref_data in data.get('references', []):
+                if not all([ref_data.get(k) for k in ['reference_name', 'email']]):
+                    logger.info("Skipping reference with missing required fields: %s", ref_data)
+                    continue
+                
+                # Filter only valid Reference fields
+                valid_ref_fields = {k: v for k, v in ref_data.items() if k in ['reference_name', 'position', 'company', 'email', 'phone']}
+                Reference.objects.create(cv=cv, **valid_ref_fields)
+
+            logger.info("Generating PDF for cv_id: %s", cv.id)
+            pdf_path = generate_pdf(cv)
+            logger.info("PDF generated at: %s", pdf_path)
+
+            return Response({
+                "message": f"CV {'created' if created else 'updated'} successfully",
+                "cv_id": cv.id,
+                "pdf_url": pdf_path,
+                "submitted_at": cv.submitted_at.isoformat(),
+                "success": True
+            }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+        
+        except Exception as e:
+            logger.error(f"Unexpected error in CVSubmitView: {str(e)}", exc_info=True)
+            return Response({
+                "error": f"An unexpected error occurred: {str(e)}",
+                "success": False
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CVPDFView(APIView):
     def get(self, request, cv_id):
@@ -250,7 +355,8 @@ class CVPDFView(APIView):
         from .models import CVSubmission
         try:
             cv = CVSubmission.objects.get(id=cv_id)
-            pdf_path = os.path.join(settings.TEX_OUTPUT_DIR, f'cv_{cv.id}.pdf')
+            pdf_output_dir = os.path.join(settings.MEDIA_ROOT, 'pdfs')
+            pdf_path = os.path.join(pdf_output_dir, f'cv_{cv.id}.pdf')
             if not os.path.exists(pdf_path):
                 logger.error("PDF not found for cv_id: %s", cv_id)
                 return Response({"error": "PDF not generated yet"}, status=status.HTTP_404_NOT_FOUND)
@@ -272,6 +378,9 @@ class CVEditView(APIView):
                 "surname": cv.surname,
                 "email": cv.email,
                 "major": cv.major,
+                "country": cv.country,
+                "graduation_year": cv.graduation_year,
+                "status_preference": cv.status_preference,
                 "educations": [
                     {
                         "id": edu.id,
@@ -366,6 +475,9 @@ class CVEditView(APIView):
             cv.surname = data.get('surname', cv.surname)
             cv.email = data.get('email', cv.email)
             cv.major = data.get('major', cv.major)
+            cv.country = data.get('country', cv.country)
+            cv.graduation_year = data.get('graduation_year', cv.graduation_year)
+            cv.status_preference = data.get('status_preference', cv.status_preference)
             cv.save()
 
             for edu_data in data.get('educations', []):
@@ -505,6 +617,9 @@ class CVDetailView(APIView):
                 "surname": cv.surname,
                 "email": cv.email,
                 "major": cv.major,
+                "country": cv.country,
+                "graduation_year": cv.graduation_year,
+                "status_preference": cv.status_preference,
                 "submitted_at": cv.submitted_at.isoformat(),
                 "educations": [
                     {
@@ -580,12 +695,28 @@ class CVDetailView(APIView):
             return Response({"error": "CV not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CVListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         logger.info("CVListView.get called")
         from .models import CVSubmission
-        cvs = CVSubmission.objects.all().prefetch_related('technical_skills', 'languages')
+        
+        # Check if this is a request for student's own CVs
+        student_email = request.GET.get('student_email')
+        management_request = request.GET.get('management', '').lower() == 'true'
+        
+        if student_email:
+            # Return all CVs for this specific student
+            cvs = CVSubmission.objects.filter(email=student_email).prefetch_related('technical_skills', 'languages')
+        elif management_request:
+            # Return ALL CVs for management system
+            cvs = CVSubmission.objects.all().prefetch_related('technical_skills', 'languages').order_by('-submitted_at')
+        else:
+            # Return only published CVs for public CVBook display
+            cvs = CVSubmission.objects.filter(
+                is_published_to_cvbook=True,
+                admin_approved=True
+            ).prefetch_related('technical_skills', 'languages')
         serialized_data = [
             {
                 'id': cv.id,
@@ -593,12 +724,23 @@ class CVListView(APIView):
                 'surname': cv.surname,
                 'email': cv.email,
                 'major': cv.major,
+                'country': cv.country,
+                'graduation_year': cv.graduation_year,
+                'status_preference': cv.status_preference,
                 'submitted_at': cv.submitted_at.isoformat(),
+                'is_uca_student': cv.is_uca_student,
+                'cohort_status': cv.cohort_status,
+                'admin_approved': cv.admin_approved,
+                'is_published_to_cvbook': cv.is_published_to_cvbook,
                 'technical_skills': [
                     {
                         'programming_languages': ts.programming_languages,
                         'frameworks_databases': ts.frameworks_databases,
-                        'tools': ts.tools
+                        'tools': ts.tools,
+                        'web_development': ts.web_development,
+                        'multimedia': ts.multimedia,
+                        'network': ts.network,
+                        'operating_systems': ts.operating_systems
                     }
                     for ts in cv.technical_skills.all()
                 ] if cv.technical_skills.exists() else [],
@@ -607,12 +749,6 @@ class CVListView(APIView):
             for cv in cvs
         ]
         return Response(serialized_data, status=status.HTTP_200_OK)
-
-def cv_cards_view(request):
-    from .models import CVSubmission
-    cvs = CVSubmission.objects.all().order_by('-submitted_at')
-    print(f"Number of CVs: {cvs.count()}")
-    return render(request, 'cv/cv-cards.html', {'cvs': cvs})
 
 def cv_detail_view(request, cv_id):
     from .models import CVSubmission, Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
@@ -624,7 +760,7 @@ def cv_detail_view(request, cv_id):
             'experiences': cv.experiences.all(),
             'competencies': cv.competencies.all(),
             'projects': cv.projects.all(),
-            'technical_skills': cv.technical_skills.first(),
+            'technical_skills': cv.technical_skills.all(),
             'languages': cv.languages.all(),
             'community_involvements': cv.community_involvements.all(),
             'awards': cv.awards.all(),
@@ -634,12 +770,16 @@ def cv_detail_view(request, cv_id):
     except CVSubmission.DoesNotExist:
         return render(request, 'cv/cv-cards.html', {'cvs': CVSubmission.objects.all().order_by('-submitted_at'), 'error': 'CV not found'})
     
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def cv_cards_view(request):
-    cvs = CVSubmission.objects.all().order_by('-submitted_at')
-    serializer = CVSubmissionSerializer(cvs, many=True)
-    return Response(serializer.data)
+    """
+    Public CV cards view - shows published and approved CVs
+    """
+    cvs = CVSubmission.objects.filter(
+        is_published_to_cvbook=True,
+        admin_approved=True
+    ).order_by('-submitted_at')
+    
+    return render(request, 'cv/cv-cards.html', {'cvs': cvs})
 
 from rest_framework import serializers
 from .models import CVSubmission
@@ -648,3 +788,87 @@ class CVSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CVSubmission
         fields = '__all__'
+
+def admin_cv_cards_view(request):
+    """
+    Special view for admin users to access CVBook without separate authentication
+    """
+    # Check if request has admin token or is from admin panel
+    admin_token = request.GET.get('admin_token')
+
+    if admin_token == 'ucacoop_admin_access_2025':  # Simple token for admin access
+        # Render the CVBook page directly without authentication
+        cvs = CVSubmission.objects.filter(
+            is_published_to_cvbook=True,
+            admin_approved=True
+        ).order_by('-submitted_at')
+
+        return render(request, 'cv/cv-cards.html', {'cvs': cvs, 'admin_access': True})
+
+    # If no valid admin token, redirect to regular cv-cards which requires auth
+    return redirect('/#cv-cards')
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def cv_management_action(request):
+    """
+    Handle CV management actions from admin panel
+    """
+    try:
+        action = request.data.get('action')
+        cv_id = request.data.get('cv_id')
+        
+        if not cv_id or not action:
+            return Response({'success': False, 'message': 'Missing required parameters'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
+        
+        cv = CVSubmission.objects.get(id=cv_id)
+        
+        # Handle 'publish' or 'toggle_publish'
+        if action in ['publish', 'toggle_publish']:
+            if action == 'publish':
+                cv.is_published_to_cvbook = True
+            else:
+                cv.is_published_to_cvbook = not cv.is_published_to_cvbook
+            cv.save()
+            status_text = 'published' if cv.is_published_to_cvbook else 'unpublished'
+            return Response({'success': True, 'message': f'CV {status_text} successfully'})
+        
+        # Handle 'unpublish'
+        elif action == 'unpublish':
+            cv.is_published_to_cvbook = False
+            cv.save()
+            return Response({'success': True, 'message': 'CV unpublished successfully'})
+            
+        # Handle 'approve' or 'toggle_approve'
+        elif action in ['approve', 'toggle_approve']:
+            if action == 'approve':
+                cv.admin_approved = True
+            else:
+                cv.admin_approved = not cv.admin_approved
+            cv.save()
+            status_text = 'approved' if cv.admin_approved else 'unapproved'
+            return Response({'success': True, 'message': f'CV {status_text} successfully'})
+        
+        # Handle 'unapprove'
+        elif action == 'unapprove':
+            cv.admin_approved = False
+            cv.save()
+            return Response({'success': True, 'message': 'CV approval removed successfully'})
+            
+        # Handle 'delete'
+        elif action == 'delete':
+            cv.delete()
+            return Response({'success': True, 'message': 'CV deleted successfully'})
+            
+        else:
+            return Response({'success': False, 'message': f'Invalid action: {action}. Valid actions are: publish, unpublish, approve, unapprove, delete'}, 
+                          status=status.HTTP_400_BAD_REQUEST)
+            
+    except CVSubmission.DoesNotExist:
+        return Response({'success': False, 'message': 'CV not found'}, 
+                      status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        logger.error(f"Error in cv_management_action: {str(e)}")
+        return Response({'success': False, 'message': str(e)}, 
+                      status=status.HTTP_500_INTERNAL_SERVER_ERROR)

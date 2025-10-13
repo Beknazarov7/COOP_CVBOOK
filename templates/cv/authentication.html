@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CV Management</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -16,6 +17,7 @@ body {
   background: linear-gradient(135deg, #d9e6f9 0%, #a0bae4 100%);
   color: #212529;
   line-height: 1.6;
+  min-height: 100vh;
 }
 /* Background polish 
 body {
@@ -220,6 +222,10 @@ display: flex; align-items: center; gap: 1rem;
 }
 .header-social a:hover { background: #e9ecef; border-color: #adb5bd; }
 
+/* Auth buttons container spacing */
+.auth-buttons {
+  margin-left: 2rem;
+}
 
 /* === Page title === */
 .main-content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
@@ -271,13 +277,10 @@ display: flex; align-items: center; gap: 1rem;
 .skill-strip { display: flex; flex-wrap: wrap; gap: .5rem; }
 
 
-/* floating action button (optional visual — no logic change) */
+/* floating action button - HIDDEN */
 .fab-add {
-  position: fixed; bottom: 2rem; right: 2rem; background: #2c5aa0; color: #fff; border: none;
-  border-radius: 50%; width: 56px; height: 56px; font-size: 1.5rem; cursor: pointer;
-  box-shadow: 0 4px 12px rgba(44,90,160,.3); transition: all .2s ease; z-index: 1000;
+  display: none;
 }
-.fab-add:hover { background: #1a4480; transform: scale(1.05); }
 
 @media (max-width: 768px) {
   .header-bar { flex-direction: column; gap: 1rem; padding: 0 1rem; }
@@ -291,6 +294,7 @@ display: flex; align-items: center; gap: 1rem;
 <body>
 <div id="root"></div>
 <script type="text/babel">
+{% verbatim %}
 const { useState, useEffect } = React;
 
 // If you previously had: export default NavBar;  ← REMOVE this line
@@ -312,23 +316,27 @@ const currentHash = window.location.hash || '#login';
           <img src="/static/cv/uca_logo.png" alt="UCA Logo" className="header-logo" />
         </div>
         <nav className="header-nav">
-          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>Home Page</a>
-          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>About</a>
-          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>FAQ</a>
-          <a href="#cv-cards" onClick={(e) => { e.preventDefault(); window.location.hash = '#cv-cards'; }}>Contacts</a>
+          <a href="https://www.ucentralasia.org/" target="_blank" rel="noopener noreferrer">Home Page</a>
+          <a href="https://ucentralasia.org/about/about-uca" target="_blank" rel="noopener noreferrer">About</a>
+          <a href="https://ucentralasia.org/faqs" target="_blank" rel="noopener noreferrer">FAQ</a>
         </nav>
         <div className="header-social">
           <a href="https://www.linkedin.com/in/uca-career-opportunities/" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
           <a href="https://www.instagram.com/uca_career_opportunities/?igshid=YmMyMTA2M2Y%3D" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
           <a href="https://www.youtube.com/@ucacareeropportunities1011" aria-label="YouTube"><i className="fab fa-youtube"></i></a>
         </div>
-        <div>
+        <div className="auth-buttons">
           {token ? (
             <button
-              onClick={() => { localStorage.removeItem('token'); setToken(null); window.location.hash = '#login'; }}
-              className="mr-4 text-white hover:text-gray-300"
+              onClick={() => { 
+                localStorage.removeItem('token'); 
+                setToken(null); 
+                window.location.hash = '#login';
+                alert('You have been logged out successfully!');
+              }}
+              className="mr-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors duration-200"
             >
-              Logout
+              <i className="fas fa-sign-out-alt mr-2"></i>Logout
             </button>
           ) : (
             <>
@@ -345,15 +353,276 @@ const currentHash = window.location.hash || '#login';
 // Optional: expose globally if other scripts need it
 window.NavBar = NavBar;
 
-const PendingApproval = () => (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Pending Approval</h2>
-            <p className="text-gray-600 mb-4">Your account is awaiting admin approval. Please wait while we review your request.</p>
-            <p className="text-gray-500">You will be notified once your account is approved.</p>
+const PendingApproval = () => {
+    const [animate, setAnimate] = React.useState(false);
+    const [userEmail, setUserEmail] = React.useState('');
+    
+    React.useEffect(() => {
+        setAnimate(true);
+        // Try to get user email from localStorage (if saved during signup)
+        const storedEmail = localStorage.getItem('userEmail') || '';
+        setUserEmail(storedEmail);
+    }, []);
+    
+    return (
+        <div style={{
+            minHeight: '100vh',
+            background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+            fontFamily: 'Arial, sans-serif'
+        }}>
+            <div style={{
+                width: '100%',
+                maxWidth: '500px',
+                background: 'white',
+                borderRadius: '18px',
+                boxShadow: '0 10px 40px rgba(0,0,0,0.12)',
+                overflow: 'hidden',
+                transform: animate ? 'scale(1)' : 'scale(0.95)',
+                opacity: animate ? 1 : 0,
+                transition: 'all 0.4s ease-out'
+            }}>
+                {/* Header Section */}
+                <div style={{
+                    background: 'linear-gradient(135deg, #3498db 0%, #2563eb 100%)',
+                    padding: '35px 30px',
+                    textAlign: 'center',
+                    position: 'relative'
+                }}>
+                    {/* Animated Clock Icon */}
+                    <div style={{
+                        width: '80px',
+                        height: '80px',
+                        margin: '0 auto 15px',
+                        background: 'rgba(255,255,255,0.2)',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '3px solid rgba(255,255,255,0.3)',
+                        animation: 'pulse 2s ease-in-out infinite'
+                    }}>
+                        <i className="fas fa-clock" style={{
+                            fontSize: '40px',
+                            color: 'white'
+                        }}></i>
+                    </div>
+                    
+                    <h2 style={{
+                        fontSize: '28px',
+                        fontWeight: '700',
+                        color: 'white',
+                        margin: '0 0 8px 0'
+                    }}>
+                        Pending Approval
+                    </h2>
+                    
+                    <p style={{
+                        color: 'rgba(255,255,255,0.95)',
+                        fontSize: '15px',
+                        margin: '0'
+                    }}>
+                        Your account is under review
+                    </p>
+                </div>
+
+                {/* Content Section */}
+                <div style={{ padding: '30px' }}>
+                    {/* Status Card */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                        borderRadius: '12px',
+                        padding: '20px',
+                        marginBottom: '25px',
+                        border: '2px solid #fbbf24'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px'
+                        }}>
+                            <div style={{
+                                fontSize: '28px'
+                            }}>⏳</div>
+                            <div style={{ flex: 1, textAlign: 'left' }}>
+                                <h3 style={{
+                                    fontSize: '16px',
+                                    fontWeight: '700',
+                                    color: '#92400e',
+                                    margin: '0 0 4px 0'
+                                }}>
+                                    Awaiting Admin Review
+                                </h3>
+                                <p style={{
+                                    fontSize: '13px',
+                                    color: '#b45309',
+                                    margin: '0'
+                                }}>
+                                    Usually takes 24-48 hours
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Information List */}
+                    <div style={{ marginBottom: '25px' }}>
+                        <h4 style={{
+                            fontSize: '15px',
+                            fontWeight: '600',
+                            color: '#2c3e50',
+                            marginBottom: '15px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px'
+                        }}>
+                            <i className="fas fa-info-circle" style={{ color: '#3498db' }}></i>
+                            What happens next?
+                        </h4>
+                        
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px'
+                        }}>
+                            {[
+                                { icon: '📧', text: 'Admin reviews your registration' },
+                                { icon: '✅', text: 'Email notification when approved' },
+                                { icon: '👁️', text: 'Access to view student CVs' }
+                            ].map((item, idx) => (
+                                <div key={idx} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px',
+                                    padding: '12px',
+                                    background: '#f9fafb',
+                                    borderRadius: '10px',
+                                    border: '1px solid #e5e7eb'
+                                }}>
+                                    <span style={{ fontSize: '20px' }}>{item.icon}</span>
+                                    <p style={{
+                                        fontSize: '14px',
+                                        color: '#4b5563',
+                                        margin: '0'
+                                    }}>
+                                        {item.text}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Help Section */}
+                    <div style={{
+                        background: '#eff6ff',
+                        borderRadius: '12px',
+                        padding: '18px',
+                        border: '1px solid #bfdbfe',
+                        marginBottom: '20px'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            marginBottom: '10px'
+                        }}>
+                            <i className="fas fa-question-circle" style={{
+                                fontSize: '20px',
+                                color: '#3498db'
+                            }}></i>
+                            <h4 style={{
+                                fontSize: '15px',
+                                fontWeight: '600',
+                                color: '#1e40af',
+                                margin: '0'
+                            }}>
+                                Need Help?
+                            </h4>
+                        </div>
+                        <p style={{
+                            fontSize: '13px',
+                            color: '#2563eb',
+                            margin: '0 0 10px 30px',
+                            lineHeight: '1.5'
+                        }}>
+                            If you haven't received approval within 48 hours, contact the Co-op Office.
+                        </p>
+                        <div style={{ marginLeft: '30px' }}>
+                            <a href="mailto:" style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '8px 14px',
+                                background: 'white',
+                                borderRadius: '8px',
+                                color: '#3498db',
+                                textDecoration: 'none',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                border: '2px solid #3498db',
+                                transition: 'all 0.2s'
+                            }} onMouseEnter={(e) => {
+                                e.currentTarget.style.background = '#3498db';
+                                e.currentTarget.style.color = 'white';
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                            }} onMouseLeave={(e) => {
+                                e.currentTarget.style.background = 'white';
+                                e.currentTarget.style.color = '#3498db';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                            }}>
+                                <i className="fas fa-envelope"></i>
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Back to Home Button */}
+                    <button onClick={() => window.location.hash = '#cv-cards'} style={{
+                        width: '100%',
+                        padding: '14px',
+                        background: 'linear-gradient(135deg, #3498db 0%, #2563eb 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '10px',
+                        fontSize: '15px',
+                        fontWeight: '700',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        boxShadow: '0 4px 12px rgba(52, 152, 219, 0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '8px'
+                    }} onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(52, 152, 219, 0.4)';
+                    }} onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(52, 152, 219, 0.3)';
+                    }}>
+                        <i className="fas fa-home"></i>
+                        Back to CVBook Home
+                    </button>
+                </div>
+            </div>
+
+            <style>{`
+                @keyframes pulse {
+                    0%, 100% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: scale(1.05);
+                        opacity: 0.9;
+                    }
+                }
+            `}</style>
         </div>
-    </div>
-);
+    );
+};
 
 // ===== Sign Up =====
 const SignUp = () => {
@@ -367,7 +636,7 @@ const SignUp = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8000/api/auth/signup/", {
+            const response = await fetch("/api/auth/signup/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -377,82 +646,299 @@ const SignUp = () => {
             });
             const data = await response.json();
             if (response.status === 201) {
-                setMessage(data.message || "Sign up successful. Awaiting approval.");
+                setMessage("✅ Registration successful! Awaiting admin approval.");
                 setTimeout(() => (window.location.hash = "#pending-approval"), 1500);
+            } else if (response.status === 400) {
+                setMessage(data.error || "❌ Invalid information. Please check all fields and try again.");
+            } else if (response.status === 409) {
+                setMessage("❌ Username or email already exists. Please try different credentials.");
+            } else if (response.status === 500) {
+                setMessage("❌ Server error. Please try again later.");
             } else {
-                setMessage(data.error || "Sign up failed.");
+                setMessage(data.error || "❌ Registration failed. Please check your information and try again.");
             }
-        } catch {
-            setMessage("An error occurred. Please try again.");
+        } catch (error) {
+            console.error('Signup error:', error);
+            setMessage("Network error. Please check your connection and try again.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="relative min-h-screen">
-            <img src="/static/cv/foto1.jpg" alt="" className="absolute inset-0 h-full w-full object-cover -z-10" />
-            <div className="absolute inset-0 bg-black/20 -z-10" />
-            <section className="fixed left-0 top-0 h-screen w-full sm:w-[460px] md:w-[500px] lg:w-[520px]
-                                border-r border-white/30 bg-white/15 backdrop-blur-xl shadow-2xl">
-                <div className="h-full flex flex-col justify-center px-6 md:px-10">
-                    <div className="flex justify-center mb-6">
-                        <img src="/static/cv/uca_logo2.png" alt="UCA" className="h-36 w-auto" />
+        <div style={{ position: 'relative', minHeight: '100vh' }}>
+            <div style={{
+                backgroundImage: 'url(/static/cv/foto1.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'blur(8px)',
+                WebkitFilter: 'blur(8px)',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 1
+            }} />
+            
+            <div className="container-fluid" style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+                <div className="row w-100">
+                    <div className="col-xl-8 col-lg-6 col-md-5 col-sm-4 d-none d-sm-block"></div>
+                    <div className="col-xl-4 col-lg-6 col-md-7 col-sm-8 col-12">
+                        <div style={{
+                            background: 'rgba(255, 255, 255, 0.95)',
+                            backdropFilter: 'blur(10px)',
+                            WebkitBackdropFilter: 'blur(10px)',
+                            padding: '40px',
+                            borderRadius: '20px',
+                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+                            overflowY: 'auto',
+                            maxHeight: '95vh',
+                            margin: '20px 0'
+                        }}>
+                            <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+                                <a href="/" style={{ display: 'inline-block' }}>
+                                    <img src="/static/cv/UCA-Logo-Centre-whiteframe.png" alt="UCA Logo" style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }} />
+                                </a>
                     </div>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                            
+                            <div style={{ borderBottom: '3px solid #e0e0e0', margin: '0 0 30px 0' }} />
+                            
+                            <div>
+                                <div style={{ marginBottom: '25px', textAlign: 'center' }}>
+                                    <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1a1a1a', margin: '0', letterSpacing: '-0.5px' }}>Sign Up</h2>
+                                    <p style={{ color: '#6c757d', fontSize: '14px', marginTop: '8px' }}>Create your account to get started</p>
+                                </div>
+
+                                {message && (
+                                    <div style={{
+                                        padding: '12px 15px',
+                                        marginBottom: '20px',
+                                        borderRadius: '8px',
+                                        backgroundColor: message.includes("successful") ? '#d1e7dd' : '#f8d7da',
+                                        border: message.includes("successful") ? '1px solid #badbcc' : '1px solid #f5c2c7',
+                                        color: message.includes("successful") ? '#0f5132' : '#842029'
+                                    }}>
+                                        {message}
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleSubmit}>
+                                    <div style={{ marginBottom: '18px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                            <i className="fas fa-user" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Username <span style={{ color: '#dc3545' }}>*</span>
+                                        </label>
                         <input
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
-                                       text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            type="text" placeholder="Username" required
+                                            type="text"
+                                            placeholder="Choose a unique username"
+                                            required
                             value={formData.username}
                             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                        />
+                                            style={{
+                                                width: '100%',
+                                                padding: '13px 16px',
+                                                border: '2px solid #e0e0e0',
+                                                borderRadius: '10px',
+                                                fontSize: '15px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: '#f8f9fa'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = '#007bff';
+                                                e.target.style.backgroundColor = '#fff';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = '#e0e0e0';
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div style={{ marginBottom: '18px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                            <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Email <span style={{ color: '#dc3545' }}>*</span>
+                                        </label>
                         <input
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
-                                       text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            type="email" placeholder="Email" required
+                                            type="email"
+                                            placeholder="your.email@example.com"
+                                            required
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        />
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            style={{
+                                                width: '100%',
+                                                padding: '13px 16px',
+                                                border: '2px solid #e0e0e0',
+                                                borderRadius: '10px',
+                                                fontSize: '15px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: '#f8f9fa'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = '#007bff';
+                                                e.target.style.backgroundColor = '#fff';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = '#e0e0e0';
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="row" style={{ margin: '0 -8px 20px -8px' }}>
+                                        <div className="col-md-6" style={{ padding: '0 8px', marginBottom: '15px' }}>
+                                            <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                                <i className="fas fa-id-card" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                                First Name
+                                            </label>
                             <input
-                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
-                                           text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                type="text" placeholder="First name"
+                                                type="text"
+                                                placeholder="Enter first name"
                                 value={formData.first_name}
                                 onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                            />
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '12px 15px',
+                                                    border: '2px solid #e0e0e0',
+                                                    borderRadius: '10px',
+                                                    fontSize: '15px',
+                                                    transition: 'all 0.3s ease',
+                                                    backgroundColor: '#f8f9fa'
+                                                }}
+                                                onFocus={(e) => {
+                                                    e.target.style.borderColor = '#007bff';
+                                                    e.target.style.backgroundColor = '#fff';
+                                                    e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                                }}
+                                                onBlur={(e) => {
+                                                    e.target.style.borderColor = '#e0e0e0';
+                                                    e.target.style.backgroundColor = '#f8f9fa';
+                                                    e.target.style.boxShadow = 'none';
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="col-md-6" style={{ padding: '0 8px', marginBottom: '15px' }}>
+                                            <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                                <i className="fas fa-id-card" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                                Last Name
+                                            </label>
                             <input
-                                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
-                                           text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                type="text" placeholder="Last name"
+                                                type="text"
+                                                placeholder="Enter last name"
                                 value={formData.last_name}
                                 onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '12px 15px',
+                                                    border: '2px solid #e0e0e0',
+                                                    borderRadius: '10px',
+                                                    fontSize: '15px',
+                                                    transition: 'all 0.3s ease',
+                                                    backgroundColor: '#f8f9fa'
+                                                }}
+                                                onFocus={(e) => {
+                                                    e.target.style.borderColor = '#007bff';
+                                                    e.target.style.backgroundColor = '#fff';
+                                                    e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                                }}
+                                                onBlur={(e) => {
+                                                    e.target.style.borderColor = '#e0e0e0';
+                                                    e.target.style.backgroundColor = '#f8f9fa';
+                                                    e.target.style.boxShadow = 'none';
+                                                }}
                             />
                         </div>
+                                    </div>
+
+                                    <div style={{ marginBottom: '25px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                            <i className="fas fa-lock" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Password <span style={{ color: '#dc3545' }}>*</span>
+                                        </label>
                         <input
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
-                                       text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            type="password" placeholder="Password" required
+                                            type="password"
+                                            placeholder="Create a strong password"
+                                            required
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        />
-                        <button type="submit" disabled={loading}
-                                className="w-full rounded-xl bg-[#3a7ccf] py-3 text-white font-semibold shadow hover:opacity-95 transition">
-                            {loading ? "Signing up..." : "Sign up"}
-                        </button>
-                        {message && (
-                            <p className={`text-center text-sm mt-1 ${message.includes("successful") ? "text-green-600" : "text-red-600"}`}>
-                                {message}
-                            </p>
-                        )}
+                                            style={{
+                                                width: '100%',
+                                                padding: '13px 16px',
+                                                border: '2px solid #e0e0e0',
+                                                borderRadius: '10px',
+                                                fontSize: '15px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: '#f8f9fa'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = '#007bff';
+                                                e.target.style.backgroundColor = '#fff';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = '#e0e0e0';
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                        <small style={{ color: '#6c757d', fontSize: '12px', marginTop: '6px', display: 'block' }}>
+                                            Must be at least 8 characters with uppercase, lowercase, number, and special character
+                                        </small>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        style={{
+                                            background: loading ? '#6c757d' : 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+                                            border: 'none',
+                                            padding: '15px',
+                                            fontSize: '17px',
+                                            fontWeight: '700',
+                                            borderRadius: '12px',
+                                            width: '100%',
+                                            color: 'white',
+                                            cursor: loading ? 'not-allowed' : 'pointer',
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                                            opacity: loading ? 0.7 : 1
+                                        }}
+                                        onMouseOver={(e) => {
+                                            if (!loading) {
+                                                e.target.style.transform = 'translateY(-2px)';
+                                                e.target.style.boxShadow = '0 6px 25px rgba(0, 123, 255, 0.5)';
+                                            }
+                                        }}
+                                        onMouseOut={(e) => {
+                                            if (!loading) {
+                                                e.target.style.transform = 'translateY(0)';
+                                                e.target.style.boxShadow = '0 4px 15px rgba(0, 123, 255, 0.3)';
+                                            }
+                                        }}
+                                    >
+                                        {loading ? (
+                                            <><i className="fas fa-spinner fa-spin"></i> Creating account...</>
+                                        ) : (
+                                            <><i className="fas fa-user-plus"></i> Create Account</>
+                                        )}
+                                    </button>
                     </form>
-                    <div className="mt-6 text-center text-sm">
-                        <span className="text-white">Already have an account? </span>
-                        <a href="#login" className="text-white hover:underline">Log in</a>
+
+                                <div style={{ textAlign: 'center', marginTop: '25px', padding: '20px 0 0 0', borderTop: '1px solid #e0e0e0' }}>
+                                    <p style={{ color: '#6c757d', fontSize: '14px', margin: '0' }}>
+                                        Already have an account? <a href="#login" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Log in here</a>
+                                    </p>
                     </div>
                 </div>
-            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
@@ -467,7 +953,7 @@ const Login = ({ setToken }) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:8000/api/auth/signin/", {
+            const response = await fetch("/api/auth/signin/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -477,71 +963,220 @@ const Login = ({ setToken }) => {
             });
             const data = await response.json();
             if (response.status === 403) {
-                setMessage(data.error || "Login failed. Account pending approval.");
+                setMessage(data.error || "Account pending approval. Please wait for admin approval.");
                 setTimeout(() => (window.location.hash = "#pending-approval"), 1500);
             } else if (response.ok) {
                 localStorage.setItem("token", data.access);
                 setToken(data.access);
-                window.location.hash = "#cv-cards";
+                setMessage("Login successful! Redirecting...");
+                setTimeout(() => window.location.hash = "#cv-cards", 500);
+            } else if (response.status === 401) {
+                setMessage("❌ Wrong credentials! Please check your username and password.");
+            } else if (response.status === 404) {
+                setMessage("❌ Service not found. Please contact support.");
+            } else if (response.status === 500) {
+                setMessage("❌ Server error. Please try again later.");
             } else {
-                setMessage(data.error || "Login failed");
+                setMessage(data.error || "❌ Login failed. Please check your credentials and try again.");
             }
-        } catch {
-            setMessage("An error occurred. Please try again.");
+        } catch (error) {
+            console.error('Login error:', error);
+            setMessage("Network error. Please check your connection and try again.");
         } finally {
             setLoading(false);
         }
     };
 
     const handleLostPassword = () => {
-        window.location.href = "http://localhost:8000/api/auth/password/reset/request/";
+        window.location.href = "/api/auth/password/reset/request/";
     };
 
     return (
-        <div className="relative min-h-screen">
-            <img src="/static/cv/foto1.jpg" alt="" className="absolute inset-0 h-full w-full object-cover -z-10" />
-            <div className="absolute inset-0 bg-black/20 -z-10" />
-            <section className="fixed left-0 top-0 h-screen w-full sm:w-[460px] md:w-[500px] lg:w-[520px]
-                                border-r border-white/30 bg-white/15 backdrop-blur-xl shadow-2xl">
-                <div className="h-full flex flex-col justify-center px-6 md:px-10">
-                    <div className="flex justify-center mb-6">
-                        <img src="/static/cv/uca_logo2.png" alt="UCA" className="h-36 w-auto" />
+        <div style={{ position: 'relative', minHeight: '100vh' }}>
+            <div style={{
+                backgroundImage: 'url(/static/cv/foto1.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'blur(8px)',
+                WebkitFilter: 'blur(8px)',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 1
+            }} />
+            
+            <div className="container-fluid" style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+                <div className="row w-100">
+                    <div className="col-xl-8 col-lg-6 col-md-5 col-sm-4 d-none d-sm-block"></div>
+                    <div className="col-xl-4 col-lg-6 col-md-7 col-sm-8 col-12">
+                        <div style={{
+                            background: 'rgba(255, 255, 255, 0.95)',
+                            backdropFilter: 'blur(10px)',
+                            WebkitBackdropFilter: 'blur(10px)',
+                            padding: '50px 40px',
+                            borderRadius: '20px',
+                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+                            overflowY: 'auto',
+                            maxHeight: '95vh',
+                            margin: '20px 0'
+                        }}>
+                            <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+                                <a href="/" style={{ display: 'inline-block' }}>
+                                    <img src="/static/cv/UCA-Logo-Centre-whiteframe.png" alt="UCA Logo" style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }} />
+                                </a>
                     </div>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                            
+                            <div style={{ borderBottom: '3px solid #e0e0e0', margin: '0 0 30px 0' }} />
+                            
+                            <div>
+                                <div style={{ marginBottom: '25px', textAlign: 'center' }}>
+                                    <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1a1a1a', margin: '0', letterSpacing: '-0.5px' }}>Welcome Back</h2>
+                                    <p style={{ color: '#6c757d', fontSize: '14px', marginTop: '8px' }}>Log in to continue to your account</p>
+                                </div>
+
+                                {message && (
+                                    <div style={{
+                                        padding: '12px 15px',
+                                        marginBottom: '20px',
+                                        borderRadius: '8px',
+                                        backgroundColor: message.includes("successful") ? '#d1e7dd' : '#f8d7da',
+                                        border: message.includes("successful") ? '1px solid #badbcc' : '1px solid #f5c2c7',
+                                        color: message.includes("successful") ? '#0f5132' : '#842029'
+                                    }}>
+                                        {message}
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleSubmit}>
+                                    <div style={{ marginBottom: '20px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                            <i className="fas fa-user" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Username <span style={{ color: '#dc3545' }}>*</span>
+                                        </label>
                         <input
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
-                                       text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             type="text"
-                            placeholder="Username"
+                                            placeholder="Enter your username"
                             required
                             value={formData.username}
                             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                        />
+                                            style={{
+                                                width: '100%',
+                                                padding: '13px 16px',
+                                                border: '2px solid #e0e0e0',
+                                                borderRadius: '10px',
+                                                fontSize: '15px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: '#f8f9fa'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = '#007bff';
+                                                e.target.style.backgroundColor = '#fff';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = '#e0e0e0';
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div style={{ marginBottom: '15px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                            <i className="fas fa-lock" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Password <span style={{ color: '#dc3545' }}>*</span>
+                                        </label>
                         <input
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3
-                                       text-slate-900 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             type="password"
-                            placeholder="Password"
+                                            placeholder="Enter your password"
                             required
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                        />
-                        <button type="submit" disabled={loading}
-                                className="w-full rounded-xl bg-[#3a7ccf] py-3 text-white font-semibold shadow hover:opacity-95 transition">
-                            {loading ? "Logging in..." : "Log in"}
+                                            style={{
+                                                width: '100%',
+                                                padding: '13px 16px',
+                                                border: '2px solid #e0e0e0',
+                                                borderRadius: '10px',
+                                                fontSize: '15px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: '#f8f9fa'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = '#007bff';
+                                                e.target.style.backgroundColor = '#fff';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = '#e0e0e0';
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div style={{ textAlign: 'right', marginBottom: '25px' }}>
+                                        <a 
+                                            href="#password/reset" 
+                                            onClick={(e) => { e.preventDefault(); handleLostPassword(); }}
+                                            style={{ color: '#007bff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', transition: 'color 0.2s' }}
+                                            onMouseOver={(e) => e.target.style.color = '#0056b3'}
+                                            onMouseOut={(e) => e.target.style.color = '#007bff'}
+                                        >
+                                            <i className="fas fa-key" style={{ marginRight: '5px' }}></i>
+                                            Forgot password?
+                                        </a>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        style={{
+                                            background: loading ? '#6c757d' : 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+                                            border: 'none',
+                                            padding: '15px',
+                                            fontSize: '17px',
+                                            fontWeight: '700',
+                                            borderRadius: '12px',
+                                            width: '100%',
+                                            color: 'white',
+                                            cursor: loading ? 'not-allowed' : 'pointer',
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                                            opacity: loading ? 0.7 : 1
+                                        }}
+                                        onMouseOver={(e) => {
+                                            if (!loading) {
+                                                e.target.style.transform = 'translateY(-2px)';
+                                                e.target.style.boxShadow = '0 6px 25px rgba(0, 123, 255, 0.5)';
+                                            }
+                                        }}
+                                        onMouseOut={(e) => {
+                                            if (!loading) {
+                                                e.target.style.transform = 'translateY(0)';
+                                                e.target.style.boxShadow = '0 4px 15px rgba(0, 123, 255, 0.3)';
+                                            }
+                                        }}
+                                    >
+                                        {loading ? (
+                                            <><i className="fas fa-spinner fa-spin"></i> Logging in...</>
+                                        ) : (
+                                            <><i className="fas fa-sign-in-alt"></i> Log In</>
+                                        )}
                         </button>
-                        {message && <p className="text-center text-red-600 text-sm">{message}</p>}
                     </form>
-                    <div className="mt-6 flex items-center justify-between text-sm">
-                        <a href="#password/reset" onClick={(e) => { e.preventDefault(); handleLostPassword(); }} className="text-white hover:underline">
-                            Lost password?
-                        </a>
-                        <a href="#signup" className="text-white hover:underline">
-                            Create account
-                        </a>
+
+                                <div style={{ textAlign: 'center', marginTop: '25px', padding: '20px 0 0 0', borderTop: '1px solid #e0e0e0' }}>
+                                    <p style={{ color: '#6c757d', fontSize: '14px', margin: '0' }}>
+                                        Don't have an account? <a href="#signup" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Sign up here</a>
+                                    </p>
                     </div>
                 </div>
-            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
@@ -579,16 +1214,36 @@ const CVCards = ({ token, filters, setFilters }) => {
   useEffect(() => {
     const fetchCVs = async () => {
       try {
-        const response = await fetch('http://localhost:8000/cv/cards/', {
+        const response = await fetch('/cv/api/list/', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        if (!response.ok) throw new Error(`Failed: ${response.status}`);
+        if (response.status === 401) {
+          setError("❌ Session expired. Please log in again.");
+          localStorage.removeItem('token');
+          window.location.hash = '#login';
+          return;
+        }
+        if (response.status === 403) {
+          setError("❌ Access denied. Your account may need approval.");
+          return;
+        }
+        if (response.status === 404) {
+          setError("❌ CV service not found. Please contact support.");
+          return;
+        }
+        if (response.status === 500) {
+          setError("❌ Server error. Please try again later.");
+          return;
+        }
+        if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+        
         const data = await response.json();
         const arr = Array.isArray(data) ? data : [];
         setAllCvs(arr);
         setCvs(arr);
       } catch (err) {
-        setError(err.message);
+        console.error('CV fetch error:', err);
+        setError(`❌ Failed to load CVs: ${err.message}`);
       } finally {
         setLoading(false);
       }
@@ -619,13 +1274,30 @@ const CVCards = ({ token, filters, setFilters }) => {
     // Technical skill contains
     if (filters.techSkill) {
       const needle = normalize(filters.techSkill);
-      filtered = filtered.filter(cv => splitList(cv.technical_skills).some(s => s.includes(needle)));
+      filtered = filtered.filter(cv => {
+        if (!cv.technical_skills || cv.technical_skills.length === 0) return false;
+        const techSkills = cv.technical_skills[0];
+        const allSkills = [
+          techSkills.programming_languages,
+          techSkills.frameworks_databases,
+          techSkills.tools,
+          techSkills.web_development,
+          techSkills.multimedia,
+          techSkills.network,
+          techSkills.operating_systems
+        ].filter(Boolean).join(',');
+        return normalize(allSkills).includes(needle);
+      });
     }
 
-    // Non-technical skill contains
+    // Non-technical skill contains (languages)
     if (filters.nonTechSkill) {
       const needle = normalize(filters.nonTechSkill);
-      filtered = filtered.filter(cv => splitList(cv.non_technical_skills).some(s => s.includes(needle)));
+      filtered = filtered.filter(cv => {
+        if (!cv.languages || cv.languages.length === 0) return false;
+        const langNames = cv.languages.map(l => l.name).join(',');
+        return normalize(langNames).includes(needle);
+      });
     }
 
     // Search by full name
@@ -647,35 +1319,72 @@ const CVCards = ({ token, filters, setFilters }) => {
   if (loading) return <div className="text-center text-white mt-10">Loading...</div>;
   if (error) return <div className="text-center text-red-600 mt-10">Error: {error}</div>;
 
+  // Extract unique values from all CVs for dynamic dropdowns
+  const getUniqueValues = (field) => {
+    const values = new Set();
+    allCvs.forEach(cv => {
+      const val = cv[field];
+      if (val) {
+        // Handle comma-separated or array values
+        if (typeof val === 'string' && val.includes(',')) {
+          val.split(/[,;|]/).forEach(v => {
+            const trimmed = v.trim();
+            if (trimmed) values.add(trimmed);
+          });
+        } else if (Array.isArray(val)) {
+          val.forEach(v => {
+            const trimmed = String(v).trim();
+            if (trimmed) values.add(trimmed);
+          });
+        } else {
+          const trimmed = String(val).trim();
+          if (trimmed) values.add(trimmed);
+        }
+      }
+    });
+    return Array.from(values).sort();
+  };
+
+  // Get unique technical skills from all CVs
+  const getUniqueTechSkills = () => {
+    const values = new Set();
+    allCvs.forEach(cv => {
+      if (cv.technical_skills && cv.technical_skills.length > 0) {
+        const ts = cv.technical_skills[0];
+        [ts.programming_languages, ts.frameworks_databases, ts.tools, 
+         ts.web_development, ts.multimedia, ts.network, ts.operating_systems]
+          .filter(Boolean)
+          .forEach(field => {
+            field.split(/[,;|]/).forEach(skill => {
+              const trimmed = skill.trim();
+              if (trimmed) values.add(trimmed);
+            });
+          });
+      }
+    });
+    return Array.from(values).sort();
+  };
+
+  // Get unique non-technical skills (languages) from all CVs
+  const getUniqueNonTechSkills = () => {
+    const values = new Set();
+    allCvs.forEach(cv => {
+      if (cv.languages && cv.languages.length > 0) {
+        cv.languages.forEach(lang => {
+          if (lang.name) values.add(lang.name.trim());
+        });
+      }
+    });
+    return Array.from(values).sort();
+  };
+
+  const uniqueCountries = getUniqueValues('country');
+  const uniqueLanguages = getUniqueValues('language');
+  const uniqueTechSkills = getUniqueTechSkills();
+  const uniqueNonTechSkills = getUniqueNonTechSkills();
+
   return (
   <main className="main-content">
-    {/* Hero */}
-    <section className="hero-section">
-      <div className="hero-content">
-        <h1>Student Profiles</h1>
-        <p>Discover the diverse talents and backgrounds of our exceptional student community across Central Asia</p>
-
-        <div className="stats-row">
-          <div className="stat-item">
-            <span className="stat-number">{cvs.length}</span>
-            <span className="stat-label">Active Students</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">4</span>
-            <span className="stat-label">Departments</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">3</span>
-            <span className="stat-label">Countries</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-number">12</span>
-            <span className="stat-label">Languages</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     {/* Filters */}
     <section className="filters-section">
       <div className="filters-header">
@@ -687,7 +1396,6 @@ const CVCards = ({ token, filters, setFilters }) => {
               : filters.category.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
           </span>
           {filters.country && <span className="filter-badge">Country: {filters.country}</span>}
-          {filters.language && <span className="filter-badge">Language: {filters.language}</span>}
           {filters.techSkill && <span className="filter-badge">Tech: {filters.techSkill}</span>}
           {filters.nonTechSkill && <span className="filter-badge">Soft: {filters.nonTechSkill}</span>}
         </div>
@@ -715,24 +1423,12 @@ const CVCards = ({ token, filters, setFilters }) => {
             value={filters.country || ''}
           >
             <option value="">All Countries</option>
-            <option value="Kyrgyzstan">Kyrgyzstan</option>
-            <option value="Tajikistan">Tajikistan</option>
-            <option value="Kazakhstan">Kazakhstan</option>
+            {uniqueCountries.map(country => (
+              <option key={country} value={country}>{country}</option>
+            ))}
           </select>
         </div>
 
-        <div className="filter-group">
-          <label>💬 Language</label>
-          <select
-            className="filter-select dropdown"
-            onChange={e => setFilters({ ...filters, language: e.target.value })}
-            value={filters.language || ''}
-          >
-            <option value="">All Languages</option>
-            <option value="English">English</option>
-            <option value="Russian">Russian</option>
-          </select>
-        </div>
 
         <div className="filter-group">
           <label>⚡ Technical Skills</label>
@@ -741,10 +1437,10 @@ const CVCards = ({ token, filters, setFilters }) => {
             onChange={e => setFilters({ ...filters, techSkill: e.target.value })}
             value={filters.techSkill || ''}
           >
-            <option value="">Technical Skills</option>
-            <option value="Programming">Programming</option>
-            <option value="Data Analysis">Data Analysis</option>
-            <option value="Design">Design</option>
+            <option value="">All Technical Skills</option>
+            {uniqueTechSkills.map(skill => (
+              <option key={skill} value={skill}>{skill}</option>
+            ))}
           </select>
         </div>
 
@@ -755,16 +1451,15 @@ const CVCards = ({ token, filters, setFilters }) => {
             onChange={e => setFilters({ ...filters, nonTechSkill: e.target.value })}
             value={filters.nonTechSkill || ''}
           >
-            <option value="">Non-technical Skills</option>
-            <option value="Communication">Communication</option>
-            <option value="Teamwork">Teamwork</option>
-            <option value="Leadership">Leadership</option>
+            <option value="">All Non-technical Skills</option>
+            {uniqueNonTechSkills.map(skill => (
+              <option key={skill} value={skill}>{skill}</option>
+            ))}
           </select>
         </div>
 
         {/* Full-width search (no inline style) */}
         <div className="search-container">
-          <label>🔎 Search Students</label>
           <div className="search-inner">
             <span className="search-icon">🔍</span>
             <input
@@ -779,9 +1474,6 @@ const CVCards = ({ token, filters, setFilters }) => {
       </div>
     </section>
 
-    {/* Results header */}
-    
-
     {/* Profiles grid — SIZE UNCHANGED */}
     <div className="card-container profiles-grid">
       {cvs.map(cv => {
@@ -791,10 +1483,55 @@ const CVCards = ({ token, filters, setFilters }) => {
           (cv.major || '').toLowerCase().includes('earth') ? 'es' :
           (cv.major || '').toLowerCase().includes('econom') ? 'ge' : '';
 
-        const skills = [
-          ...(cv.technical_skills ? String(cv.technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
-          ...(cv.non_technical_skills ? String(cv.non_technical_skills).split(/[,;|]/).map(s => s.trim()).filter(Boolean) : []),
-        ].slice(0, 4);
+        // Extract skills based on major - max 2 skills
+        const getSkillsForMajor = (cv) => {
+          const majorLower = (cv.major || '').toLowerCase();
+          const techSkills = cv.technical_skills && cv.technical_skills.length > 0 ? cv.technical_skills[0] : null;
+          
+          if (!techSkills) return [];
+          
+          const extractFromField = (field) => {
+            return field ? field.split(/[,;|]/).map(s => s.trim()).filter(Boolean) : [];
+          };
+          
+          let skillsList = [];
+          
+          if (majorLower.includes('computer') || majorLower.includes('cs')) {
+            // Computer Science: programming languages, frameworks
+            skillsList = [
+              ...extractFromField(techSkills.programming_languages),
+              ...extractFromField(techSkills.frameworks_databases)
+            ];
+          } else if (majorLower.includes('communication') || majorLower.includes('media')) {
+            // Communication & Media: multimedia, web development
+            skillsList = [
+              ...extractFromField(techSkills.multimedia),
+              ...extractFromField(techSkills.web_development)
+            ];
+          } else if (majorLower.includes('earth') || majorLower.includes('environmental')) {
+            // Earth & Environmental: tools, operating systems
+            skillsList = [
+              ...extractFromField(techSkills.tools),
+              ...extractFromField(techSkills.operating_systems)
+            ];
+          } else if (majorLower.includes('econom')) {
+            // Economics: tools, frameworks
+            skillsList = [
+              ...extractFromField(techSkills.tools),
+              ...extractFromField(techSkills.frameworks_databases)
+            ];
+          } else {
+            // Default: show programming languages and tools
+            skillsList = [
+              ...extractFromField(techSkills.programming_languages),
+              ...extractFromField(techSkills.tools)
+            ];
+          }
+          
+          return skillsList.slice(0, 2); // Max 2 skills
+        };
+
+        const skills = getSkillsForMajor(cv);
 
         return (
           <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card profile-card">
@@ -802,14 +1539,12 @@ const CVCards = ({ token, filters, setFilters }) => {
               <div className="profile-info">
                 <div className="student-name">{cv.name} {cv.surname}</div>
               </div>
-              <span className="submitted-date">✅ Submitted</span>
             </div>
 
             <div className={`student-major ${deptClass}`}>{cv.major || 'Department'}</div>
 
             <div className="meta-row profile-meta">
               <span>🌍 {cv.country || 'Country'}</span>
-              <span>🗣️ {cv.language || 'Language'}</span>
               <span>🎓 {cv.graduation_year ? `Class of ${cv.graduation_year}` : 'Class year'}</span>
             </div>
 
@@ -912,7 +1647,10 @@ function getCookie(name) {
     return cookieValue;
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// Use React 18 createRoot API
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+{% endverbatim %}
 </script>
 </body>
 </html>

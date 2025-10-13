@@ -1,0 +1,326 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+% Page geometry - matches standard letter size with margins
+\geometry{
+    letterpaper,
+    top=0.75in,
+    bottom=0.75in,
+    left=1in,
+    right=1in
+}
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdfborder={0 0 0}
+}
+
+% Remove paragraph indentation
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+% Page numbering
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Page \thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% Section formatting
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries\uppercase}
+  {}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+
+% Custom commands
+\newcommand{\cvheader}[5]{
+    \begin{center}
+        \textbf{#1} \\
+        \textbf{\Large\MakeUppercase{#2 #3}} \\
+        #4 \\
+        #5
+    \end{center}
+    \vspace{0.15in}
+}
+
+\newcommand{\entryheader}[2]{
+    \noindent\textbf{#1} \hfill \textbf{#2} \\
+}
+
+\newcommand{\entrysubheader}[1]{
+    \noindent\textit{#1} \\
+}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+% HEADER
+%----------------------------------------------------------------------------------------
+
+\cvheader
+    {📝}
+    { {{ cv.name|escape_latex }} }
+    { {{ cv.surname|escape_latex }} }
+    {% if cv.city or cv.country %}{ {% if cv.city %}{{ cv.city|escape_latex }}{% endif %}{% if cv.city and cv.country %}, {% endif %}{% if cv.country %}{{ cv.country|escape_latex }}{% endif %} }{% else %}{}{% endif %}
+    {% if cv.phone or cv.email or cv.linkedin or cv.github %}
+    {
+        {% if cv.phone %}+{{ cv.phone|escape_latex }} | {% endif %}
+        \href{mailto:{{ cv.email|escape_latex }}}{{ "{" }}{{ cv.email|escape_latex }}{{ "}" }}
+        {% if cv.linkedin %} | \href{ {{ cv.linkedin|escape_latex }} }{{ "{" }}Linkedin.com/profile{{ "}" }}{% endif %}
+        {% if cv.github %} | \href{ {{ cv.github|escape_latex }} }{{ "{" }}Github.com/profile{{ "}" }}{% endif %}
+    }
+    {% else %}
+    {}
+    {% endif %}
+
+%----------------------------------------------------------------------------------------
+% EDUCATION
+%----------------------------------------------------------------------------------------
+
+\section{Education}
+
+{% if educations %}
+{% for edu in educations %}
+\entryheader{ {{ edu.degree_title|default:"Degree Title"|escape_latex }} }{ {{ edu.expected_graduation|default:"20XX"|escape_latex }} }
+\entrysubheader{ {{ edu.university|default:"University"|escape_latex }}, {{ edu.university_location|default:"City, Country"|escape_latex }} }
+{% if edu.honors %}
+\textbf{Honours:} {{ edu.honors|escape_latex }} \\
+{% endif %}
+{% if edu.relevant_courses %}
+\textbf{Relevant Courses:} {{ edu.relevant_courses|escape_latex }} \\
+{% endif %}
+\vspace{8pt}
+
+{% endfor %}
+{% endif %}
+
+{% if cv.certificates %}
+\entryheader{Certificate Title}{20XX}
+\entrysubheader{Organization, location}
+\vspace{8pt}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% PROFESSIONAL EXPERIENCE
+%----------------------------------------------------------------------------------------
+
+{% if experiences %}
+\section{Professional Experience}
+
+{% for exp in experiences %}
+\entryheader{ {{ exp.position_title|escape_latex }} }{ {{ exp.dates|escape_latex }} }
+\entrysubheader{ {{ exp.company|escape_latex }} }
+\begin{itemize}[leftmargin=*,itemsep=2pt,parsep=0pt]
+{% if exp.responsibilities %}
+    {% for resp in exp.responsibilities.split('\n') %}
+    {% if resp.strip %}
+    \item {{ resp|escape_latex }}
+    {% endif %}
+    {% endfor %}
+{% else %}
+    \item Accomplishment statement beginning with an action verb.
+    \item Accomplishment statement beginning with an action verb.
+    \item Accomplishment statement beginning with an action verb.
+{% endif %}
+\end{itemize}
+\vspace{8pt}
+
+{% endfor %}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% PROFESSIONAL COMPETENCIES
+%----------------------------------------------------------------------------------------
+
+{% if competencies %}
+\section{Professional Competencies}
+
+{% for comp in competencies %}
+\textbf{ {{ comp.competency_type|escape_latex }}: } \\
+\begin{itemize}[leftmargin=*,itemsep=2pt,parsep=0pt]
+{% if comp.description %}
+    {% for item in comp.description.split('\n') %}
+    {% if item.strip %}
+    \item {{ item|escape_latex }}
+    {% endif %}
+    {% endfor %}
+{% else %}
+    \item Accomplishment statement beginning with an action verb.
+    \item Accomplishment statement beginning with an action verb.
+    \item Accomplishment statement beginning with an action verb.
+{% endif %}
+\end{itemize}
+\vspace{8pt}
+
+{% endfor %}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% PROJECTS
+%----------------------------------------------------------------------------------------
+
+{% if projects %}
+\section{Projects}
+
+{% for project in projects %}
+\entryheader{ {{ project.project_title|escape_latex }} {% if project.technologies_used %}\textit{(optional: insert technical skills used)}{% endif %} }{ {{ project.year|default:"20XX"|escape_latex }} }
+{% if project.summary %}
+\textbf{Summary:} {{ project.summary|escape_latex }} \\
+{% endif %}
+\begin{itemize}[leftmargin=*,itemsep=2pt,parsep=0pt]
+{% if project.accomplishment %}
+    \item {{ project.accomplishment|escape_latex }}
+{% else %}
+    \item Accomplishment statement beginning with an action verb.
+    \item Accomplishment statement beginning with an action verb.
+    \item Accomplishment statement beginning with an action verb.
+{% endif %}
+\end{itemize}
+\vspace{8pt}
+
+{% endfor %}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% TECHNICAL SKILLS
+%----------------------------------------------------------------------------------------
+
+{% if technical_skills %}
+\section{Technical Skills}
+
+\textit{(Customize according to your field of study)} \\
+\vspace{4pt}
+
+{% for skill in technical_skills %}
+\textbf{ {{ skill.category|default:"Programming \& Statistical Tools"|escape_latex }}: } {{ skill.skills|default:""|escape_latex }} \\
+{% endfor %}
+\vspace{8pt}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% SPOKEN LANGUAGES
+%----------------------------------------------------------------------------------------
+
+{% if languages %}
+\section{Spoken Languages}
+
+\begin{itemize}[leftmargin=*,itemsep=2pt,parsep=0pt]
+{% for lang in languages %}
+    \item {{ lang.name|escape_latex }}{% if lang.proficiency %}, include proficiency if available{% endif %}
+{% endfor %}
+\end{itemize}
+\vspace{8pt}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% PAGE 2
+%----------------------------------------------------------------------------------------
+
+\newpage
+\rhead{Page 2}
+
+\begin{center}
+    \textbf{\Large\MakeUppercase{ {{ cv.name|escape_latex }} {{ cv.surname|escape_latex }} }}
+\end{center}
+\vspace{0.15in}
+
+%----------------------------------------------------------------------------------------
+% COMMUNITY INVOLVEMENT
+%----------------------------------------------------------------------------------------
+
+{% if community_involvements %}
+\section{Community Involvement}
+
+{% for involvement in community_involvements %}
+\entryheader{ {{ involvement.position_title|escape_latex }} }{ {{ involvement.start_date|escape_latex }} – {{ involvement.end_date|escape_latex }} }
+\entrysubheader{ {{ involvement.organization|escape_latex }}, {{ involvement.location|default:"City, Country"|escape_latex }} }
+\begin{itemize}[leftmargin=*,itemsep=2pt,parsep=0pt]
+{% if involvement.description %}
+    {% for item in involvement.description.split('\n') %}
+    {% if item.strip %}
+    \item {{ item|escape_latex }}
+    {% endif %}
+    {% endfor %}
+{% else %}
+    \item Accomplishment statement
+    \item Accomplishment statement
+{% endif %}
+\end{itemize}
+\vspace{8pt}
+
+{% endfor %}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% AWARDS
+%----------------------------------------------------------------------------------------
+
+{% if awards %}
+\section{Awards}
+
+\begin{itemize}[leftmargin=*,itemsep=2pt,parsep=0pt]
+{% for award in awards %}
+    \item {{ award.award_name|escape_latex }} {% if award.year %}({{ award.year|escape_latex }}){% else %}(20XX){% endif %}
+{% endfor %}
+\end{itemize}
+\vspace{8pt}
+
+OR
+\vspace{8pt}
+
+{% for award in awards %}
+\entryheader{ {{ award.award_name|escape_latex }} }{ {{ award.year|default:"20XX"|escape_latex }} }
+\entrysubheader{ {{ award.presenting_organization|default:"Presenting Organization"|escape_latex }} }
+{% if award.short_description %}
+\begin{itemize}[leftmargin=*,itemsep=2pt,parsep=0pt]
+    \item {{ award.short_description|escape_latex }}
+\end{itemize}
+{% endif %}
+\vspace{8pt}
+
+{% endfor %}
+{% endif %}
+
+%----------------------------------------------------------------------------------------
+% REFERENCES
+%----------------------------------------------------------------------------------------
+
+{% if references %}
+\section{References}
+
+\begin{minipage}[t]{0.3\textwidth}
+{% for ref in references %}
+{% if forloop.counter0|divisibleby:3 and forloop.counter0 < forloop.revcounter0 %}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.3\textwidth}
+{% endif %}
+\textbf{ {{ ref.reference_name|escape_latex }} } \\
+{{ ref.position|default:"Position"|escape_latex }} \\
+{{ ref.company|default:"Company"|escape_latex }} \\
+Phone: {{ ref.phone|default:"+1-234-45678"|escape_latex }} \\
+Email: \href{mailto:{{ ref.email|escape_latex }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" }} \\
+\vspace{10pt}
+
+{% endfor %}
+\end{minipage}
+{% endif %}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+

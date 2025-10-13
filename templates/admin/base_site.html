@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | CVBook Admin{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">CVBook Administration</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div style="background: #417690; padding: 10px; margin-bottom: 20px;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+        <h3 style="color: white; margin: 0 0 10px 0; font-size: 16px;">
+            <i class="fas fa-chart-line"></i> CV Management System
+        </h3>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <a href="{% url 'cv-admin-dashboard' %}" 
+               style="background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; 
+                      border-radius: 5px; text-decoration: none; font-size: 14px; 
+                      transition: background 0.3s ease;"
+               onmouseover="this.style.background='rgba(255,255,255,0.3)'"
+               onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                <i class="fas fa-tachometer-alt"></i> CV Dashboard
+            </a>
+            <a href="{% url 'admin-student-cvs' %}" 
+               style="background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; 
+                      border-radius: 5px; text-decoration: none; font-size: 14px; 
+                      transition: background 0.3s ease;"
+               onmouseover="this.style.background='rgba(255,255,255,0.3)'"
+               onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                <i class="fas fa-graduation-cap"></i> Student CVs
+            </a>
+            <a href="{% url 'admin-external-cvs' %}" 
+               style="background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; 
+                      border-radius: 5px; text-decoration: none; font-size: 14px; 
+                      transition: background 0.3s ease;"
+               onmouseover="this.style.background='rgba(255,255,255,0.3)'"
+               onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                <i class="fas fa-users"></i> External CVs
+            </a>
+            <a href="{% url 'cv_cards' %}" target="_blank"
+               style="background: rgba(255,255,255,0.2); color: white; padding: 8px 16px; 
+                      border-radius: 5px; text-decoration: none; font-size: 14px; 
+                      transition: background 0.3s ease;"
+               onmouseover="this.style.background='rgba(255,255,255,0.3)'"
+               onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                <i class="fas fa-eye"></i> View Public CVBook
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .module h2, .module caption, .inline-group h2 {
+        background: #417690;
+    }
+    
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: #417690;
+        border-color: #417690;
+    }
+    
+    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
+        background: #205067;
+    }
+    
+    .selector-chosen h2 {
+        background: #417690;
+    }
+    
+    a:link, a:visited {
+        color: #417690;
+    }
+</style>
+{% endblock %}
+
