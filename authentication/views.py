@@ -8,7 +8,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
-from rest_framework_simplejwt.tokens import RefreshToken
+# from rest_framework_simplejwt.tokens import RefreshToken  # Disabled for deployment
 from .models import CustomUser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -159,11 +159,12 @@ class SigninView(APIView):
                 return Response({'error': 'Your account is pending admin approval.'}, status=status.HTTP_403_FORBIDDEN)
             if user.rejected_at is not None:
                 return Response({'error': 'Your account has been rejected and cannot log in.'}, status=status.HTTP_403_FORBIDDEN)
-            refresh = RefreshToken.for_user(user)
+            # JWT tokens disabled for deployment - using session authentication
+            # refresh = RefreshToken.for_user(user)
             logger.info(f"User logged in: {username}")
             return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                # 'refresh': str(refresh),
+                # 'access': str(refresh.access_token),
                 'user': {
                     'id': user.id,
                     'username': user.username,
