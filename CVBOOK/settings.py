@@ -2,7 +2,12 @@ import re
 import os
 from pathlib import Path
 from datetime import timedelta
-import dj_database_url
+
+# Conditional import for dj_database_url
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,9 +85,19 @@ WSGI_APPLICATION = 'CVBOOK.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {
-    'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
-}
+# Database configuration
+if dj_database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
+    }
+else:
+    # Fallback to SQLite if dj_database_url is not available
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Authentication

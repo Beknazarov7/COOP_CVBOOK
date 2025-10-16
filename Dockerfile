@@ -31,8 +31,11 @@ COPY . /app/
 RUN mkdir -p /app/staticfiles
 RUN mkdir -p /app/media
 
+# Set environment variables for Django
+ENV DJANGO_SETTINGS_MODULE=CVBOOK.settings
+
 # Collect static files (skip if migrations fail)
-RUN python manage.py collectstatic --noinput || true
+RUN python manage.py collectstatic --noinput || echo "Static files collection failed, continuing..."
 
 # Expose port
 EXPOSE $PORT
