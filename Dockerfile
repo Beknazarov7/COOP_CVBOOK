@@ -34,11 +34,10 @@ RUN mkdir -p /app/media
 # Set environment variables for Django
 ENV DJANGO_SETTINGS_MODULE=CVBOOK.settings
 
-# Collect static files (skip if migrations fail)
-RUN python manage.py collectstatic --noinput || echo "Static files collection failed, continuing..."
+# Skip collectstatic during build - will be done at runtime
 
 # Expose port
 EXPOSE $PORT
 
 # Run the application with debugging
-CMD python manage.py check && python manage.py migrate && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
+CMD python manage.py check && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
