@@ -13,12 +13,20 @@ from cv.views import CVListView
 def health_check(request):
     return JsonResponse({"status": "healthy", "service": "CV Book"})
 
+# Even simpler health check for Railway
+def simple_health_check(request):
+    from django.http import HttpResponse
+    return HttpResponse("OK", status=200)
+
 urlpatterns = [
     # Health check endpoint for Railway (primary)
     path('health/', health_check, name='health_check'),
     
+    # Simple health check for Railway
+    path('ping/', simple_health_check, name='ping'),
+    
     # Root health check as fallback
-    path('', health_check, name='root_health_check'),
+    path('', simple_health_check, name='root_health_check'),
     
     path('admin/', admin.site.urls),
     path('cv/', include('cv.urls')),

@@ -37,5 +37,5 @@ RUN python manage.py collectstatic --noinput || true
 # Expose port
 EXPOSE $PORT
 
-# Run the application
-CMD exec gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3
+# Run the application with debugging
+CMD python manage.py check && python manage.py migrate && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
