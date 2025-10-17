@@ -1,9 +1,13 @@
+# Nixpacks configuration for CV Book Django project
 [phases.setup]
 nixPkgs = ["python311", "postgresql"]
 
 [phases.install]
-cmds = ["pip install -r requirements.txt"]
+cmds = ["pip install --upgrade pip", "pip install -r requirements.txt"]
+
+[phases.build]
+cmds = ["echo 'Build phase - skipping collectstatic'"]
 
 [start]
-cmd = "gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120"
+cmd = "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120"
 
