@@ -3,24 +3,26 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from cv.views import cv_cards_view, cv_detail_view, admin_cv_cards_view
 
 from cv.views import CVListView
 
 # Simple health check view
+@csrf_exempt
 def health_check(request):
     return JsonResponse({"status": "healthy", "service": "CV Book"}, status=200)
 
 # Even simpler health check for Railway
+@csrf_exempt
 def simple_health_check(request):
-    from django.http import HttpResponse
     return HttpResponse("OK", status=200)
 
 # Minimal health check - just returns 200
+@csrf_exempt
 def minimal_health_check(request):
-    from django.http import HttpResponse
     return HttpResponse(status=200)
 
 urlpatterns = [
