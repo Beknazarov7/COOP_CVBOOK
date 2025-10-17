@@ -9,5 +9,5 @@ cmds = ["pip install --upgrade pip", "pip install -r requirements.txt"]
 cmds = ["echo 'Build phase - skipping collectstatic'"]
 
 [start]
-cmd = "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120"
+cmd = "bash start.sh"
 
