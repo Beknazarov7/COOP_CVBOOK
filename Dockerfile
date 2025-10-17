@@ -4,7 +4,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8000
+# PORT will be set by Railway at runtime
 
 # Set work directory
 WORKDIR /app
@@ -36,8 +36,7 @@ ENV DJANGO_SETTINGS_MODULE=CVBOOK.settings
 
 # Skip collectstatic during build - will be done at runtime
 
-# Expose port
-EXPOSE $PORT
+# Note: PORT is exposed dynamically by Railway at runtime
 
 # Run the application with debugging
 CMD python manage.py check && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
