@@ -31,17 +31,17 @@ RUN mkdir -p /app/staticfiles /app/media/pdfs
 # Collect static files
 RUN python manage.py collectstatic --noinput --clear 2>&1 || true
 
-# Expose port
-EXPOSE 8000
+# Expose port (Railway will override with $PORT)
+EXPOSE $PORT
 
 # Create entrypoint script
 RUN echo '#!/bin/sh\n\
 set -e\n\
 echo "Running migrations..."\n\
 python manage.py migrate --noinput\n\
-echo "Starting gunicorn..."\n\
+echo "Starting gunicorn on port $PORT..."\n\
 exec gunicorn CVBOOK.wsgi:application \\\n\
-  --bind 0.0.0.0:8000 \\\n\
+  --bind 0.0.0.0:$PORT \\\n\
   --workers 3 \\\n\
   --worker-class sync \\\n\
   --timeout 120 \\\n\
