@@ -38,3 +38,9 @@ RUN echo "Hello World"
 
 # Run migrations and start gunicorn
 CMD sh -c "python manage.py migrate --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:3000 --workers 3 --worker-class sync --timeout 120 --keep-alive 5 --access-logfile - --error-logfile - --log-level info"
+
+RUN curl http://localhost:3000/ping/
+RUN curl http://localhost:3000/ping/
+RUN curl http://localhost:3000/ping/
+RUN curl http://localhost:3000/ping/
+RUN curl http://localhost:3000/ping/
