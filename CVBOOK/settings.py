@@ -47,7 +47,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+<<<<<<< HEAD
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Moved to top for static files
+=======
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+>>>>>>> testdeploy
     # 'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,8 +60,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+<<<<<<< HEAD
 # Use simpler static files storage for deployment
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+=======
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+>>>>>>> testdeploy
 ROOT_URLCONF = 'CVBOOK.urls'
 
 TEMPLATES = [
@@ -79,6 +88,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CVBOOK.wsgi.application'
 
 # Database
+<<<<<<< HEAD
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -98,7 +108,11 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
+=======
+DATABASES = {
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
+}
+>>>>>>> testdeploy
 
 # Authentication
 AUTH_USER_MODEL = 'authentication.CustomUser'
@@ -209,7 +223,7 @@ CORS_ALLOW_HEADERS = [
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_HTTPONLY = False  # Only if you need to access CSRF token via JS
+CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
 
 # Email settings
@@ -218,7 +232,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '').replace(' ', '')  # Remove spaces from app password
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '').replace(' ', '')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'admin@localhost')
 
 # Internationalization
@@ -231,24 +245,26 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+<<<<<<< HEAD
 # STATICFILES_STORAGE is configured at line 60 with WhiteNoise
+=======
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+>>>>>>> testdeploy
 
 # Media files
 MEDIA_URL = '/media/'
-#MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # LaTeX/PDF settings
-# TEX_OUTPUT_DIR = BASE_DIR / 'media' / 'pdfs'
 TEX_INPUT_DIR = BASE_DIR / 'cv' / 'templates'
 LATEX_INTERPRETER = 'pdflatex'
 
 # Security enhancements for production
 if not DEBUG:
-    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     SECURE_SSL_REDIRECT = True
@@ -261,7 +277,6 @@ if not DEBUG:
     CORS_ALLOW_ALL_ORIGINS = False
     CORS_ALLOW_CREDENTIALS = False
 
-
 # Ignore source map 404s
 IGNORABLE_404_URLS = [
     re.compile(r'\.js\.map$'),
@@ -270,6 +285,7 @@ IGNORABLE_404_URLS = [
 
 # Whitenoise settings
 WHITENOISE_MANIFEST_STRICT = False
+<<<<<<< HEAD
 WHITENOISE_INDEX_FILE = True  # For SPA support
 
 # REST Framework configuration (without JWT)
@@ -281,3 +297,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+=======
+WHITENOISE_INDEX_FILE = True
+>>>>>>> testdeploy
