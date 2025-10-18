@@ -2,12 +2,7 @@ import re
 import os
 from pathlib import Path
 from datetime import timedelta
-
-# Conditional import for dj_database_url
-try:
-    import dj_database_url
-except ImportError:
-    dj_database_url = None
+import dj_database_url
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,7 +14,7 @@ load_dotenv(BASE_DIR / '.env')
 # Security settings
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temporary-key-for-development')
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',') if os.environ.get('ALLOWED_HOSTS') else ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 # Allow embedding in iframes from localhost
 X_FRAME_OPTIONS = 'ALLOWALL'
@@ -35,9 +30,9 @@ INSTALLED_APPS = [
     
     # Third-party apps
     'rest_framework',
-    # 'rest_framework_simplejwt',  # Disabled temporarily for deployment
+    # 'rest_framework_simplejwt',
     # 'corsheaders',
-    'whitenoise',  # Enabled for static files
+    # 'whitenoise',
     # 'django_tex',
     
     # Local apps
@@ -47,11 +42,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-<<<<<<< HEAD
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Moved to top for static files
-=======
     'whitenoise.middleware.WhiteNoiseMiddleware',
->>>>>>> testdeploy
     # 'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,13 +51,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-<<<<<<< HEAD
-# Use simpler static files storage for deployment
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-=======
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
->>>>>>> testdeploy
 ROOT_URLCONF = 'CVBOOK.urls'
 
 TEMPLATES = [
@@ -88,31 +74,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CVBOOK.wsgi.application'
 
 # Database
-<<<<<<< HEAD
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-# Database configuration
-if dj_database_url:
-    DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
-    }
-else:
-    # Fallback to SQLite if dj_database_url is not available
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-=======
 DATABASES = {
     'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
 }
->>>>>>> testdeploy
 
 # Authentication
 AUTH_USER_MODEL = 'authentication.CustomUser'
@@ -133,57 +97,57 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# REST Framework settings (JWT disabled for deployment)
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ),
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-#     ),
-#     'DEFAULT_RENDERER_CLASSES': (
-#         'rest_framework.renderers.JSONRenderer',
-#         'rest_framework.renderers.BrowsableAPIRenderer',
-#     ),
-#     'DEFAULT_PARSER_CLASSES': (
-#         'rest_framework.parsers.JSONParser',
-#         'rest_framework.parsers.FormParser',
-#         'rest_framework.parsers.MultiPartParser',
-#     ),
-#     'DEFAULT_THROTTLE_RATES': {
-#         'anon': '100/day',
-#         'user': '1000/day'
-#     },
-# }
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day'
+    },
+}
 
-# JWT Settings (disabled for deployment)
-# SIMPLE_JWT = {
-#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-#     'ROTATE_REFRESH_TOKENS': True,
-#     'BLACKLIST_AFTER_ROTATION': True,
-#     'UPDATE_LAST_LOGIN': True,
-#     
-#     'ALGORITHM': 'HS256',
-#     'SIGNING_KEY': SECRET_KEY,
-#     'VERIFYING_KEY': None,
-#     'AUDIENCE': None,
-#     'ISSUER': None,
-#     
-#     'AUTH_HEADER_TYPES': ('Bearer',),
-#     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-#     'USER_ID_FIELD': 'id',
-#     'USER_ID_CLAIM': 'user_id',
-#     
-#     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-#     'TOKEN_TYPE_CLAIM': 'token_type',
-#     
-#     'JTI_CLAIM': 'jti',
-#     
-#     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-#     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
-# }
+# JWT Settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+    
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+    
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+    
+    'JTI_CLAIM': 'jti',
+    
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
@@ -245,11 +209,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-<<<<<<< HEAD
-# STATICFILES_STORAGE is configured at line 60 with WhiteNoise
-=======
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
->>>>>>> testdeploy
 
 # Media files
 MEDIA_URL = '/media/'
@@ -285,18 +245,4 @@ IGNORABLE_404_URLS = [
 
 # Whitenoise settings
 WHITENOISE_MANIFEST_STRICT = False
-<<<<<<< HEAD
-WHITENOISE_INDEX_FILE = True  # For SPA support
-
-# REST Framework configuration (without JWT)
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
-=======
 WHITENOISE_INDEX_FILE = True
->>>>>>> testdeploy
