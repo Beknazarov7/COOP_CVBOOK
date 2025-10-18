@@ -39,8 +39,7 @@ RUN echo "Hello World"
 # Run migrations and start gunicorn
 CMD sh -c "python manage.py migrate --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:3000 --workers 3 --worker-class sync --timeout 120 --keep-alive 5 --access-logfile - --error-logfile - --log-level info"
 
-RUN curl http://localhost:3000/ping/
-RUN curl http://localhost:3000/ping/
-RUN curl http://localhost:3000/ping/
-RUN curl http://localhost:3000/ping/
-RUN curl http://localhost:3000/ping/
+RUN apt-get update && apt-get install -y curl  # Ensure curl is available
+RUN curl --version  # Just verify curl works, don't curl your app
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/ping/ || exit 1
