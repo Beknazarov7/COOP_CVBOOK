@@ -18,7 +18,11 @@ def health_check(request):
 # Main URL patterns
 urlpatterns = [
     # Health check MUST come first before any catch-all patterns
+    # Support both with and without trailing slash to avoid 301 redirects
+    path('ping', health_check, name='health_check_no_slash'),
     path('ping/', health_check, name='health_check'),
+    path('health', health_check, name='health_no_slash'),
+    path('health/', health_check, name='health_slash'),
     
     # Admin
     path('admin/', admin.site.urls),
