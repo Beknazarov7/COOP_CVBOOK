@@ -26,17 +26,13 @@ def minimal_health_check(request):
     return HttpResponse(status=200)
 
 urlpatterns = [
-    # Health check endpoint for Railway (primary)
+    # Health check endpoints for Railway deployment monitoring
     path('health/', health_check, name='health_check'),
-    
-    # Simple health check for Railway
     path('ping/', simple_health_check, name='ping'),
-    
-    # Minimal health check - just HTTP 200
     path('status/', minimal_health_check, name='status'),
     
-    # Root health check as fallback
-    path('', simple_health_check, name='root_health_check'),
+    # Root URL points to authentication/login page
+    path('', TemplateView.as_view(template_name='cv/authentication.html'), name='root_login'),
     
     path('admin/', admin.site.urls),
     path('cv/', include('cv.urls')),

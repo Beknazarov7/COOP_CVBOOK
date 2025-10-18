@@ -254,3 +254,4 @@ path('cv-form-new/', views.cv_form_new_view, name='cv-form-new'),
 
 
 
+

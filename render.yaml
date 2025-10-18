@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: cvbook
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health/
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cvbook-db
+          property: connectionString
+      - key: PORT
+        value: 8000
+      - key: PYTHON_VERSION
+        value: 3.10.0
+
+databases:
+  - name: cvbook-db
+    databaseName: cvbook
+    plan: free
+
