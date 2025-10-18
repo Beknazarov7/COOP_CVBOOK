@@ -75,10 +75,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CVBOOK.wsgi.application'
 
 # Database
+#DATABASES = {
+    #'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
+#}
 DATABASES = {
-    'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
+    'default': dj_database_url.parse(
+        os.environ.get(
+            'DATABASE_URL',
+            'postgresql://postgres:password@localhost:5432/dbname'
+        )
+    )
 }
-
 # Authentication
 AUTH_USER_MODEL = 'authentication.CustomUser'
 
@@ -162,7 +169,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8002",
 ]
 
-CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS.copy()
+#CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS.copy()
+CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://yourdomain.com']
 
 CORS_ALLOW_METHODS = [
     'DELETE',
