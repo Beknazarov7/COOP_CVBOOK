@@ -223,7 +223,7 @@ USE_TZ = True
 
 
 #can be removed after testing
-APPEND_SLASH = False
+APPEND_SLASH = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
