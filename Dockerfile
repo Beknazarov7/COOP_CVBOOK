@@ -1,11 +1,10 @@
 # Use Python 3.10 slim image
-FROM python:3.12
-# FROM python:3.10-slim
+FROM python:3.10-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8000
+    PORT=3000
 
 # Set work directory
 WORKDIR /app
@@ -33,10 +32,9 @@ RUN mkdir -p /app/staticfiles /app/media/pdfs
 RUN python manage.py collectstatic --noinput --clear 2>&1 || true
 
 # Expose port
-EXPOSE 8000
+EXPOSE 3000
 
-# Hello world test
-CMD echo "Hello World"
+RUN echo "Hello World"
 
 # Run migrations and start gunicorn
-CMD sh -c "python manage.py migrate --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:8000 --workers 3 --worker-class sync --timeout 120 --keep-alive 5 --access-logfile - --error-logfile - --log-level info"
+CMD sh -c "python manage.py migrate --noinput && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:3000 --workers 3 --worker-class sync --timeout 120 --keep-alive 5 --access-logfile - --error-logfile - --log-level info"
