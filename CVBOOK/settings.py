@@ -2,7 +2,10 @@ import re
 import os
 from pathlib import Path
 from datetime import timedelta
-import dj_database_url
+try:
+    import dj_database_url
+except ImportError:
+    dj_database_url = None
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,14 +81,18 @@ WSGI_APPLICATION = 'CVBOOK.wsgi.application'
 #DATABASES = {
     #'default': dj_database_url.parse(os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'))
 #}
-DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get(
-            'DATABASE_URL',
-            'postgresql://postgres:password@localhost:5432/dbname'
-        )
-    )
-}
+if dj_database_url and os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    # Fallback to SQLite for local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 # Authentication
 AUTH_USER_MODEL = 'authentication.CustomUser'
 
