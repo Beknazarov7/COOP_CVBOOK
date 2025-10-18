@@ -13,7 +13,28 @@ from cv.views import CVListView
 @csrf_exempt
 @require_http_methods(["GET"])
 def health_check(request):
+    logger.info(f"🏥 HEALTH CHECK ENDPOINT HIT")
+    logger.info(f"  Path: {request.path}")
+    logger.info(f"  Method: {request.method}")
+    logger.info(f"  Full path: {request.get_full_path()}")
+    logger.info(f"  User-Agent: {request.META.get('HTTP_USER_AGENT', 'N/A')}")
     return JsonResponse({'status': 'healthy', 'message': 'Server is running'}, status=200)
+
+# Middleware to log all requests to health check paths
+class HealthCheckDebugMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+    
+    def __call__(self, request):
+        if 'ping' in request.path or 'health' in request.path:
+            logger.warning(f"🔍 MIDDLEWARE INTERCEPT: {request.path} | Method: {request.method}")
+        
+        response = self.get_response(request)
+        
+        if 'ping' in request.path or 'health' in request.path:
+            logger.warning(f"🔙 MIDDLEWARE RESPONSE: {request.path} | Status: {response.status_code}")
+        
+        return response
 
 # Main URL patterns
 urlpatterns = [
