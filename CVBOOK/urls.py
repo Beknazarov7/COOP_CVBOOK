@@ -4,10 +4,12 @@ from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.decorators.csrf import csrf_exempt
 from cv.views import cv_cards_view, cv_detail_view, admin_cv_cards_view
 from cv.views import CVListView
 
 # Health check endpoint for Railway
+@csrf_exempt
 def health_check(request):
     return JsonResponse({'status': 'healthy', 'message': 'Server is running'})
 
