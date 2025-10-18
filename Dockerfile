@@ -1,4 +1,4 @@
-# Use Python 3.10 slim image for smaller size
+# Use Python 3.10 slim image
 FROM python:3.10-slim
 
 # Set environment variables
@@ -10,7 +10,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
@@ -25,22 +25,30 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy project files
 COPY . .
 
-# Collect static files
-RUN python manage.py collectstatic --noinput || true
+# Create necessary directories
+RUN mkdir -p /app/staticfiles /app/media/pdfs
 
-# Create media directory
-RUN mkdir -p media/pdfs
+# Collect static files
+RUN python manage.py collectstatic --noinput --clear 2>&1 || true
 
 # Expose port
-EXPOSE $PORT
+EXPOSE 8000
 
-# Run migrations and start gunicorn
-CMD python manage.py migrate --noinput && \
-    gunicorn CVBOOK.wsgi:application \
-    --bind 0.0.0.0:$PORT \
-    --workers 3 \
-    --timeout 120 \
-    --log-level info \
-    --access-logfile - \
-    --error-logfile -
+# Create entrypoint script
+RUN echo '#!/bin/sh\n\
+set -e\n\
+echo "Running migrations..."\n\
+python manage.py migrate --noinput\n\
+echo "Starting gunicorn..."\n\
+exec gunicorn CVBOOK.wsgi:application \\\n\
+  --bind 0.0.0.0:8000 \\\n\
+  --workers 3 \\\n\
+  --worker-class sync \\\n\
+  --timeout 120 \\\n\
+  --access-logfile - \\\n\
+  --error-logfile - \\\n\
+  --log-level info\n\
+' > /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
+# Run the entrypoint script
+CMD ["/app/entrypoint.sh"]
