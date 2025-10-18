@@ -19,7 +19,6 @@ def health_check(request):
 urlpatterns = [
     # Health check MUST come first before any catch-all patterns
     path('ping/', health_check, name='health_check'),
-    path('ping', health_check, name='health_check_no_slash'),
     
     # Admin
     path('admin/', admin.site.urls),
