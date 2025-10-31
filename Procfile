@@ -1,2 +1,2 @@
-web: gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 120
+web: python manage.py migrate && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 4
 
