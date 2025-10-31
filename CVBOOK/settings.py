@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     # Third-party apps
     'rest_framework',
     # 'rest_framework_simplejwt',
-    # 'corsheaders',
+    'corsheaders',  # Enabled for cross-origin requests from main website
     # 'whitenoise',
     # 'django_tex',
     
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Enabled - Must be before CommonMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -164,20 +164,42 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "http://localhost:8001",
-    "http://127.0.0.1:8001",
-    "http://localhost:8002",
-    "http://127.0.0.1:8002",
-]
-##
-#CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS.copy()
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app', 'https://yourdomain.com']
+# CORS settings - Allow requests from both production and development
+# Read from environment variable or use defaults
+import os
+cors_origins_env = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(',')]
+else:
+    # Default CORS origins for both development and production
+    CORS_ALLOWED_ORIGINS = [
+        # Production URLs
+        "https://ucacoop.org",
+        "https://ucagraduatecvbook.org",
+        # Development URLs
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8001",
+        "http://127.0.0.1:8001",
+        "http://localhost:8002",
+        "http://127.0.0.1:8002",
+    ]
+
+# CSRF Trusted Origins - Read from environment or use defaults
+csrf_origins_env = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+if csrf_origins_env:
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins_env.split(',')]
+else:
+    # Default CSRF trusted origins
+    CSRF_TRUSTED_ORIGINS = [
+        'https://ucagraduatecvbook.org',
+        'https://ucacoop.org',
+        'https://*.railway.app',
+        'http://localhost:8000',
+        'http://localhost:8001',
+    ]
 
 CORS_ALLOW_METHODS = [
     'DELETE',
