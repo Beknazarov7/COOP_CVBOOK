@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     
     # Third-party apps
     'rest_framework',
-    # 'rest_framework_simplejwt',
+    'rest_framework_simplejwt',
     'corsheaders',  # Enabled for cross-origin requests from main website
     # 'whitenoise',
     # 'django_tex',
@@ -175,6 +175,8 @@ else:
     CORS_ALLOWED_ORIGINS = [
         # Production URLs
         "https://ucacoop.org",
+        "https://www.ucacoop.org",  # Added www variant
+        "https://ucacoop.up.railway.app",  # Railway URL
         "https://ucagraduatecvbook.org",
         # Development URLs
         "http://localhost:3000",
@@ -196,6 +198,7 @@ else:
     CSRF_TRUSTED_ORIGINS = [
         'https://ucagraduatecvbook.org',
         'https://ucacoop.org',
+        'https://www.ucacoop.org',  # Added www variant
         'https://*.railway.app',
         'http://localhost:8000',
         'http://localhost:8001',

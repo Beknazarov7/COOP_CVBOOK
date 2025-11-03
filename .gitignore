@@ -42,3 +42,24 @@ yarn-error.log*
 coverage/
 build/
 dist/
+
+# ==========================================
+# Local Development Files (Do Not Commit)
+# ==========================================
+
+# Development documentation
+*_FIX.md
+*_GUIDE.md
+*_DEPLOYMENT.md
+*_INTEGRATION.md
+
+# Local development scripts (keep start.sh for Railway)
+check-*.sh
+test-*.sh
+view-*.sh
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+

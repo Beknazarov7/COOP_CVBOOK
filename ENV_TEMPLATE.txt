@@ -1,0 +1,29 @@
+###############################################################################
+# CVBook Project - Environment Configuration Template
+# Create a file named ".env" in this directory with these settings
+###############################################################################
+
+# Basic Django Settings
+SECRET_KEY=django-insecure-CHANGE-THIS-IN-PRODUCTION
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1,ucagraduatecvbook.org,.up.railway.app,healthcheck.railway.app
+
+# Database Configuration
+# For local: DATABASE_URL=sqlite:///db.sqlite3
+# For production: Will be provided by Railway
+
+# Email Configuration
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-gmail-app-password
+DEFAULT_FROM_EMAIL=your-email@gmail.com
+
+# Security Settings
+CSRF_TRUSTED_ORIGINS=https://ucagraduatecvbook.org,https://ucacoop.org,http://localhost:8000,http://localhost:8001
+
+# Optional API Key
+CVBOOK_API_KEY=
+
+# Copy this content to a new file named ".env" in the same directory
+
+
+

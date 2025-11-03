@@ -966,8 +966,11 @@ const Login = ({ setToken }) => {
                 setMessage(data.error || "Account pending approval. Please wait for admin approval.");
                 setTimeout(() => (window.location.hash = "#pending-approval"), 1500);
             } else if (response.ok) {
-                localStorage.setItem("token", data.access);
-                setToken(data.access);
+                // Since JWT is disabled, use username as token identifier
+                const userToken = data.user?.username || 'logged_in';
+                localStorage.setItem("token", userToken);
+                localStorage.setItem("user", JSON.stringify(data.user));
+                setToken(userToken);
                 setMessage("Login successful! Redirecting...");
                 setTimeout(() => window.location.hash = "#cv-cards", 500);
             } else if (response.status === 401) {
@@ -1214,9 +1217,8 @@ const CVCards = ({ token, filters, setFilters }) => {
   useEffect(() => {
     const fetchCVs = async () => {
       try {
-        const response = await fetch('/cv/api/list/', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        // API has AllowAny permission, no auth header needed
+        const response = await fetch('/cv/api/list/');
         if (response.status === 401) {
           setError("❌ Session expired. Please log in again.");
           localStorage.removeItem('token');
