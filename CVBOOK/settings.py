@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',  # Enabled for cross-origin requests from main website
-    # 'whitenoise',
+    'whitenoise',  # Required for static files in production
     # 'django_tex',
     
     # Local apps
