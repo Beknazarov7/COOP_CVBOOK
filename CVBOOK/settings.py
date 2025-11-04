@@ -173,11 +173,13 @@ if cors_origins_env:
 else:
     # Default CORS origins for both development and production
     CORS_ALLOWED_ORIGINS = [
-        # Production URLs
+        # Production URLs - Custom Domains
         "https://ucacoop.org",
         "https://www.ucacoop.org",  # Added www variant
-        "https://ucacoop.up.railway.app",  # Railway URL
         "https://ucagraduatecvbook.org",
+        # Production URLs - Railway Domains  
+        "https://ucacoop.up.railway.app",  # Main website Railway URL
+        "https://ucagraduatecvbook.up.railway.app",  # CVBook Railway URL
         # Development URLs
         "http://localhost:3000",
         "http://127.0.0.1:3000",
