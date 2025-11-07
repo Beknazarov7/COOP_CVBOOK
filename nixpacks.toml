@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["python310", "postgresql"]
+nixPkgs = ["python310", "postgresql", "texlive.combined.scheme-small"]
 
 [phases.install]
 cmds = [
