@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <title>CV – {{ cv.name }} {{ cv.surname }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% load static %}
+  <link rel="icon" type="image/png" href="{% static 'cv/uca-logo-favicon.png' %}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,7 +29,7 @@
       min-height: 11in;
     }
     
-    /* Header */
+    /* Header - ORIGINAL DESIGN */
     .header {
       text-align: center;
       margin-bottom: 0.3in;
@@ -39,12 +41,6 @@
       top: 0;
       right: 0;
       font-size: 10pt;
-    }
-    
-    .logo {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 8px;
     }
     
     .name {
@@ -68,7 +64,7 @@
       text-decoration: underline;
     }
     
-    /* Sections */
+    /* Sections - ORIGINAL */
     .section {
       margin-bottom: 0.25in;
     }
@@ -120,7 +116,7 @@
       margin-bottom: 2pt;
     }
     
-    /* Technical Skills Grid */
+    /* Technical Skills Grid - ORIGINAL */
     .skills-grid {
       display: grid;
       grid-template-columns: auto 1fr;
@@ -137,13 +133,13 @@
       text-align: left;
     }
     
-    /* Languages */
+    /* Languages - ORIGINAL */
     .languages-list ul {
       list-style-type: disc;
       margin-left: 20pt;
     }
     
-    /* References */
+    /* References - ORIGINAL */
     .references-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -168,57 +164,99 @@
       text-decoration: underline;
     }
     
-    /* Buttons - Sticky at top */
+    /* Floating Action Buttons - Modern Design */
     .action-buttons {
-      position: sticky;
-      top: 0;
+      position: fixed;
+      right: 20px;
+      top: 20px;
       z-index: 1000;
-      background: linear-gradient(135deg, #3498db 0%, #2563eb 100%);
-      padding: 15px 20px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      margin: -20px -20px 20px -20px;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 10px;
     }
     
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 24px;
+      padding: 10px 18px;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 50px;
       font-weight: 600;
-      font-size: 14px;
-      transition: all 0.2s ease;
+      font-size: 13px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       border: none;
       cursor: pointer;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+      white-space: nowrap;
+    }
+    
+    .btn i {
+      font-size: 14px;
     }
     
     .btn-primary {
-      background: white;
-      color: #3498db;
-      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: white;
     }
     
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.5);
+      transform: translateX(-3px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+    }
+    
+    .btn-primary:active {
+      transform: translateX(-3px) scale(1);
     }
     
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 2px solid white;
+      background: white;
+      color: #374151;
+      border: 2px solid #e5e7eb;
     }
     
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
+      background: #f9fafb;
+      border-color: #2563eb;
+      color: #2563eb;
+      transform: translateX(-3px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.15);
+    }
+    
+    .btn-secondary:active {
+      transform: translateX(-3px) scale(1);
+    }
+    
+    /* Responsive button sizing */
+    @media (max-width: 1200px) {
+      .action-buttons {
+        right: 18px;
+        top: 18px;
+        gap: 8px;
+      }
+      .btn {
+        padding: 9px 16px;
+        font-size: 12px;
+      }
+      .btn i {
+        font-size: 13px;
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .action-buttons {
+        right: 15px;
+        top: 15px;
+        gap: 8px;
+      }
+      .btn {
+        padding: 8px 14px;
+        font-size: 11px;
+      }
+      .btn i {
+        font-size: 12px;
+      }
     }
     
     @media print {
@@ -238,30 +276,52 @@
     @media (max-width: 768px) {
       .container {
         padding: 20px;
+        margin-right: 20px;
       }
       .references-grid {
         grid-template-columns: 1fr;
+      }
+      .action-buttons {
+        right: 10px;
+        top: auto;
+        bottom: 20px;
+        transform: none;
+        flex-direction: row;
+        gap: 10px;
+      }
+      .btn {
+        padding: 12px;
+        min-width: 50px;
+        justify-content: center;
+      }
+      .btn span {
+        display: none;
+      }
+      .btn i {
+        font-size: 20px;
+        margin: 0;
       }
     }
   </style>
 </head>
 <body>
 
-<!-- Action Buttons - Sticky at Top -->
+<!-- Professional Header -->
 <div class="action-buttons">
   <a href="/#cv-cards" class="btn btn-secondary">
-    <i class="fas fa-arrow-left"></i> Back to CV Cards
+    <i class="fas fa-arrow-left"></i>
+    <span>Back to CV Cards</span>
   </a>
   <a href="{% url 'cv:cv-download' cv_id=cv.id %}" class="btn btn-primary">
-    <i class="fas fa-download"></i> Download PDF
+    <i class="fas fa-download"></i>
+    <span>Download PDF</span>
   </a>
 </div>
 
 <div class="container">
-  <!-- Header -->
+  <!-- Header - ORIGINAL DESIGN -->
   <div class="header">
     <div class="page-number">Page 1</div>
-    <div class="logo">📝</div>
     <div class="name">{{ cv.name|upper }} {{ cv.surname|upper }}</div>
     <div class="location">{{ cv.city|default:"" }}{% if cv.city and cv.country %}, {% endif %}{{ cv.country|default:"" }}</div>
     <div class="contact-line">
@@ -272,7 +332,7 @@
     </div>
   </div>
 
-  <!-- Education -->
+  <!-- Education - ORIGINAL -->
   {% if educations %}
   <div class="section">
     <div class="section-title">Education</div>
@@ -280,49 +340,34 @@
     <div class="entry">
       <div class="entry-header">
         <div class="entry-title">{{ edu.degree_title|default:"Degree Title" }}</div>
-        <div class="entry-date">{% if edu.start_date %}{{ edu.start_date }}{% endif %}{% if edu.start_date and edu.expected_graduation %} – {% endif %}{{ edu.expected_graduation|default:"Expected 20XX" }}</div>
+        <div class="entry-date">{{ edu.expected_graduation|default:"20XX" }}</div>
       </div>
       <div class="entry-subtitle">{{ edu.university|default:"University" }}, {{ edu.university_location|default:"City, Country" }}</div>
-      {% if edu.gpa %}<div class="entry-detail"><strong>GPA:</strong> {{ edu.gpa }}</div>{% endif %}
       {% if edu.honors %}<div class="entry-detail"><strong>Honours:</strong> {{ edu.honors }}</div>{% endif %}
       {% if edu.relevant_courses %}<div class="entry-detail"><strong>Relevant Courses:</strong> {{ edu.relevant_courses }}</div>{% endif %}
-      
-      {% if edu.certificates.all %}
-      {% for cert in edu.certificates.all %}
-      <div style="margin-top: 8pt;">
-        <div class="entry-header">
-          <div class="entry-title">{{ cert.certificate_title }}</div>
-          <div class="entry-date">{{ cert.year|default:"20XX" }}</div>
-        </div>
-        <div class="entry-subtitle">{{ cert.organization }}</div>
-      </div>
-      {% endfor %}
-      {% endif %}
     </div>
     {% endfor %}
   </div>
   {% endif %}
 
-  <!-- Professional Experience -->
+  <!-- Professional Experience - ORIGINAL -->
   {% if experiences %}
   <div class="section">
     <div class="section-title">Professional Experience</div>
     {% for exp in experiences %}
     <div class="entry">
       <div class="entry-header">
-        <div class="entry-title">{{ exp.position_title }}</div>
-        <div class="entry-date">{{ exp.dates }}</div>
+        <div class="entry-title">{{ exp.position_title|default:"Position Title" }}</div>
+        <div class="entry-date">{{ exp.start_date|default:"Start" }} – {{ exp.end_date|default:"Present" }}</div>
       </div>
-      <div class="entry-subtitle">{{ exp.company }}</div>
+      <div class="entry-subtitle">{{ exp.company|default:"Company" }}{% if exp.location %}, {{ exp.location }}{% endif %}</div>
       {% if exp.accomplishments %}
       <ul>
-        <li>{{ exp.accomplishments|linebreaksbr|safe }}</li>
-      </ul>
-      {% else %}
-      <ul>
-        <li>Accomplishment statement beginning with an action verb.</li>
-        <li>Accomplishment statement beginning with an action verb.</li>
-        <li>Accomplishment statement beginning with an action verb.</li>
+        {% for accomplishment in exp.accomplishments.splitlines %}
+          {% if accomplishment.strip %}
+          <li>{{ accomplishment }}</li>
+          {% endif %}
+        {% endfor %}
       </ul>
       {% endif %}
     </div>
@@ -330,117 +375,46 @@
   </div>
   {% endif %}
 
-  <!-- Professional Competencies -->
+  <!-- Professional Competencies - ORIGINAL -->
   {% if competencies %}
   <div class="section">
     <div class="section-title">Professional Competencies</div>
+    {% for comp in competencies %}
     <div class="entry">
-      {% for comp in competencies %}
-      <div class="entry-detail"><strong>{{ comp.competency_type }}:</strong></div>
+      <div class="entry-title">{{ comp.competency_type|default:"Competency Type" }}</div>
       {% if comp.key_accomplishments %}
       <ul>
-        <li>{{ comp.key_accomplishments|linebreaksbr|safe }}</li>
-      </ul>
-      {% else %}
-      <ul>
-        <li>Accomplishment statement beginning with an action verb.</li>
-        <li>Accomplishment statement beginning with an action verb.</li>
-        <li>Accomplishment statement beginning with an action verb.</li>
+        {% for accomplishment in comp.key_accomplishments.splitlines %}
+          {% if accomplishment.strip %}
+          <li>{{ accomplishment }}</li>
+          {% endif %}
+        {% endfor %}
       </ul>
       {% endif %}
-      {% endfor %}
     </div>
+    {% endfor %}
   </div>
   {% endif %}
 
-  <!-- Projects -->
+  <!-- Projects - ORIGINAL -->
   {% if projects %}
   <div class="section">
     <div class="section-title">Projects</div>
     {% for project in projects %}
     <div class="entry">
       <div class="entry-header">
-        <div class="entry-title">{{ project.project_title }} {% if project.technologies_used %}<em>(optional: insert technical skills used)</em>{% endif %}</div>
-        <div class="entry-date">{{ project.year|default:"20XX" }}</div>
+        <div class="entry-title">{{ project.project_title|default:"Project Title" }}</div>
+        <div class="entry-date">{{ project.year|default:"Year" }}</div>
       </div>
       {% if project.summary %}<div class="entry-detail"><strong>Summary:</strong> {{ project.summary }}</div>{% endif %}
+      {% if project.technologies %}<div class="entry-detail"><strong>Technologies:</strong> {{ project.technologies }}</div>{% endif %}
+      {% if project.description %}
       <ul>
-        {% if project.accomplishment %}
-        <li>{{ project.accomplishment }}</li>
-        {% else %}
-        <li>Accomplishment statement beginning with an action verb.</li>
-        <li>Accomplishment statement beginning with an action verb.</li>
-        <li>Accomplishment statement beginning with an action verb.</li>
-        {% endif %}
-      </ul>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-
-  <!-- Technical Skills -->
-  {% if technical_skills %}
-  <div class="section">
-    <div class="section-title">Technical Skills</div>
-    <div class="entry">
-      <div class="entry-detail"><em>(Customize according to your field of study)</em></div>
-      <div class="skills-grid">
-        {% for skill in technical_skills %}
-          {% if skill.programming_languages %}<div class="skill-category">Programming Languages:</div><div class="skill-items">{{ skill.programming_languages }}</div>{% endif %}
-          {% if skill.frameworks_databases %}<div class="skill-category">Frameworks & Databases:</div><div class="skill-items">{{ skill.frameworks_databases }}</div>{% endif %}
-          {% if skill.tools %}<div class="skill-category">Tools:</div><div class="skill-items">{{ skill.tools }}</div>{% endif %}
-          {% if skill.web_development %}<div class="skill-category">Web Development:</div><div class="skill-items">{{ skill.web_development }}</div>{% endif %}
-          {% if skill.multimedia %}<div class="skill-category">Multimedia:</div><div class="skill-items">{{ skill.multimedia }}</div>{% endif %}
-          {% if skill.network %}<div class="skill-category">Network:</div><div class="skill-items">{{ skill.network }}</div>{% endif %}
-          {% if skill.operating_systems %}<div class="skill-category">Operating Systems:</div><div class="skill-items">{{ skill.operating_systems }}</div>{% endif %}
+        {% for line in project.description.splitlines %}
+          {% if line.strip %}
+          <li>{{ line }}</li>
+          {% endif %}
         {% endfor %}
-      </div>
-    </div>
-  </div>
-  {% endif %}
-
-  <!-- Spoken Languages -->
-  {% if languages %}
-  <div class="section">
-    <div class="section-title">Spoken Languages</div>
-    <div class="entry languages-list">
-      <ul>
-        {% for lang in languages %}
-        <li>{{ lang.name }}{% if lang.proficiency %}, include proficiency if available{% endif %}</li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-  {% endif %}
-
-</div>
-
-<!-- Page 2 -->
-<div class="container" style="margin-top: 40px;">
-  <div class="header">
-    <div class="page-number">Page 2</div>
-    <div class="name">{{ cv.name|upper }} {{ cv.surname|upper }}</div>
-  </div>
-
-  <!-- Community Involvement -->
-  {% if community_involvements %}
-  <div class="section">
-    <div class="section-title">Community Involvement</div>
-    {% for involvement in community_involvements %}
-    <div class="entry">
-      <div class="entry-header">
-        <div class="entry-title">{{ involvement.position_title }}</div>
-        <div class="entry-date">{{ involvement.dates }}</div>
-      </div>
-      <div class="entry-subtitle">{{ involvement.organization }}</div>
-      {% if involvement.achievements %}
-      <ul>
-        <li>{{ involvement.achievements|linebreaksbr|safe }}</li>
-      </ul>
-      {% else %}
-      <ul>
-        <li>Accomplishment statement</li>
-        <li>Accomplishment statement</li>
       </ul>
       {% endif %}
     </div>
@@ -448,55 +422,111 @@
   </div>
   {% endif %}
 
-  <!-- Awards -->
-  {% if awards %}
+  <!-- Technical Skills - ORIGINAL -->
+  {% if technical_skills %}
   <div class="section">
-    <div class="section-title">Awards</div>
-    <div class="entry">
+    <div class="section-title">Technical Skills</div>
+    <div style="font-size: 9pt; font-style: italic; color: #666; margin-bottom: 8pt;">(Customize according to your field of study)</div>
+    {% for skill in technical_skills %}
+    <div class="skills-grid">
+      {% if skill.programming_languages %}
+      <div class="skill-category">Programming Languages:</div>
+      <div class="skill-items">{{ skill.programming_languages }}</div>
+      {% endif %}
+      {% if skill.frameworks_databases %}
+      <div class="skill-category">Frameworks & Databases:</div>
+      <div class="skill-items">{{ skill.frameworks_databases }}</div>
+      {% endif %}
+      {% if skill.developer_tools %}
+      <div class="skill-category">Tools:</div>
+      <div class="skill-items">{{ skill.developer_tools }}</div>
+      {% endif %}
+      {% if skill.libraries %}
+      <div class="skill-category">Tools:</div>
+      <div class="skill-items">{{ skill.libraries }}</div>
+      {% endif %}
+      {% if skill.web_development %}
+      <div class="skill-category">Web Development:</div>
+      <div class="skill-items">{{ skill.web_development }}</div>
+      {% endif %}
+      {% if skill.multimedia %}
+      <div class="skill-category">Multimedia:</div>
+      <div class="skill-items">{{ skill.multimedia }}</div>
+      {% endif %}
+      {% if skill.operating_systems %}
+      <div class="skill-category">Operating Systems:</div>
+      <div class="skill-items">{{ skill.operating_systems }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Languages - ORIGINAL -->
+  {% if languages %}
+  <div class="section">
+    <div class="section-title">Languages</div>
+    <div class="languages-list">
       <ul>
-        {% for award in awards %}
-        <li>{{ award.award_name }} {% if award.year %}({{ award.year }}){% else %}(20XX){% endif %}</li>
+        {% for lang in languages %}
+        <li><strong>{{ lang.language|default:"Language" }}:</strong> {{ lang.proficiency|default:"Proficiency" }}</li>
         {% endfor %}
       </ul>
-      
-      <div style="margin-top: 10pt;">OR</div>
-      
-      {% for award in awards %}
-      <div style="margin-top: 8pt;">
-        <div class="entry-header">
-          <div class="entry-title">{{ award.award_name }}</div>
-          <div class="entry-date">{{ award.year|default:"20XX" }}</div>
-        </div>
-        <div class="entry-subtitle">{{ award.presenting_organization|default:"Presenting Organization" }}</div>
-        {% if award.short_description %}
-        <ul>
-          <li>{{ award.short_description }}</li>
-        </ul>
-        {% endif %}
-      </div>
-      {% endfor %}
     </div>
   </div>
   {% endif %}
 
-  <!-- References -->
+  <!-- Community Involvement - ORIGINAL -->
+  {% if community_involvements %}
+  <div class="section">
+    <div class="section-title">Community Involvement</div>
+    {% for involvement in community_involvements %}
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title">{{ involvement.organization|default:"Organization" }}</div>
+        <div class="entry-date">{{ involvement.year|default:"Year" }}</div>
+      </div>
+      <div class="entry-subtitle">{{ involvement.role|default:"Role" }}</div>
+      {% if involvement.description %}<div class="entry-detail">{{ involvement.description }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Awards & Achievements - ORIGINAL -->
+  {% if awards %}
+  <div class="section">
+    <div class="section-title">Awards & Achievements</div>
+    {% for award in awards %}
+    <div class="entry">
+      <div class="entry-header">
+        <div class="entry-title">{{ award.award_title|default:"Award Title" }}</div>
+        <div class="entry-date">{{ award.year|default:"Year" }}</div>
+      </div>
+      <div class="entry-subtitle">{{ award.organization|default:"Organization" }}</div>
+      {% if award.description %}<div class="entry-detail">{{ award.description }}</div>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- References - ORIGINAL -->
   {% if references %}
   <div class="section">
     <div class="section-title">References</div>
     <div class="references-grid">
       {% for ref in references %}
       <div class="reference">
-        <div class="reference-name">{{ ref.reference_name }}</div>
-        <div class="reference-detail">{{ ref.position|default:"Position" }}</div>
-        <div class="reference-detail">{{ ref.company|default:"Company" }}</div>
-        <div class="reference-detail">Phone: {{ ref.phone|default:"+1-234-45678" }}</div>
-        <div class="reference-detail">Email: <a href="mailto:{{ ref.email }}">{{ ref.email }}</a></div>
+        <div class="reference-name">{{ ref.name|default:"Reference Name" }}</div>
+        <div class="reference-detail">{{ ref.title|default:"Title" }}</div>
+        <div class="reference-detail">{{ ref.organization|default:"Organization" }}</div>
+        {% if ref.email %}<div class="reference-detail"><a href="mailto:{{ ref.email }}">{{ ref.email }}</a></div>{% endif %}
+        {% if ref.phone %}<div class="reference-detail">+{{ ref.phone }}</div>{% endif %}
       </div>
       {% endfor %}
     </div>
   </div>
   {% endif %}
-
 </div>
 
 </body>

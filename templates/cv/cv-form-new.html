@@ -10,8 +10,83 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-    <link rel="icon" type="image/x-icon" href="{% static 'cv/favicon.ico' %}" />
+    <link rel="icon" type="image/png" href="{% static 'cv/uca-logo-favicon.png' %}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <style>
+      /* Fix flatpickr calendar alignment - AGGRESSIVE OVERRIDES */
+      .flatpickr-calendar {
+        margin-top: 5px !important;
+      }
+      
+      .flatpickr-months {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 10px 15px !important;
+      }
+      
+      /* Arrow buttons - vertical alignment */
+      .flatpickr-months .flatpickr-prev-month,
+      .flatpickr-months .flatpickr-next-month {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: static !important;
+        height: 28px !important;
+        padding: 0 8px !important;
+      }
+      
+      .flatpickr-current-month {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 15px !important;
+        padding: 0 20px !important;
+        position: relative !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        height: 28px !important;
+      }
+      
+      .flatpickr-monthDropdown-months {
+        margin: 0 !important;
+        margin-left: 20px !important;
+        padding: 5px 15px !important;
+        padding-left: 18px !important;
+        min-width: 130px !important;
+        font-size: 14px !important;
+        height: 28px !important;
+        line-height: 18px !important;
+        box-sizing: border-box !important;
+      }
+      
+      /* Fix year input visibility and spacing */
+      .numInputWrapper {
+        margin: 0 !important;
+        margin-left: 10px !important;
+        padding: 0 !important;
+        width: 85px !important;
+        min-width: 85px !important;
+      }
+      
+      .numInputWrapper input.cur-year {
+        width: 85px !important;
+        min-width: 85px !important;
+        padding: 5px 10px !important;
+        font-size: 14px !important;
+        text-align: center !important;
+        height: 28px !important;
+        line-height: 18px !important;
+        box-sizing: border-box !important;
+      }
+      
+      .flatpickr-current-month .flatpickr-monthDropdown-months,
+      .flatpickr-current-month .numInputWrapper {
+        flex-shrink: 0 !important;
+      }
+    </style>
 
   </head>
     <div class="cv-big">
@@ -38,7 +113,7 @@
           <span id="totalSteps">10</span>
         </div>
 
-        <form id="cvForm" method="post" action="{% url 'cv:cv-submit' %}" onsubmit="submitForm(event); return false;">
+        <form id="cvForm" method="post" action="{% url 'cv:cv-submit' %}" onsubmit="submitForm(event); return false;" novalidate>
           {% csrf_token %}
           <!-- STEP 1: PERSONAL INFORMATION -->
            <!-- hope this works-->
@@ -885,7 +960,7 @@
   <div class="form-group">
     <label for="communityOrganization1">
       <i class="fas fa-building"></i>
-      Organization <span class="required-star" aria-hidden="true">*</span>
+      Organization
     </label>
     <div class="input-group">
       <input
@@ -893,17 +968,15 @@
         id="communityOrganization1"
         name="communityOrganization1"
         placeholder="Organization name"
-      
       />
     </div>
-    <div class="error-message">This field is required</div>
   </div>
 
   <!-- City, Country -->
   <div class="form-group">
     <label for="communityLocation1">
       <i class="fas fa-map-marker-alt"></i>
-      City, Country <span class="required-star" aria-hidden="true">*</span>
+      City, Country
     </label>
     <div class="input-group">
       <input
@@ -911,10 +984,8 @@
         id="communityLocation1"
         name="communityLocation1"
         placeholder="City, Country"
-        required
       />
     </div>
-    <div class="error-message">This field is required</div>
   </div>
 </div>
 
@@ -2040,18 +2111,62 @@ window.addEventListener("resize", () => {
       function validateStep(step) {
         let isValid = true;
         const stepElement = document.getElementById(`step-${step}`);
+        
+        console.log('validateStep called for step:', step);
+        
         if (stepElement) {
-          stepElement.querySelectorAll("[required]").forEach((input) => {
+          // First, hide all error messages for disabled fields
+          const disabledFields = stepElement.querySelectorAll("input[disabled], textarea[disabled], select[disabled]");
+          console.log('Found disabled fields:', disabledFields.length);
+          
+          disabledFields.forEach((input) => {
+            console.log('Hiding error for disabled field:', input.id);
+            const errorEl = input.closest(".form-group")?.querySelector(".error-message");
+            if (errorEl) {
+              errorEl.style.display = "none";
+            }
+          });
+          
+          // Then validate only enabled required fields
+          const requiredFields = stepElement.querySelectorAll("[required]");
+          console.log('Total required fields:', requiredFields.length);
+          
+          requiredFields.forEach((input) => {
+            console.log('Checking field:', input.id, 'disabled:', input.disabled, 'value:', input.value, 'type:', input.type);
+            
+            // Skip validation for disabled inputs (e.g., end date when "currently working" is checked)
+            if (input.disabled) {
+              console.log('Skipping disabled required field:', input.id);
+              return;
+            }
+            
+            // Skip hidden inputs
+            if (input.type === 'hidden') {
+              return;
+            }
+            
             const errorEl = input
               .closest(".form-group")
               ?.querySelector(".error-message");
-            if (!input.value.trim()) {
+            
+            // Check if field has value (handle different input types)
+            let hasValue = false;
+            if (input.type === 'checkbox' || input.type === 'radio') {
+              hasValue = input.checked;
+            } else {
+              hasValue = input.value && input.value.trim() !== '';
+            }
+            
+            if (!hasValue) {
+              console.log('Field empty and required:', input.id, 'type:', input.type);
               if (errorEl) errorEl.style.display = "block";
               isValid = false;
             } else if (errorEl) {
               errorEl.style.display = "none";
             }
           });
+          
+          console.log('Validation result for step', step, ':', isValid);
         } else {
           console.error(`Step-${step} not found for validation`);
         }
@@ -2216,15 +2331,75 @@ window.addEventListener("resize", () => {
   function toggleCurrentJob(i) {
     const cb  = document.getElementById(`currentJob${i}`);
     const end = document.getElementById(`expEndDate${i}`);
-    if (!cb || !end) return;
+    
+    console.log('toggleCurrentJob called:', i, 'checkbox:', cb, 'end date:', end);
+    
+    if (!cb || !end) {
+      console.error('Element not found - cb:', cb, 'end:', end);
+      return;
+    }
 
     if (cb.checked) {
+      console.log('Checkbox checked - disabling end date');
       end.value = "";
       end.disabled = true;
       end.removeAttribute("required");
+      
+      // CRITICAL: Also disable flatpickr's alternate input (the visible text field)
+      const altInput = end.nextElementSibling;
+      if (altInput && altInput.classList && altInput.classList.contains('flatpickr-input')) {
+        console.log('Found flatpickr alternate input, disabling it');
+        altInput.disabled = true;
+        altInput.removeAttribute("required");
+        altInput.value = "";
+      }
+      
+      // Also disable all inputs in the same form-group that are required
+      const formGroup = end.closest(".form-group");
+      if (formGroup) {
+        formGroup.classList.add('disabled-field');
+        formGroup.querySelectorAll('input[required]').forEach(input => {
+          if (input.id !== end.id) {  // Don't double-process the main field
+            console.log('Disabling related required input:', input.id || 'no-id', input.className);
+            input.disabled = true;
+            input.removeAttribute("required");
+          }
+        });
+      }
+      
+      // Hide error message when field is disabled
+      const errorEl = end.closest(".form-group")?.querySelector(".error-message");
+      if (errorEl) {
+        errorEl.style.display = "none";
+      }
+      
+      console.log('End date after disable:', 'disabled:', end.disabled, 'required:', end.hasAttribute('required'));
     } else {
+      console.log('Checkbox unchecked - enabling end date');
       end.disabled = false;
       end.setAttribute("required", "required");
+      
+      // Re-enable flatpickr's alternate input
+      const altInput = end.nextElementSibling;
+      if (altInput && altInput.classList && altInput.classList.contains('flatpickr-input')) {
+        console.log('Re-enabling flatpickr alternate input');
+        altInput.disabled = false;
+        altInput.setAttribute("required", "required");
+      }
+      
+      // Re-enable all related inputs
+      const formGroup = end.closest(".form-group");
+      if (formGroup) {
+        formGroup.classList.remove('disabled-field');
+        formGroup.querySelectorAll('input').forEach(input => {
+          if (input.id !== end.id && input.type !== 'checkbox') {
+            input.disabled = false;
+            if (input.classList.contains('flatpickr-input')) {
+              input.setAttribute("required", "required");
+            }
+          }
+        });
+      }
     }
   }
 function addExperience() {
