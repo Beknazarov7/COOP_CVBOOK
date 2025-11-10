@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["python310", "postgresql", "texlive.combined.scheme-full"]
+nixPkgs = ["python310", "postgresql", "texlive.combined.scheme-small"]
 
 [phases.install]
 cmds = [
@@ -13,7 +13,7 @@ cmds = [
 ]
 
 [start]
-cmd = "python manage.py migrate && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 4"
+cmd = "python manage.py migrate && gunicorn CVBOOK.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
 
 
 
