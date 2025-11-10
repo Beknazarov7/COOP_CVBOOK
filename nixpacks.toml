@@ -1,9 +1,8 @@
 [phases.setup]
-nixPkgs = ["python310", "postgresql", "texlive.combined.scheme-small"]
+nixPkgs = ["python310", "postgresql", "texlive.combined.scheme-full"]
 
 [phases.install]
 cmds = [
-    "apt-get update && apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended",
     "pip install --upgrade pip",
     "pip install -r requirements.txt"
 ]
