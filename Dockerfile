@@ -4,16 +4,21 @@ FROM python:3.10-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=3000
+    PORT=3000 \
+    DEBIAN_FRONTEND=noninteractive
 
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies + TeX Live for LaTeX PDF generation
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+ && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
 COPY requirements.txt .
