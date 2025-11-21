@@ -70,19 +70,21 @@
 {% for edu in educations %}
 \noindent\textbf{ {{ edu.degree_title|default:"Degree Title"|escape_latex }} } \hfill \textbf{ {{ edu.expected_graduation|default:"20XX"|escape_latex }} } \\
 \textit{ {{ edu.university|default:"University"|escape_latex }}, {{ edu.university_location|default:"City, Country"|escape_latex }} } \\
-{% if edu.start_date %}Start Date: {{ edu.start_date|escape_latex }} \\{% endif %}
 {% if edu.honors %}\textbf{Honours:} {{ edu.honors|escape_latex }} \\{% endif %}
 {% if edu.relevant_courses %}\textbf{Relevant Courses:} {{ edu.relevant_courses|escape_latex }} \\{% endif %}
+{% if edu.gpa %}\textbf{GPA:} {{ edu.gpa|escape_latex }} \\{% endif %}
+\vspace{2pt}
+{% if edu.certificates.all %}
+{% for cert in edu.certificates.all %}
+\noindent\textbf{ {{ cert.certificate_title|escape_latex }} } \hfill \textbf{ {{ cert.year|default:"20XX"|escape_latex }} } \\
+\textit{ {% if cert.organization %}{{ cert.organization|escape_latex }}{% endif %}{% if cert.location %}, {{ cert.location|escape_latex }}{% endif %} } \\
+{% endfor %}{% endif %}
 \vspace{6pt}
 
 {% endfor %}
 {% endif %}
 
-{% if cv.certificates %}
-\noindent\textbf{Certificate Title} \hfill \textbf{20XX} \\
-\textit{Organization, location} \\
-\vspace{6pt}
-{% endif %}
+{% comment %} Certificates are rendered under each Education above {% endcomment %}
 
 %----------------------------------------------------------------------------------------
 % PROFESSIONAL EXPERIENCE
@@ -97,7 +99,9 @@
 {% if exp.accomplishments %}
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
-    \item {{ exp.accomplishments|escape_latex }}
+{% for line in exp.accomplishments.splitlines %}
+{% if line.strip %}\item {{ line|escape_latex }}{% endif %}
+{% endfor %}
 \end{itemize}
 {% endif %}
 \vspace{4pt}
@@ -116,7 +120,9 @@
 \noindent\textbf{ {{ comp.competency_type|escape_latex }}: } \\
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
-    \item {{ comp.key_accomplishments|default:"Competency description"|escape_latex }}
+{% for line in comp.key_accomplishments.splitlines %}
+{% if line.strip %}\item {{ line|escape_latex }}{% endif %}
+{% endfor %}
 \end{itemize}
 \vspace{4pt}
 
@@ -150,18 +156,18 @@
 \section{Technical Skills}
 
 \textit{(Customize according to your field of study)} \\
-\vspace{4pt}
+\vspace{2pt}
 
 {% for skill in technical_skills %}
-{% if skill.programming_languages %}\noindent\textbf{Programming Languages: } {{ skill.programming_languages|escape_latex }} \\{% endif %}
+{% if skill.programming_languages %}\noindent\textbf{Programming and Statistical Tools: } {{ skill.programming_languages|escape_latex }} \\{% endif %}
+{% if skill.tools %}\noindent\textbf{Data Analysis and Visualization: } {{ skill.tools|escape_latex }} \\{% endif %}
+{% if skill.web_development %}\noindent\textbf{Web and Software Development: } {{ skill.web_development|escape_latex }} \\{% endif %}
 {% if skill.frameworks_databases %}\noindent\textbf{Frameworks and Databases: } {{ skill.frameworks_databases|escape_latex }} \\{% endif %}
-{% if skill.tools %}\noindent\textbf{Tools: } {{ skill.tools|escape_latex }} \\{% endif %}
-{% if skill.web_development %}\noindent\textbf{Web Development: } {{ skill.web_development|escape_latex }} \\{% endif %}
-{% if skill.multimedia %}\noindent\textbf{Multimedia: } {{ skill.multimedia|escape_latex }} \\{% endif %}
-{% if skill.network %}\noindent\textbf{Network: } {{ skill.network|escape_latex }} \\{% endif %}
+{% if skill.multimedia %}\noindent\textbf{Media and Design Tools: } {{ skill.multimedia|escape_latex }} \\{% endif %}
+{% if skill.network %}\noindent\textbf{Communication and Collaboration: } {{ skill.network|escape_latex }} \\{% endif %}
 {% if skill.operating_systems %}\noindent\textbf{Operating Systems: } {{ skill.operating_systems|escape_latex }} \\{% endif %}
 {% endfor %}
-\vspace{6pt}
+\vspace{4pt}
 {% endif %}
 
 %----------------------------------------------------------------------------------------
@@ -201,10 +207,12 @@
 
 {% for involvement in community_involvements %}
 \noindent\textbf{ {{ involvement.position_title|escape_latex }} } \hfill \textbf{ {{ involvement.dates|default:"Dates"|escape_latex }} } \\
-\textit{ {{ involvement.organization|escape_latex }} } \\
+\textit{ {{ involvement.organization|escape_latex }}{% if involvement.location %}, {{ involvement.location|escape_latex }}{% endif %} } \\
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
-    \item {{ involvement.achievements|default:"Accomplishment statement"|escape_latex }}
+{% for line in involvement.achievements.splitlines %}
+{% if line.strip %}\item {{ line|escape_latex }}{% endif %}
+{% empty %}\item Accomplishment statement{% endfor %}
 \end{itemize}
 \vspace{4pt}
 

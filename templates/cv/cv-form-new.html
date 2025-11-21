@@ -3239,8 +3239,8 @@ document.addEventListener("DOMContentLoaded", () => {
       expected_graduation: val(`eduEndDate${i}`),
       university_location: val(`universityLocation${i}`),
       gpa: val(`gpa${i}`) || null,
-      honours: val(`honours${i}`) || null,
-      courses: val(`courses${i}`) || null,
+      honors: val(`honours${i}`) || null,
+      relevant_courses: val(`courses${i}`) || null,
       certificates: []
     });
   });
@@ -3266,13 +3266,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const experiences = [];
   document.querySelectorAll("#experienceContainer .experience-entry").forEach((entry, idx) => {
     const i = idx + 1;
+    const s = val(`expStartDate${i}`);
+    const e = val(`expEndDate${i}`);
+    const dates = s || e ? `${formatDate(s)} – ${formatDate(e) || "Present"}` : "";
     experiences.push({
       position_title: val(`positionTitle${i}`),
       company: val(`company${i}`),
       location: val(`location${i}`),
       employment_type: val(`employmentType${i}`) || null,
-      start_date: val(`expStartDate${i}`),
-      end_date: val(`expEndDate${i}`) || null,
+      start_date: s,
+      end_date: e || null,
+      dates,
       accomplishments: [
         val(`expAccomplishment${i}_1`),
         val(`expAccomplishment${i}_2`),
@@ -3310,15 +3314,14 @@ document.querySelectorAll("#projectContainer .project-entry").forEach((entry, id
 });
 
 
-  // Gather Technical Skills
-  // Gather Technical Skills (grouped)
+// Technical Skills mapped directly to backend fields
 const technical_skills = {
-  programming_stat_tools: document.getElementById("programmingStatTools")?.value.trim() || "",
-  data_analysis_viz: document.getElementById("dataAnalysisViz")?.value.trim() || "",
-  web_software_dev: document.getElementById("webSoftwareDev")?.value.trim() || "",
+  programming_languages: document.getElementById("programmingStatTools")?.value.trim() || "",
+  tools: document.getElementById("dataAnalysisViz")?.value.trim() || "",
+  web_development: document.getElementById("webSoftwareDev")?.value.trim() || "",
   frameworks_databases: document.getElementById("frameworksDatabases")?.value.trim() || "",
-  media_design_tools: document.getElementById("mediaDesignTools")?.value.trim() || "",
-  communication_collaboration: document.getElementById("commCollab")?.value.trim() || "",
+  multimedia: document.getElementById("mediaDesignTools")?.value.trim() || "",
+  network: document.getElementById("commCollab")?.value.trim() || "",
   operating_systems: document.getElementById("operatingSystems")?.value.trim() || ""
 };
 
@@ -3337,11 +3340,16 @@ const technical_skills = {
   const community_involvements = [];
   document.querySelectorAll("#communityContainer .community-entry").forEach((entry, idx) => {
     const i = idx + 1;
+    const cs = val(`communityStartDate${i}`);
+    const ce = val(`communityEndDate${i}`);
+    const cdates = cs || ce ? `${formatDate(cs)} – ${formatDate(ce) || "Present"}` : "";
     community_involvements.push({
       position_title: val(`communityPosition${i}`),
       organization: val(`communityOrg${i}`),
-      start_date: val(`communityStartDate${i}`) || null,
-      end_date: val(`communityEndDate${i}`) || null,
+      location: val(`communityLocation${i}`) || null,
+      start_date: cs || null,
+      end_date: ce || null,
+      dates: cdates,
       achievements: val(`communityAccomplishment${i}`) || null
     });
   });

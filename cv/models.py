@@ -33,6 +33,7 @@ class Education(models.Model):
     university_location = models.CharField(max_length=100, blank=True, null=True)
     honors = models.TextField(blank=True, default='')  # Academic honors
     relevant_courses = models.TextField(blank=True, default='')  # Relevant coursework
+    gpa = models.CharField(max_length=20, blank=True, default='')  # GPA (optional)
     
     def __str__(self):
         return f"{self.degree_title} at {self.university}" if self.university else self.degree_title
@@ -42,6 +43,7 @@ class Certificate(models.Model):
     certificate_title = models.CharField(max_length=200)
     organization = models.CharField(max_length=200, blank=True, default='')
     year = models.CharField(max_length=4, blank=True, default='')
+    location = models.CharField(max_length=200, blank=True, default='')
 
     def __str__(self):
         return self.certificate_title
@@ -50,6 +52,10 @@ class ProfessionalExperience(models.Model):
     cv = models.ForeignKey(CVSubmission, on_delete=models.CASCADE, related_name='experiences')
     position_title = models.CharField(max_length=200, blank=True, default='')
     company = models.CharField(max_length=200, blank=True, default='')
+    location = models.CharField(max_length=200, blank=True, default='')
+    employment_type = models.CharField(max_length=100, blank=True, default='')
+    start_date = models.CharField(max_length=50, blank=True, default='')
+    end_date = models.CharField(max_length=50, blank=True, default='')
     dates = models.CharField(max_length=50, blank=True, default='')
     accomplishments = models.TextField(blank=True, default='')
 
@@ -100,6 +106,9 @@ class CommunityInvolvement(models.Model):
     cv = models.ForeignKey(CVSubmission, on_delete=models.CASCADE, related_name='community_involvements')
     position_title = models.CharField(max_length=200, blank=True, default='')
     organization = models.CharField(max_length=200, blank=True, default='')
+    location = models.CharField(max_length=200, blank=True, default='')
+    start_date = models.CharField(max_length=50, blank=True, default='')
+    end_date = models.CharField(max_length=50, blank=True, default='')
     dates = models.CharField(max_length=50, blank=True, default='')
     achievements = models.TextField(blank=True, default='')
 
@@ -123,6 +132,7 @@ class Reference(models.Model):
     company = models.CharField(max_length=200, blank=True, default='')  # Company/Organization
     email = models.EmailField(blank=True, default='')
     phone = models.CharField(max_length=15, blank=True, default='')
+    relation = models.CharField(max_length=200, blank=True, default='')
 
     def __str__(self):
         return self.reference_name

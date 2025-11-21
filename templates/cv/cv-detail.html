@@ -340,6 +340,18 @@
       <div class="entry-subtitle">{{ edu.university|default:"University" }}, {{ edu.university_location|default:"City, Country" }}</div>
       {% if edu.honors %}<div class="entry-detail"><strong>Honours:</strong> {{ edu.honors }}</div>{% endif %}
       {% if edu.relevant_courses %}<div class="entry-detail"><strong>Relevant Courses:</strong> {{ edu.relevant_courses }}</div>{% endif %}
+      {% if edu.certificates.all %}
+      <div class="entry-detail" style="margin-top:4pt;"><strong>Certificates:</strong></div>
+      <ul>
+        {% for cert in edu.certificates.all %}
+          {% if cert.certificate_title %}
+          <li>
+            {{ cert.certificate_title }}{% if cert.organization %} — {{ cert.organization }}{% endif %}{% if cert.year %} ({{ cert.year }}){% endif %}
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
     </div>
     {% endfor %}
   </div>
@@ -353,7 +365,7 @@
     <div class="entry">
       <div class="entry-header">
         <div class="entry-title">{{ exp.position_title|default:"Position Title" }}</div>
-        <div class="entry-date">{{ exp.start_date|default:"Start" }} – {{ exp.end_date|default:"Present" }}</div>
+        <div class="entry-date">{{ exp.dates|default:"Dates" }}</div>
       </div>
       <div class="entry-subtitle">{{ exp.company|default:"Company" }}{% if exp.location %}, {{ exp.location }}{% endif %}</div>
       {% if exp.accomplishments %}
@@ -432,13 +444,9 @@
       <div class="skill-category">Frameworks & Databases:</div>
       <div class="skill-items">{{ skill.frameworks_databases }}</div>
       {% endif %}
-      {% if skill.developer_tools %}
+      {% if skill.tools %}
       <div class="skill-category">Tools:</div>
-      <div class="skill-items">{{ skill.developer_tools }}</div>
-      {% endif %}
-      {% if skill.libraries %}
-      <div class="skill-category">Tools:</div>
-      <div class="skill-items">{{ skill.libraries }}</div>
+      <div class="skill-items">{{ skill.tools }}</div>
       {% endif %}
       {% if skill.web_development %}
       <div class="skill-category">Web Development:</div>

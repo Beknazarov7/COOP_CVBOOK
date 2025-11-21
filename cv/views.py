@@ -131,6 +131,50 @@ class CVSubmitView(APIView):
         try:
             logger.info("CVSubmitView.post called with data: %s", request.data)
             data = request.data
+            # --------- Normalize client payload keys for backward/variant names ----------
+            def normalize_education_item(edu):
+                # Map British spelling and alternate field names
+                if 'honours' in edu and not edu.get('honors'):
+                    edu['honors'] = edu.get('honours')
+                if 'courses' in edu and not edu.get('relevant_courses'):
+                    edu['relevant_courses'] = edu.get('courses')
+                return edu
+
+            def normalize_experience_item(exp):
+                # Combine start/end dates into single 'dates' string if provided
+                start = (exp.get('start_date') or '').strip()
+                end = (exp.get('end_date') or '').strip()
+                if (start or end) and not exp.get('dates'):
+                    exp['dates'] = f"{start} – {end or 'Present'}".strip(' –')
+                return exp
+
+            def normalize_technical_skills(ts):
+                # Accept new grouped keys and map them to model fields
+                mapped = {
+                    'programming_languages': ts.get('programming_languages') or ts.get('programming_stat_tools') or '',
+                    'frameworks_databases': ts.get('frameworks_databases') or '',
+                    'tools': ts.get('tools') or ts.get('data_analysis_viz') or '',
+                    'web_development': ts.get('web_development') or ts.get('web_software_dev') or '',
+                    'multimedia': ts.get('multimedia') or ts.get('media_design_tools') or '',
+                    'network': ts.get('network') or ts.get('communication_collaboration') or '',
+                    'operating_systems': ts.get('operating_systems') or '',
+                }
+                return mapped
+            # --------- Deduplicate incoming repeated list entries (defensive) ----------
+            def dedup_list(items, key_fields):
+                seen = set()
+                unique = []
+                for item in items or []:
+                    # Build a safe fingerprint using stringified values
+                    key = tuple((k, str(item.get(k) or "").strip()) for k in key_fields)
+                    # Only dedup when there is at least one non-empty key to identify the item
+                    if any(v for (_, v) in key):
+                        if key in seen:
+                            continue
+                        seen.add(key)
+                    unique.append(item)
+                return unique
+
             name = data.get('name')
             surname = data.get('surname')
             email = data.get('email')
@@ -207,7 +251,27 @@ class CVSubmitView(APIView):
                 cv.references.all().delete()
 
             from .models import Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
-            for edu_data in data.get('educations', []):
+            # Apply de-duplication on lists
+            educations_in_raw = [normalize_education_item(e or {}) for e in data.get('educations', [])]
+            educations_in = dedup_list(educations_in_raw, ['degree_title', 'university', 'start_date', 'expected_graduation', 'university_location', 'gpa', 'honors', 'relevant_courses'])
+            experiences_in_raw = [normalize_experience_item(e or {}) for e in data.get('experiences', [])]
+            experiences_in = dedup_list(experiences_in_raw, ['position_title', 'company', 'location', 'employment_type', 'dates', 'accomplishments'])
+            competencies_in = dedup_list(data.get('competencies', []), ['competency_type', 'key_accomplishments'])
+            projects_in = dedup_list(data.get('projects', []), ['project_title', 'year', 'technologies_used', 'summary', 'accomplishment'])
+            languages_in = dedup_list(data.get('languages', []), ['name', 'proficiency'])
+            # Normalize community involvement dates similar to experiences
+            def normalize_comm_item(ci):
+                s = (ci.get('start_date') or '').strip()
+                e = (ci.get('end_date') or '').strip()
+                if (s or e) and not ci.get('dates'):
+                    ci['dates'] = f"{s} – {e or 'Present'}".strip(' –')
+                return ci
+            community_involvements_in_raw = [normalize_comm_item(ci or {}) for ci in data.get('community_involvements', [])]
+            community_involvements_in = dedup_list(community_involvements_in_raw, ['organization', 'position_title', 'location', 'dates', 'achievements'])
+            awards_in = dedup_list(data.get('awards', []), ['award_name', 'year', 'presenting_organization', 'short_description'])
+            references_in = dedup_list(data.get('references', []), ['reference_name', 'email', 'phone', 'position', 'company'])
+
+            for edu_data in educations_in:
                 # Skip empty education entries
                 if not edu_data.get('degree_title') and not edu_data.get('university'):
                     logger.info("Skipping empty education entry: %s", edu_data)
@@ -223,16 +287,16 @@ class CVSubmitView(APIView):
                         edu_data['university'] = 'University'
                 
                 # Filter only valid Education fields
-                valid_edu_fields = {k: v for k, v in edu_data.items() if k in ['degree_title', 'university', 'start_date', 'expected_graduation', 'university_location', 'honors', 'relevant_courses']}
+                valid_edu_fields = {k: v for k, v in edu_data.items() if k in ['degree_title', 'university', 'start_date', 'expected_graduation', 'university_location', 'honors', 'relevant_courses', 'gpa']}
                 education = Education.objects.create(cv=cv, **valid_edu_fields)
                 
-                for cert_data in edu_data.get('certificates', []):
+                for cert_data in dedup_list(edu_data.get('certificates', []), ['certificate_title', 'organization', 'year', 'location']):
                     if not cert_data.get('certificate_title'):
                         logger.info("Skipping certificate with no title: %s", cert_data)
                         continue
                     
                     # Filter only valid Certificate fields
-                    valid_cert_fields = {k: v for k, v in cert_data.items() if k in ['certificate_title', 'organization', 'year']}
+                    valid_cert_fields = {k: v for k, v in cert_data.items() if k in ['certificate_title', 'organization', 'year', 'location']}
                     try:
                         Certificate.objects.create(education=education, **valid_cert_fields)
                     except Exception as e:
@@ -240,7 +304,7 @@ class CVSubmitView(APIView):
                         # Don't fail the entire submission, just skip this certificate
                         continue
 
-            for exp_data in data.get('experiences', []):
+            for exp_data in experiences_in:
                 # Skip empty experience entries
                 if not exp_data.get('position_title') and not exp_data.get('company'):
                     logger.info("Skipping empty experience entry: %s", exp_data)
@@ -256,10 +320,10 @@ class CVSubmitView(APIView):
                         exp_data['company'] = 'Company'
                 
                 # Filter only valid ProfessionalExperience fields
-                valid_exp_fields = {k: v for k, v in exp_data.items() if k in ['position_title', 'company', 'dates', 'accomplishments']}
+                valid_exp_fields = {k: v for k, v in exp_data.items() if k in ['position_title', 'company', 'location', 'employment_type', 'start_date', 'end_date', 'dates', 'accomplishments']}
                 ProfessionalExperience.objects.create(cv=cv, **valid_exp_fields)
 
-            for comp_data in data.get('competencies', []):
+            for comp_data in competencies_in:
                 if not comp_data.get('competency_type') and not comp_data.get('key_accomplishments'):
                     logger.info("Skipping competency as both competency_type and key_accomplishments are empty: %s", comp_data)
                     continue
@@ -271,7 +335,7 @@ class CVSubmitView(APIView):
                 valid_comp_fields = {k: v for k, v in comp_data.items() if k in ['competency_type', 'key_accomplishments']}
                 ProfessionalCompetency.objects.create(cv=cv, **valid_comp_fields)
 
-            for proj_data in data.get('projects', []):
+            for proj_data in projects_in:
                 if not proj_data.get('project_title'):
                     logger.info("Skipping project with no title: %s", proj_data)
                     continue
@@ -281,7 +345,7 @@ class CVSubmitView(APIView):
                 Project.objects.create(cv=cv, **valid_proj_fields)
 
             if 'technical_skills' in data:
-                tech_skills = data['technical_skills']
+                tech_skills = normalize_technical_skills(data['technical_skills'] or {})
                 # Filter only valid TechnicalSkill fields
                 valid_tech_fields = {k: v for k, v in tech_skills.items() if k in [
                     'programming_languages', 'frameworks_databases', 'tools', 
@@ -294,7 +358,7 @@ class CVSubmitView(APIView):
                     logger.info("Skipping technical skills as all fields are empty")
                     cv.technical_skills.all().delete()
 
-            for lang_data in data.get('languages', []):
+            for lang_data in languages_in:
                 if not lang_data.get('name'):
                     logger.info("Skipping language as name is empty: %s", lang_data)
                     continue
@@ -303,16 +367,16 @@ class CVSubmitView(APIView):
                 valid_lang_fields = {k: v for k, v in lang_data.items() if k in ['name', 'proficiency']}
                 Language.objects.create(cv=cv, **valid_lang_fields)
 
-            for comm_data in data.get('community_involvements', []):
+            for comm_data in community_involvements_in:
                 # Skip if all fields are empty
-                if not any([comm_data.get(k) for k in ['organization', 'position_title', 'dates', 'achievements']]):
+                if not any([comm_data.get(k) for k in ['organization', 'position_title', 'dates', 'achievements', 'location']]):
                     logger.info("Skipping empty community involvement: %s", comm_data)
                     continue
                 
-                valid_fields = {k: v for k, v in comm_data.items() if k in ['organization', 'position_title', 'dates', 'achievements']}
+                valid_fields = {k: v for k, v in comm_data.items() if k in ['organization', 'position_title', 'location', 'start_date', 'end_date', 'dates', 'achievements']}
                 CommunityInvolvement.objects.create(cv=cv, **valid_fields)
 
-            for award_data in data.get('awards', []):
+            for award_data in awards_in:
                 # Skip if no award name
                 if not award_data.get('award_name'):
                     logger.info("Skipping award with no name: %s", award_data)
@@ -321,13 +385,13 @@ class CVSubmitView(APIView):
                 valid_fields = {k: v for k, v in award_data.items() if k in ['award_name', 'year', 'presenting_organization', 'short_description']}
                 Award.objects.create(cv=cv, **valid_fields)
 
-            for ref_data in data.get('references', []):
+            for ref_data in references_in:
                 if not all([ref_data.get(k) for k in ['reference_name', 'email']]):
                     logger.info("Skipping reference with missing required fields: %s", ref_data)
                     continue
                 
                 # Filter only valid Reference fields
-                valid_ref_fields = {k: v for k, v in ref_data.items() if k in ['reference_name', 'position', 'company', 'email', 'phone']}
+                valid_ref_fields = {k: v for k, v in ref_data.items() if k in ['reference_name', 'position', 'company', 'email', 'phone', 'relation']}
                 Reference.objects.create(cv=cv, **valid_ref_fields)
 
             logger.info("Generating PDF for cv_id: %s", cv.id)
