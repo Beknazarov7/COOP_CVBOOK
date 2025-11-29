@@ -421,9 +421,31 @@ class CVPDFView(APIView):
             cv = CVSubmission.objects.get(id=cv_id)
             pdf_output_dir = os.path.join(settings.MEDIA_ROOT, 'pdfs')
             pdf_path = os.path.join(pdf_output_dir, f'cv_{cv.id}.pdf')
+            
+            # If PDF doesn't exist, try to generate it
             if not os.path.exists(pdf_path):
-                logger.error("PDF not found for cv_id: %s", cv_id)
-                return Response({"error": "PDF not generated yet"}, status=status.HTTP_404_NOT_FOUND)
+                logger.info("PDF not found for cv_id: %s. Attempting to generate...", cv_id)
+                try:
+                    generated_path = generate_pdf(cv)
+                    # generate_pdf returns a relative URL like '/media/pdfs/cv_1.pdf'
+                    # We need the absolute path to serve the file
+                    if generated_path:
+                        # Construct absolute path from the relative URL returned by generate_pdf
+                        # Remove the leading '/media/' to join with MEDIA_ROOT correctly if needed,
+                        # but generate_pdf implementation returns: f'/media/{relative_path}'
+                        # and relative_path is relative to MEDIA_ROOT.
+                        # Let's just use the pdf_path we already constructed since generate_pdf 
+                        # saves it to that exact location.
+                        if not os.path.exists(pdf_path):
+                             # Double check if it really exists now
+                             logger.error("PDF generation reported success but file still missing: %s", pdf_path)
+                             return Response({"error": "PDF generation failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    else:
+                         return Response({"error": "PDF generation failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                except Exception as e:
+                    logger.error("Failed to regenerate PDF for cv_id %s: %s", cv_id, str(e))
+                    return Response({"error": f"PDF generation failed: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             return FileResponse(open(pdf_path, 'rb'), as_attachment=True, filename=f'cv_{cv.name}_{cv.surname}.pdf')
         except CVSubmission.DoesNotExist:
             logger.error("CV not found for cv_id: %s", cv_id)

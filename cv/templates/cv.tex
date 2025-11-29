@@ -55,7 +55,7 @@
 \begin{center}
     \textbf{\Large {{ cv.name|upper|escape_latex }} {{ cv.surname|upper|escape_latex }}} \\[2pt]
     {% if cv.city or cv.country %}{{ cv.city|default:""|escape_latex }}{% if cv.city and cv.country %}, {% endif %}{{ cv.country|default:""|escape_latex }} \\[2pt]{% endif %}
-    {% if cv.phone %}{{ cv.phone }} | {% endif %}\href{mailto:{{ cv.email }}}{{ "{" }}{{ cv.email }}{{ "}" }}{% if cv.linkedin %} | \href{ {{ cv.linkedin }} }{{ "{" }}LinkedIn{{ "}" }}{% endif %}{% if cv.github %} | \href{ {{ cv.github }} }{{ "{" }}GitHub{{ "}" }}{% endif %}
+    {% if cv.phone %}{{ cv.phone }} | {% endif %}\href{mailto:{{ cv.email }}}{{ "{" }}{{ cv.email|escape_latex }}{{ "}" }}{% if cv.linkedin %} | \href{ {{ cv.linkedin }} }{{ "{" }}LinkedIn{{ "}" }}{% endif %}{% if cv.github %} | \href{ {{ cv.github }} }{{ "{" }}GitHub{{ "}" }}{% endif %}
 \end{center}
 
 \vspace{0.15in}
@@ -186,17 +186,7 @@
 \vspace{6pt}
 {% endif %}
 
-%----------------------------------------------------------------------------------------
-% PAGE 2
-%----------------------------------------------------------------------------------------
 
-\newpage
-
-\begin{center}
-    \textbf{\Large {{ cv.name|upper|escape_latex }} {{ cv.surname|upper|escape_latex }}}
-\end{center}
-
-\vspace{0.15in}
 
 %----------------------------------------------------------------------------------------
 % COMMUNITY INVOLVEMENT
@@ -266,7 +256,7 @@ OR
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
 Phone: {{ ref.phone|default:"+1-234-45678"|escape_latex }} \\
-Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email }}{{ "}" }}
+Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" }}
 {% endif %}
 {% endfor %}
 \end{minipage}
@@ -278,7 +268,7 @@ Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email }}{{ "}" }}
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
 Phone: {{ ref.phone|default:"+1-234-45678"|escape_latex }} \\
-Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email }}{{ "}" }}
+Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" }}
 {% endif %}
 {% endfor %}
 \end{minipage}
@@ -290,7 +280,7 @@ Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email }}{{ "}" }}
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
 Phone: {{ ref.phone|default:"+1-234-45678"|escape_latex }} \\
-Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email }}{{ "}" }}
+Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" }}
 {% endif %}
 {% endfor %}
 \end{minipage}

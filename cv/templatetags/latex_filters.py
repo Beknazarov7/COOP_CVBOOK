@@ -14,21 +14,23 @@ def escape_latex(value):
     value = str(value)
     
     # Define LaTeX special characters and their escaped versions
-    latex_special_chars = {
-        '&': r'\&',
-        '%': r'\%',
-        '$': r'\$',
-        '#': r'\#',
-        '_': r'\_',
-        '{': r'\{',
-        '}': r'\}',
-        '~': r'\textasciitilde{}',
-        '^': r'\textasciicircum{}',
-        '\\': r'\textbackslash{}',
-    }
+    # Define replacements - ORDER MATTERS!
+    # We must replace backslash first to avoid escaping backslashes introduced by other replacements
+    replacements = [
+        ('\\', r'\textbackslash{}'),
+        ('&', r'\&'),
+        ('%', r'\%'),
+        ('$', r'\$'),
+        ('#', r'\#'),
+        ('_', r'\_'),
+        ('{', r'\{'),
+        ('}', r'\}'),
+        ('~', r'\textasciitilde{}'),
+        ('^', r'\textasciicircum{}'),
+    ]
     
     # Replace each special character
-    for char, escaped in latex_special_chars.items():
+    for char, escaped in replacements:
         value = value.replace(char, escaped)
     
     return value
