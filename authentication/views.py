@@ -147,12 +147,21 @@ class SignupView(APIView):
 class SigninView(APIView):
     permission_classes = [AllowAny]
     def post(self, request):
-        username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
         
-        if not all([username, password]):
-            return Response({'error': 'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not all([email, password]):
+            return Response({'error': 'Email and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
         
+        # Find user by email
+        try:
+            user_obj = CustomUser.objects.get(email=email)
+            username = user_obj.username
+        except CustomUser.DoesNotExist:
+            # Return generic error to prevent email enumeration
+            logger.warning(f"Login attempt for non-existent email: {email}")
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_pending:
@@ -174,7 +183,7 @@ class SigninView(APIView):
                     'is_pending': user.is_pending
                 }
             })
-        logger.warning(f"Invalid login attempt for username: {username}")
+        logger.warning(f"Invalid login attempt for email: {email}")
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 def password_reset_request(request):

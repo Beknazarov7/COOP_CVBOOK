@@ -622,7 +622,7 @@ const PendingApproval = () => {
 // ===== Sign Up =====
 const SignUp = () => {
     const [formData, setFormData] = useState({
-        username: "", email: "", password: "", first_name: "", last_name: ""
+        first_name: "", last_name: "", email: "", username: "", password: ""
     });
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
@@ -718,72 +718,6 @@ const SignUp = () => {
                                 )}
 
                                 <form onSubmit={handleSubmit}>
-                                    <div style={{ marginBottom: '18px' }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-user" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Username <span style={{ color: '#dc3545' }}>*</span>
-                                        </label>
-                        <input
-                                            type="text"
-                                            placeholder="Choose a unique username"
-                                            required
-                            value={formData.username}
-                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                                            style={{
-                                                width: '100%',
-                                                padding: '13px 16px',
-                                                border: '2px solid #e0e0e0',
-                                                borderRadius: '10px',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                backgroundColor: '#f8f9fa'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007bff';
-                                                e.target.style.backgroundColor = '#fff';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#e0e0e0';
-                                                e.target.style.backgroundColor = '#f8f9fa';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div style={{ marginBottom: '18px' }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Email <span style={{ color: '#dc3545' }}>*</span>
-                                        </label>
-                        <input
-                                            type="email"
-                                            placeholder="your.email@example.com"
-                                            required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            style={{
-                                                width: '100%',
-                                                padding: '13px 16px',
-                                                border: '2px solid #e0e0e0',
-                                                borderRadius: '10px',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                backgroundColor: '#f8f9fa'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007bff';
-                                                e.target.style.backgroundColor = '#fff';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#e0e0e0';
-                                                e.target.style.backgroundColor = '#f8f9fa';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                    </div>
-
                                     <div className="row" style={{ margin: '0 -8px 20px -8px' }}>
                                         <div className="col-md-6" style={{ padding: '0 8px', marginBottom: '15px' }}>
                                             <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
@@ -847,6 +781,72 @@ const SignUp = () => {
                                                 }}
                             />
                         </div>
+                                    </div>
+
+                                    <div style={{ marginBottom: '18px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                            <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Email <span style={{ color: '#dc3545' }}>*</span>
+                                        </label>
+                        <input
+                                            type="email"
+                                            placeholder="your.email@example.com"
+                                            required
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                            style={{
+                                                width: '100%',
+                                                padding: '13px 16px',
+                                                border: '2px solid #e0e0e0',
+                                                borderRadius: '10px',
+                                                fontSize: '15px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: '#f8f9fa'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = '#007bff';
+                                                e.target.style.backgroundColor = '#fff';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = '#e0e0e0';
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div style={{ marginBottom: '18px' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                                            <i className="fas fa-building" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Representing company <span style={{ color: '#dc3545' }}>*</span>
+                                        </label>
+                        <input
+                                            type="text"
+                                            placeholder="Enter company name"
+                                            required
+                            value={formData.username}
+                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                            style={{
+                                                width: '100%',
+                                                padding: '13px 16px',
+                                                border: '2px solid #e0e0e0',
+                                                borderRadius: '10px',
+                                                fontSize: '15px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: '#f8f9fa'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = '#007bff';
+                                                e.target.style.backgroundColor = '#fff';
+                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = '#e0e0e0';
+                                                e.target.style.backgroundColor = '#f8f9fa';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
+                                        />
                                     </div>
 
                                     <div style={{ marginBottom: '25px' }}>
@@ -939,7 +939,7 @@ const SignUp = () => {
 
 // ===== Login =====
 const Login = ({ setToken }) => {
-    const [formData, setFormData] = useState({ username: "", password: "" });
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -1048,15 +1048,15 @@ const Login = ({ setToken }) => {
                                 <form onSubmit={handleSubmit}>
                                     <div style={{ marginBottom: '20px' }}>
                                         <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-user" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Username <span style={{ color: '#dc3545' }}>*</span>
+                                            <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                                            Email <span style={{ color: '#dc3545' }}>*</span>
                                         </label>
                         <input
-                            type="text"
-                                            placeholder="Enter your username"
+                            type="email"
+                                            placeholder="Enter your email"
                             required
-                            value={formData.username}
-                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                             style={{
                                                 width: '100%',
                                                 padding: '13px 16px',
