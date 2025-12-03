@@ -42,7 +42,7 @@ class Certificate(models.Model):
     education = models.ForeignKey(Education, on_delete=models.CASCADE, related_name='certificates')
     certificate_title = models.CharField(max_length=200)
     organization = models.CharField(max_length=200, blank=True, default='')
-    year = models.CharField(max_length=4, blank=True, default='')
+    year = models.CharField(max_length=50, blank=True, default='')
     location = models.CharField(max_length=200, blank=True, default='')
 
     def __str__(self):
@@ -73,7 +73,7 @@ class ProfessionalCompetency(models.Model):
 class Project(models.Model):
     cv = models.ForeignKey(CVSubmission, on_delete=models.CASCADE, related_name='projects')
     project_title = models.CharField(max_length=200)
-    year = models.CharField(max_length=4, blank=True, default='')
+    year = models.CharField(max_length=50, blank=True, default='')
     technologies_used = models.TextField(blank=True, default='')
     summary = models.TextField(blank=True, default='')
     accomplishment = models.TextField(blank=True, default='')
@@ -118,7 +118,7 @@ class CommunityInvolvement(models.Model):
 class Award(models.Model):
     cv = models.ForeignKey(CVSubmission, on_delete=models.CASCADE, related_name='awards')
     award_name = models.CharField(max_length=200)
-    year = models.CharField(max_length=4, blank=True, default='')
+    year = models.CharField(max_length=50, blank=True, default='')
     presenting_organization = models.CharField(max_length=200, blank=True, default='')  # Organization that presented the award
     short_description = models.TextField(blank=True, default='')
 
