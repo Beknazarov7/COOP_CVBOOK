@@ -131,7 +131,7 @@ class Reference(models.Model):
     position = models.CharField(max_length=200, blank=True, default='')
     company = models.CharField(max_length=200, blank=True, default='')  # Company/Organization
     email = models.EmailField(blank=True, default='')
-    phone = models.CharField(max_length=15, blank=True, default='')
+    phone = models.CharField(max_length=20, blank=True, default='')
     relation = models.CharField(max_length=200, blank=True, default='')
 
     def __str__(self):
