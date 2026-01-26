@@ -16,8 +16,8 @@ load_dotenv(BASE_DIR / '.env')
 
 # Security settings
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-temporary-key-for-development')
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '.up.railway.app,localhost,127.0.0.1,healthcheck.railway.app,ucagraduatecvbook.org,.ucagraduatecvbook.org').split(',')
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.up.railway.app,healthcheck.railway.app,ucagraduatecvbook.org,.ucagraduatecvbook.org').split(',')
 
 
 # Allow embedding in iframes from localhost
