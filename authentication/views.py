@@ -50,7 +50,7 @@ class SignupView(APIView):
         """Check if email exists in the management system database"""
         try:
             # Path to the management system database
-            management_db_path = os.path.join(settings.BASE_DIR, '..', 'UCA-Co-op-Website-main', 'db.sqlite3')
+            management_db_path = os.path.join(settings.BASE_DIR, '..', 'UCA-Co-op-Website', 'db.sqlite3')
             if os.path.exists(management_db_path):
                 conn = sqlite3.connect(management_db_path)
                 cursor = conn.cursor()
@@ -101,9 +101,9 @@ class SignupView(APIView):
         if CustomUser.objects.filter(email=email).exists():
             return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
         
-        # Check if email exists in management system (only for regular signups, not admin-created users)
-        if not auto_approve and self.check_email_exists_in_management_system(email):
-            return Response({'error': 'Email already exists in the system. Please use a different email or login if you have an account.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Check if email exists in management system (Removed as per request)
+        # if not auto_approve and self.check_email_exists_in_management_system(email):
+        #     return Response({'error': 'Email already exists in the system. Please use a different email or login if you have an account.'}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             # Create user with appropriate approval status
@@ -127,6 +127,26 @@ class SignupView(APIView):
             else:
                 logger.info(f"User created: {username}, awaiting approval")
                 message = 'Account created. Awaiting admin approval.'
+                
+                # Send email to the user
+                from .utils import send_postmark_email, notify_coordinators_new_signup
+                
+                user_subject = "Your CVBook Access Request is Pending"
+                user_html = f"""
+                <html>
+                    <body>
+                        <h1>Hello {first_name},</h1>
+                        <p>Thank you for registering for the UCA CVBook. Your request is currently pending approval by a coordinator.</p>
+                        <p>You will receive another email once your request has been reviewed.</p>
+                        <p>Best regards,<br>UCA Co-op Team</p>
+                    </body>
+                </html>
+                """
+                send_postmark_email(email, user_subject, user_html, "Your CVBook request is pending approval.")
+                
+                # Notify coordinators
+                notify_coordinators_new_signup(email, first_name, last_name)
+
             
             return Response({
                 'message': message,
@@ -203,25 +223,49 @@ def password_reset_request(request):
         
         token = PasswordResetTokenGenerator().make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        reset_url = f"http://localhost:8000/api/auth/password/reset/confirm-page/{uid}/{token}/"
+        
+        from django.urls import reverse
+        relative_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+        reset_url = request.build_absolute_uri(relative_url)
+        
+        # In case build_absolute_uri doesn't work well behind proxies (like Railway)
+        # we can check environment variables
+        env_site_url = os.environ.get('SITE_URL')
+        if env_site_url:
+            if env_site_url.endswith('/'):
+                env_site_url = env_site_url[:-1]
+            reset_url = f"{env_site_url}{relative_url}"
         
         print(f"DEBUG: Attempting to send email to {email} with reset URL: {reset_url}", file=sys.stderr)
         try:
-            print("DEBUG: Calling send_mail", file=sys.stderr)
-            result = send_mail(
-                'Password Reset Request',
-                f'Click the link to reset your password: {reset_url}',
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
-            )
-            print(f"DEBUG: send_mail result: {result}", file=sys.stderr)
-            logger.info(f"Password reset email sent to: {email}")
-            return render(request, 'authentication/password_reset.html', {'success': 'Password reset link sent.'})
+            from .utils import send_postmark_email
+            
+            subject = 'Password Reset Request'
+            html_content = f"""
+            <html>
+                <body>
+                    <h1>Password Reset Request</h1>
+                    <p>You requested a password reset for your CVBook account.</p>
+                    <p>Please click the link below to reset your password:</p>
+                    <p><a href="{reset_url}">{reset_url}</a></p>
+                    <p>If you did not request this, please ignore this email.</p>
+                    <p>Best regards,<br>UCA Co-op Team</p>
+                </body>
+            </html>
+            """
+            text_content = f"Click the link to reset your password: {reset_url}"
+            
+            result = send_postmark_email(email, subject, html_content, text_content)
+            
+            if result:
+                logger.info(f"Password reset email sent to: {email}")
+                return render(request, 'authentication/password_reset.html', {'success': 'Password reset link sent.'})
+            else:
+                raise Exception("Postmark API returned failure")
         except Exception as e:
             logger.error(f"Failed to send password reset email to {email}: {str(e)}")
-            print(f"DEBUG: Email sending error details: {str(e)}", file=sys.stderr)
-            return render(request, 'authentication/password_reset.html', {'error': f'Failed to send reset email: {str(e)}'})
+            return render(request, 'authentication/password_reset.html', {'error': f'Failed to send reset email. Please try again later.'})
+
     
     print("Rendering initial password reset form for GET request", file=sys.stderr)
     return render(request, 'authentication/password_reset.html')
@@ -303,6 +347,22 @@ def user_management_action(request):
             user.accepted_at = timezone.now()
             user.rejected_at = None
             user.save()
+            
+            # Send approval email
+            from .utils import send_postmark_email
+            subject = "Your CVBook Request has been Approved"
+            html = f"""
+            <html>
+                <body>
+                    <h1>Hello {user.first_name},</h1>
+                    <p>Your request for access to the UCA CVBook has been approved!</p>
+                    <p>You can now sign in using your email and the password you created.</p>
+                    <p>Best regards,<br>UCA Co-op Team</p>
+                </body>
+            </html>
+            """
+            send_postmark_email(user.email, subject, html, "Your CVBook request has been approved.")
+            
             return Response({'success': True, 'message': 'User approved successfully'})
             
         elif action == 'reject':
@@ -310,7 +370,24 @@ def user_management_action(request):
             user.is_active = False
             user.rejected_at = timezone.now()
             user.save()
+            
+            # Send rejection email
+            from .utils import send_postmark_email
+            subject = "Your CVBook Request Status"
+            html = f"""
+            <html>
+                <body>
+                    <h1>Hello {user.first_name},</h1>
+                    <p>We regret to inform you that your request for access to the UCA CVBook has been declined at this time.</p>
+                    <p>If you believe this is a mistake, please contact the UCA Co-op department.</p>
+                    <p>Best regards,<br>UCA Co-op Team</p>
+                </body>
+            </html>
+            """
+            send_postmark_email(user.email, subject, html, "Your CVBook request has been declined.")
+            
             return Response({'success': True, 'message': 'User rejected successfully'})
+
             
         elif action == 'delete':
             user.delete()
