@@ -1,3 +1,4 @@
+{% autoescape off %}
 {% load latex_filters %}
 \documentclass[11pt,letterpaper]{article}
 \usepackage[utf8]{inputenc}
@@ -33,7 +34,7 @@
     pdfborder={0 0 0}
 }
 
-% Page style
+% Page style - page number on right
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
@@ -43,7 +44,7 @@
 \usepackage{titlesec}
 \titleformat{\section}
   {\normalfont\normalsize\bfseries\MakeUppercase}
-  {}{0em}{}[\vspace{-8pt}\rule{\textwidth}{0.4pt}]
+  {}{0em}{}[\vspace{-8pt}\rule{\textwidth}{0.8pt}]
 \titlespacing*{\section}{0pt}{12pt}{6pt}
 
 \begin{document}
@@ -53,12 +54,12 @@
 %----------------------------------------------------------------------------------------
 
 \begin{center}
-    \textbf{\Large {{ cv.name|upper|escape_latex }} {{ cv.surname|upper|escape_latex }}} \\[2pt]
-    {% if cv.city or cv.country %}{{ cv.city|default:""|escape_latex }}{% if cv.city and cv.country %}, {% endif %}{{ cv.country|default:""|escape_latex }} \\[2pt]{% endif %}
-    {% if cv.phone %}{{ cv.phone }} | {% endif %}\href{mailto:{{ cv.email }}}{{ "{" }}{{ cv.email|escape_latex }}{{ "}" }}{% if cv.linkedin %} | \href{ {{ cv.linkedin }} }{{ "{" }}LinkedIn{{ "}" }}{% endif %}{% if cv.github %} | \href{ {{ cv.github }} }{{ "{" }}GitHub{{ "}" }}{% endif %}
+    \textbf{\Large {{ cv.name|upper|escape_latex }} {{ cv.surname|upper|escape_latex }}} \\
+    {% if cv.city or cv.country %}{{ cv.city|default:""|escape_latex }}{% if cv.city and cv.country %}, {% endif %}{{ cv.country|default:""|escape_latex }} \\{% endif %}
+    {% if cv.phone %}{{ cv.phone|escape_latex }} | {% endif %}\href{mailto:{{ cv.email|escape_latex_url }}}{ {{ cv.email|escape_latex }} }{% if cv.linkedin %} | \href{ {{ cv.linkedin|escape_latex_url }} }{LinkedIn.com/{{ cv.linkedin|escape_latex|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/" }}}{% endif %}{% if cv.github %} | \href{ {{ cv.github|escape_latex_url }} }{Github.com/{{ cv.github|escape_latex|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/" }}}{% endif %}
 \end{center}
 
-\vspace{0.15in}
+\vspace{0.05in}
 
 %----------------------------------------------------------------------------------------
 % EDUCATION
@@ -68,23 +69,21 @@
 
 {% if educations %}
 {% for edu in educations %}
-\noindent\textbf{ {{ edu.degree_title|default:"Degree Title"|escape_latex }} } \hfill \textbf{ {{ edu.expected_graduation|default:"20XX"|escape_latex }} } \\
+\noindent\textbf{ {{ edu.degree_title|default:"Degree Title"|escape_latex }} } \hfill \textbf{Expected Graduation: {{ edu.expected_graduation|format_date_str|default:"20XX"|escape_latex }} } \\
 \textit{ {{ edu.university|default:"University"|escape_latex }}, {{ edu.university_location|default:"City, Country"|escape_latex }} } \\
 {% if edu.honors %}\textbf{Honours:} {{ edu.honors|escape_latex }} \\{% endif %}
 {% if edu.relevant_courses %}\textbf{Relevant Courses:} {{ edu.relevant_courses|escape_latex }} \\{% endif %}
-{% if edu.gpa %}\textbf{GPA:} {{ edu.gpa|escape_latex }} \\{% endif %}
-\vspace{2pt}
+\vspace{4pt}
+
 {% if edu.certificates.all %}
 {% for cert in edu.certificates.all %}
-\noindent\textbf{ {{ cert.certificate_title|escape_latex }} } \hfill \textbf{ {{ cert.year|default:"20XX"|escape_latex }} } \\
-\textit{ {% if cert.organization %}{{ cert.organization|escape_latex }}{% endif %}{% if cert.location %}, {{ cert.location|escape_latex }}{% endif %} } \\
+\noindent\textbf{ {{ cert.certificate_title|escape_latex }} } \hfill \textbf{ {{ cert.year|format_year_only|default:"20XX"|escape_latex }} } \\
+{% if cert.organization or cert.location %}\textit{ {% if cert.organization %}{{ cert.organization|escape_latex }}{% endif %}{% if cert.location %}, {{ cert.location|escape_latex }}{% endif %} } \\{% endif %}
+\vspace{4pt}
 {% endfor %}{% endif %}
-\vspace{6pt}
 
 {% endfor %}
 {% endif %}
-
-{% comment %} Certificates are rendered under each Education above {% endcomment %}
 
 %----------------------------------------------------------------------------------------
 % PROFESSIONAL EXPERIENCE
@@ -94,16 +93,14 @@
 \section{Professional Experience}
 
 {% for exp in experiences %}
-\noindent\textbf{ {{ exp.position_title|default:"Position"|escape_latex }} } \hfill \textbf{ {{ exp.dates|default:"Dates"|escape_latex }} } \\
-\textit{ {{ exp.company|default:"Company"|escape_latex }} } \\
-{% if exp.accomplishments %}
+\noindent\textbf{ {{ exp.position_title|default:"Position Title"|escape_latex }} } \hfill \textbf{ {{ exp.start_date|format_date_str|escape_latex }} -- {{ exp.end_date|format_date_str|default:"Present"|escape_latex }} } \\
+\textit{ {{ exp.company|default:"Company"|escape_latex }}{% if exp.location %}, {{ exp.location|escape_latex }}{% endif %} } \\
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
 {% for line in exp.accomplishments.splitlines %}
 {% if line.strip %}\item {{ line|escape_latex }}{% endif %}
 {% endfor %}
 \end{itemize}
-{% endif %}
 \vspace{4pt}
 
 {% endfor %}
@@ -117,7 +114,7 @@
 \section{Professional Competencies}
 
 {% for comp in competencies %}
-\noindent\textbf{ {{ comp.competency_type|escape_latex }}: } \\
+\noindent\textbf{ {{ comp.competency_type|escape_latex }} } \\
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
 {% for line in comp.key_accomplishments.splitlines %}
@@ -137,11 +134,15 @@
 \section{Projects}
 
 {% for project in projects %}
-\noindent\textbf{ {{ project.project_title|escape_latex }} }{% if project.technologies_used %} \textit{({{ project.technologies_used|escape_latex }})}{% endif %} \hfill \textbf{ {{ project.year|default:"20XX"|escape_latex }} } \\
-{% if project.summary %}\textbf{Summary:} {{ project.summary|escape_latex }} \\{% endif %}
+\noindent\textbf{ {{ project.project_title|escape_latex }} } | \textit{ {{ project.technologies_used|default:"insert technical skills used"|escape_latex }} } \hfill \textbf{ {{ project.year|format_year_only|default:"20XX"|escape_latex }} } \\
+\textbf{Summary:} {{ project.summary|default:"Brief Summary of Project."|escape_latex }} \\
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
-    \item {{ project.accomplishment|default:"Project accomplishment"|escape_latex }}
+{% for line in project.accomplishment.splitlines %}
+{% if line.strip %}\item {{ line|escape_latex }}{% endif %}
+{% empty %}
+    \item Accomplishment statement beginning with an action verb.
+{% endfor %}
 \end{itemize}
 \vspace{4pt}
 
@@ -158,15 +159,15 @@
 \textit{(Customize according to your field of study)} \\
 \vspace{2pt}
 
-{% for skill in technical_skills %}
-{% if skill.programming_languages %}\noindent\textbf{Programming and Statistical Tools: } {{ skill.programming_languages|escape_latex }} \\{% endif %}
-{% if skill.tools %}\noindent\textbf{Data Analysis and Visualization: } {{ skill.tools|escape_latex }} \\{% endif %}
-{% if skill.web_development %}\noindent\textbf{Web and Software Development: } {{ skill.web_development|escape_latex }} \\{% endif %}
-{% if skill.frameworks_databases %}\noindent\textbf{Frameworks and Databases: } {{ skill.frameworks_databases|escape_latex }} \\{% endif %}
-{% if skill.multimedia %}\noindent\textbf{Media and Design Tools: } {{ skill.multimedia|escape_latex }} \\{% endif %}
-{% if skill.network %}\noindent\textbf{Communication and Collaboration: } {{ skill.network|escape_latex }} \\{% endif %}
+{% with skill=technical_skills.0 %}
+{% if skill.programming_languages %}\noindent\textbf{Programming \& Statistical Tools: } {{ skill.programming_languages|escape_latex }} \\{% endif %}
+{% if skill.tools %}\noindent\textbf{Data Analysis \& Visualization: } {{ skill.tools|escape_latex }} \\{% endif %}
+{% if skill.web_development %}\noindent\textbf{Web \& Software Development: } {{ skill.web_development|escape_latex }} \\{% endif %}
+{% if skill.frameworks_databases %}\noindent\textbf{Frameworks \& Databases: } {{ skill.frameworks_databases|escape_latex }} \\{% endif %}
+{% if skill.multimedia %}\noindent\textbf{Media \& Design Tools: } {{ skill.multimedia|escape_latex }} \\{% endif %}
+{% if skill.network %}\noindent\textbf{Communication \& Collaboration: } {{ skill.network|escape_latex }} \\{% endif %}
 {% if skill.operating_systems %}\noindent\textbf{Operating Systems: } {{ skill.operating_systems|escape_latex }} \\{% endif %}
-{% endfor %}
+{% endwith %}
 \vspace{4pt}
 {% endif %}
 
@@ -186,8 +187,6 @@
 \vspace{6pt}
 {% endif %}
 
-
-
 %----------------------------------------------------------------------------------------
 % COMMUNITY INVOLVEMENT
 %----------------------------------------------------------------------------------------
@@ -196,7 +195,7 @@
 \section{Community Involvement}
 
 {% for involvement in community_involvements %}
-\noindent\textbf{ {{ involvement.position_title|escape_latex }} } \hfill \textbf{ {{ involvement.dates|default:"Dates"|escape_latex }} } \\
+\noindent\textbf{ {{ involvement.position_title|escape_latex }} } \hfill \textbf{ {{ involvement.start_date|format_date_str|escape_latex }} -- {{ involvement.end_date|format_date_str|default:"Present"|escape_latex }} } \\
 \textit{ {{ involvement.organization|escape_latex }}{% if involvement.location %}, {{ involvement.location|escape_latex }}{% endif %} } \\
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
@@ -216,19 +215,8 @@
 {% if awards %}
 \section{Awards}
 
-\vspace{-6pt}
-\begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
 {% for award in awards %}
-    \item {{ award.award_name|escape_latex }} {% if award.year %}({{ award.year|escape_latex }}){% else %}(20XX){% endif %}
-{% endfor %}
-\end{itemize}
-
-\vspace{8pt}
-OR
-\vspace{8pt}
-
-{% for award in awards %}
-\noindent\textbf{ {{ award.award_name|escape_latex }} } \hfill \textbf{ {{ award.year|default:"20XX"|escape_latex }} } \\
+\noindent\textbf{ {{ award.award_name|escape_latex }} } \hfill \textbf{ {{ award.year|format_date_str|default:"20XX"|escape_latex }} } \\
 {% if award.presenting_organization %}\textit{ {{ award.presenting_organization|escape_latex }} } \\{% endif %}
 {% if award.short_description %}
 \vspace{-6pt}
@@ -249,38 +237,38 @@ OR
 \section{References}
 
 \noindent
-\begin{minipage}[t]{0.30\textwidth}
+\begin{minipage}[t]{0.32\textwidth}
 {% for ref in references %}
 {% if forloop.counter0 == 0 %}
 \textbf{ {{ ref.reference_name|escape_latex }} } \\
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
-Phone: {{ ref.phone|default:"+1-234-45678"|escape_latex }} \\
-Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" }}
+Phone: {{ ref.phone|default:"+1-234-5678"|escape_latex }} \\
+Email: \href{mailto:{{ ref.email|escape_latex_url }}}{ {{ ref.email|escape_latex }} }
 {% endif %}
 {% endfor %}
 \end{minipage}
 \hfill
-\begin{minipage}[t]{0.30\textwidth}
+\begin{minipage}[t]{0.32\textwidth}
 {% for ref in references %}
 {% if forloop.counter0 == 1 %}
 \textbf{ {{ ref.reference_name|escape_latex }} } \\
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
-Phone: {{ ref.phone|default:"+1-234-45678"|escape_latex }} \\
-Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" }}
+Phone: {{ ref.phone|default:"+1-234-5678"|escape_latex }} \\
+Email: \href{mailto:{{ ref.email|escape_latex_url }}}{ {{ ref.email|escape_latex }} }
 {% endif %}
 {% endfor %}
 \end{minipage}
 \hfill
-\begin{minipage}[t]{0.30\textwidth}
+\begin{minipage}[t]{0.32\textwidth}
 {% for ref in references %}
 {% if forloop.counter0 == 2 %}
 \textbf{ {{ ref.reference_name|escape_latex }} } \\
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
-Phone: {{ ref.phone|default:"+1-234-45678"|escape_latex }} \\
-Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" }}
+Phone: {{ ref.phone|default:"+1-234-5678"|escape_latex }} \\
+Email: \href{mailto:{{ ref.email|escape_latex_url }}}{ {{ ref.email|escape_latex }} }
 {% endif %}
 {% endfor %}
 \end{minipage}
@@ -289,3 +277,4 @@ Email: \href{mailto:{{ ref.email }}}{{ "{" }}{{ ref.email|escape_latex }}{{ "}" 
 {% endif %}
 
 \end{document}
+{% endautoescape %}

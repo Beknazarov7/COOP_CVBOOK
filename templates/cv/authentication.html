@@ -1,609 +1,1283 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CV Management</title>
-<link rel="icon" type="image/png" href="/static/cv/uca-logo-favicon.png" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<style>
-/* Existing styles remain largely intact with minor tweaks */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #d9e6f9 0%, #a0bae4 100%);
-  color: #212529;
-  line-height: 1.6;
-  min-height: 100vh;
-}
-/* Background polish 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Management</title>
+  <link rel="icon" type="image/png" href="/static/cv/uca-logo-favicon.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Existing styles remain largely intact with minor tweaks */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #d9e6f9 0%, #a0bae4 100%);
+      color: #212529;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Background polish 
 body {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }*/
 
-/* Hero */
-.hero-section {
-  background: #fff; border-radius: 16px; padding: 2rem; margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,.1); position: relative; overflow: hidden;
-}
-.hero-section::before {
-  content:""; position:absolute; top:0; right:0; width:200px; height:200px;
-  background: linear-gradient(135deg,#2c5aa0,#4a90e2); opacity:.1; border-radius:50%;
-  transform: translate(50%,-50%);
-}
-.hero-content { text-align:center; }
-.hero-content h1 { font-size: 2.25rem; font-weight: 800; color:#2c5aa0; margin-bottom:.75rem; }
-.hero-content p { color:#6c757d; max-width: 640px; margin: 0 auto 1.5rem; }
-.stats-row { display:grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap:1rem; }
-.stat-item { text-align:center; background: linear-gradient(135deg,#f8f9ff,#e8f2ff); border:1px solid rgba(44,90,160,.1); border-radius:12px; padding:1rem; }
-.stat-number { font-size:1.75rem; font-weight:800; color:#2c5aa0; }
+    /* Hero */
+    .hero-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .1);
+      position: relative;
+      overflow: hidden;
+    }
 
-/* Filters panel */
-.filters-section {
-  background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:16px; padding:2rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,.1); position:relative; overflow:hidden; margin-bottom: 2rem;
-}
-.filters-section::before {
-  content:""; position:absolute; left:0; right:0; top:0; height:4px;
-  background: linear-gradient(90deg,#2c5aa0,#4a90e2,#6bb6ff);
-}
-.filters-header {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:1.25rem; padding-bottom:1rem; border-bottom:2px solid #f8f9fa;
-}
-.filters-title { font-size:1.125rem; font-weight:700; color:#2c5aa0; }
-.active-filters { display:flex; gap:.5rem; flex-wrap:wrap; }
-.filter-badge {
-  background:#e3f2fd; color:#1976d2; padding:.25rem .75rem; border-radius:16px; font-size:.75rem; font-weight:600;
-}
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(135deg, #2c5aa0, #4a90e2);
+      opacity: .1;
+      border-radius: 50%;
+      transform: translate(50%, -50%);
+    }
 
-.department-tabs.filter-tabs {
-  padding: 1rem;
-  background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(44,90,160,.12);
-}
-.tab {
-  padding: .75rem 1.1rem; border: 2px solid #dee2e6; border-radius: 8px;
-  font-weight: 600; background: #fff; transition: .2s;
-}
-.tab.active {
-  background: linear-gradient(135deg, #2c5aa0 0%, #1e3d72 100%);
-  border-color: #2c5aa0; color: #fff; box-shadow: 0 4px 12px rgba(44,90,160,.28);
-  transform: translateY(-1px);
-}
-.tab:not(.active):hover { background:#f8f9fa; border-color:#2c5aa0; transform: translateY(-1px); }
+    .hero-content {
+      text-align: center;
+    }
 
-.filters-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.25rem;
-}
-.filter-group label { display:block; font-size:.875rem; font-weight:700; color:#495057; margin-bottom:.5rem; }
-.filter-select.dropdown {
-  width: 100%; padding: .75rem 1rem; border-radius: 8px; font-size:.875rem;
-  background: linear-gradient(135deg,#ffffff 0%,#f8f9ff 100%); border: 2px solid #e9ecef;
-}
-.filter-select.dropdown:focus {
-  outline:none; border-color:#2c5aa0; box-shadow:0 0 0 3px rgba(44,90,160,.12); background:#fff;
-}
+    .hero-content h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: #2c5aa0;
+      margin-bottom: .75rem;
+    }
 
-/* Full-width search with no inline styles */
-.search-container { grid-column: 1 / -1; }
-.search-inner { position: relative; }
-.search-input {
-  width:100%; padding:1rem 1rem 1rem 3rem; border:2px solid #e9ecef; border-radius:12px;
-  background: linear-gradient(135deg,#fff,#f8f9ff); transition:.2s;
-}
-.search-input:focus { outline:none; border-color:#2c5aa0; box-shadow:0 0 0 3px rgba(44,90,160,.1); background:#fff; }
-.search-icon { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#6c757d; }
+    .hero-content p {
+      color: #6c757d;
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+    }
 
-/* Results header */
-.results-header {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:1.5rem; padding:1rem 1.25rem; background:#fff;
-  border:1px solid rgba(0,0,0,.1); border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,.08);
-}
-.results-info { display:flex; align-items:center; gap:1rem; }
-.results-count { font-weight:700; color:#2c5aa0; }
-.view-toggle { display:flex; gap:.5rem; background:#f8f9fa; padding:.25rem; border-radius:8px; }
-.view-btn { padding:.5rem 1rem; border:none; border-radius:6px; background:transparent; font-weight:600; }
-.view-btn.active { background:#2c5aa0; color:#fff; }
-.sort-select {
-  padding:.65rem 1rem; background:#fff; border:2px solid #e9ecef; border-radius:8px; color:#495057;
-}
-.sort-select:focus { outline:none; border-color:#2c5aa0; box-shadow:0 0 0 2px rgba(44,90,160,.1); }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
 
-/* Grid SIZE UNCHANGED */
-.card-container.profiles-grid { grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 1.5rem; }
+    .stat-item {
+      text-align: center;
+      background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+      border: 1px solid rgba(44, 90, 160, .1);
+      border-radius: 12px;
+      padding: 1rem;
+    }
 
-/* Card look without changing padding/size */
-.profile-card.student-card {
-  background: #fff; border: 1px solid rgba(0,0,0,.1); border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08); transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  position: relative; overflow: hidden;
-}
-.profile-card.student-card::before {
-  content:""; position:absolute; left:0; right:0; top:0; height:4px; background:linear-gradient(90deg,#2c5aa0,#4a90e2);
-}
-.profile-card.student-card:hover { transform: translateY(-4px); box-shadow: 0 12px 38px rgba(44,90,160,.15); border-color:#2c5aa0; }
+    .stat-number {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #2c5aa0;
+    }
 
-.profile-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 1rem; }
-.student-name { font-size: 1.15rem; font-weight: 700; color: #212529; }
-.submitted-date {
-  color:#155724; background:#d4edda; border:1px solid #c3e6cb; padding:.375rem .75rem; border-radius:16px; font-size:.75rem; font-weight:600;
-}
+    /* Filters panel */
+    .filters-section {
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, .1);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .1);
+      position: relative;
+      margin-bottom: 2rem;
+    }
 
-/* Department badge hues */
-.student-major {
-  display:inline-block; margin:.75rem 0 1rem 0; padding:.5rem 1rem; border-radius:20px; font-size:.875rem; font-weight:700; border:1px solid transparent;
-}
-.student-major.cs { background: linear-gradient(135deg,#e8f5e8,#d4edda); color:#155724; border-color:#c3e6cb; }
-.student-major.cm { background: linear-gradient(135deg,#fff3e0,#ffeaa7); color:#e65100; border-color:#ffcc80; }
-.student-major.es { background: linear-gradient(135deg,#e0f2f1,#b2dfdb); color:#004d40; border-color:#80cbc4; }
-.student-major.ge { background: linear-gradient(135deg,#fce4ec,#f8bbd9); color:#880e4f; border-color:#f48fb1; }
+    .filters-section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2c5aa0, #4a90e2, #6bb6ff);
+    }
 
-/* Meta & skills */
-.profile-meta.meta-row {
-  display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:.75rem;
-  margin-bottom:1.25rem; padding:.9rem; background: linear-gradient(135deg,#f8f9ff,#e8f2ff);
-  border:1px solid rgba(44,90,160,.12); border-radius:8px; color:#495057;
-}
-.profile-meta span { display:inline-flex; align-items:center; gap:.35rem; }
+    .filters-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #f8f9fa;
+    }
 
-.profile-skills .skills-label { font-size:.875rem; font-weight:700; color:#495057; margin-bottom:.5rem; }
-.skills-list { display:flex; flex-wrap:wrap; gap:.5rem; }
-.skill-tag {
-  background: linear-gradient(135deg, #f8f9ff, #e3f2fd); color:#1976d2; border:1px solid #bbdefb;
-  padding:.375rem .75rem; border-radius:16px; font-size:.75rem; font-weight:600; transition: transform .15s ease, box-shadow .15s ease;
-}
-.skill-tag:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+    .filters-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #2c5aa0;
+    }
 
-/* FAB */
-.add-student-btn.fab-add {
-  background: linear-gradient(135deg, #2c5aa0, #1e3d72);
-  box-shadow: 0 8px 24px rgba(44,90,160,.4);
-}
-.add-student-btn.fab-add:hover { transform: scale(1.07); box-shadow: 0 12px 32px rgba(44,90,160,.5); }
+    .active-filters {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
 
-.header {
-  background: #ffffff;
-  border-bottom: 1px solid #dee2e6;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  position: static;
-  max-width: 1100px;
-  margin: 0 auto;
-  border-radius: 12px;
-}
-.header-title, .header-nav, .filters-section, .main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.header-bar {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  border: 0;           /* remove old divider */
-  min-height: auto;    /* lighter */
-  background: #fff;
+    .filter-badge {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: .25rem .75rem;
+      border-radius: 16px;
+      font-size: .75rem;
+      font-weight: 600;
+    }
 
-}
-.header-left {
-display: flex; align-items: center; gap: 1rem;
-}
-.header-logo {
-    height: 140px; width: 280px; object-fit: contain;
-}
-.header-nav {
-  position: static; transform: none;
-  display: flex; align-items: center; gap: 2rem;
-}
-.header-nav a {
-  color: #495057; font-weight: 500; text-decoration: none;
-  padding: .5rem 0; border-bottom: 2px solid transparent;
-  transition: color .2s ease, border-color .2s ease;
-}
-.header-nav a:hover { color: #2c5aa0; border-bottom-color: #2c5aa0; }
-.header-social { display: flex; gap: .5rem; margin-left: 1.25rem; }
-.header-social a {
-  width: 36px; height: 36px; border-radius: 6px;
-  display: grid; place-items: center; text-decoration: none;
-  background: #f8f9fa; border: 1px solid #dee2e6; color: #495057;
-  transition: all .2s ease;
-}
-.header-social a:hover { background: #e9ecef; border-color: #adb5bd; }
+    .department-tabs.filter-tabs {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+      border-radius: 12px;
+      border: 1px solid rgba(44, 90, 160, .12);
+    }
 
-/* Auth buttons container spacing */
-.auth-buttons {
-  margin-left: 2rem;
-}
+    .tab {
+      flex: 1;
+      padding: .75rem 1.1rem;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      font-weight: 600;
+      background: #fff;
+      transition: .2s;
+      white-space: nowrap;
+      text-align: center;
+    }
 
-/* === Page title === */
-.main-content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .tab.active {
+      background: linear-gradient(135deg, #2c5aa0 0%, #1e3d72 100%);
+      border-color: #2c5aa0;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(44, 90, 160, .28);
+      transform: translateY(-1px);
+    }
 
-/* Filter section and CV cards styles remain unchanged */
-.filter-section {
-  background: #fff; border: 1px solid #dee2e6; border-radius: 8px;
-  padding: 1.5rem; margin-bottom: 5rem; box-shadow: none;
-}
-.filter-tabs {
-  display: flex; gap: .5rem; flex-wrap: wrap;
-}
-.filter-tab {
-  padding: .5rem 1rem; background: transparent; color: #6c757d;
-  border: 1px solid #dee2e6; border-radius: 6px; cursor: pointer; font-size: .875rem; font-weight: 500;
-  transition: all .2s ease;
-}
-.filter-tab.active { background: #2c5aa0; color: #fff; border-color: #2c5aa0; }
-.filter-tab:not(.active):hover { background: #f8f9fa; border-color: #adb5bd; }
+    .tab:not(.active):hover {
+      background: #f8f9fa;
+      border-color: #2c5aa0;
+      transform: translateY(-1px);
+    }
 
-.dropdown {
-  width: 100%; padding: .5rem .75rem; background: #fff; color: #495057;
-  border: 1px solid #ced4da; border-radius: 6px; font-size: .875rem; cursor: pointer;
-  transition: border-color .2s ease, box-shadow .2s ease;
-}
-.dropdown:focus { outline: none; border-color: #2c5aa0; box-shadow: 0 0 0 2px rgba(44,90,160,.1); }
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+    }
+
+    @media (max-width: 992px) {
+      .filters-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .department-tabs.filter-tabs {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tab {
+        flex: 1 1 calc(50% - 0.5rem);
+      }
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: .875rem;
+      font-weight: 700;
+      color: #495057;
+      margin-bottom: .5rem;
+    }
+
+    .filter-select.dropdown {
+      width: 100%;
+      padding: .75rem 1.25rem;
+      border-radius: 12px;
+      font-size: .9rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 14px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .filter-select.dropdown:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Custom Dropdown Styling */
+    .custom-dropdown-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .custom-dropdown-trigger {
+      width: 100%;
+      padding: 0.75rem 1.25rem;
+      padding-right: 2.5rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .custom-dropdown-trigger:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .custom-dropdown-trigger.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+      background: #fff;
+      z-index: 1001;
+      /* Ensure trigger is above other things when active */
+    }
+
+    .custom-dropdown-trigger::after {
+      content: "";
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 6px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2364748b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: transform 0.2s ease;
+    }
+
+    .custom-dropdown-trigger.active::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .custom-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      border-radius: 14px;
+      box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.1), 0 4px 12px -4px rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+      max-height: 280px;
+      overflow-y: auto;
+      padding: 6px;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .custom-dropdown-menu.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .custom-dropdown-option {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .custom-dropdown-option:hover {
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding-left: 18px;
+    }
+
+    .custom-dropdown-option.selected {
+      background: #3b82f6;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .custom-dropdown-menu::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .custom-dropdown-menu::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-dropdown-menu::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+
+    .custom-dropdown-menu::-webkit-scrollbar-thumb:hover {
+      background: #cbd5e1;
+    }
+
+    /* Full-width search with no inline styles */
+    .search-container {
+      grid-column: 1 / -1;
+    }
+
+    .search-inner {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3.5rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      background: #ffffff;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 1.1rem;
+    }
+
+    .filter-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: .875rem;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 0.6rem;
+    }
+
+    .filter-group label i {
+      color: #2c5aa0;
+      width: 18px;
+      text-align: center;
+    }
+
+    /* Results header */
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, .1);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+    }
+
+    .results-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .results-count {
+      font-weight: 700;
+      color: #2c5aa0;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: .5rem;
+      background: #f8f9fa;
+      padding: .25rem;
+      border-radius: 8px;
+    }
+
+    .view-btn {
+      padding: .5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      font-weight: 600;
+    }
+
+    .view-btn.active {
+      background: #2c5aa0;
+      color: #fff;
+    }
+
+    .sort-select {
+      padding: .65rem 1rem;
+      background: #fff;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      color: #495057;
+    }
+
+    .sort-select:focus {
+      outline: none;
+      border-color: #2c5aa0;
+      box-shadow: 0 0 0 2px rgba(44, 90, 160, .1);
+    }
+
+    /* Grid SIZE UNCHANGED */
+    .card-container.profiles-grid {
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Card look without changing padding/size */
+    .profile-card.student-card {
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, .1);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-card.student-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2c5aa0, #4a90e2);
+    }
+
+    .profile-card.student-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 38px rgba(44, 90, 160, .15);
+      border-color: #2c5aa0;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .student-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #212529;
+    }
+
+    .submitted-date {
+      color: #155724;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      padding: .375rem .75rem;
+      border-radius: 16px;
+      font-size: .75rem;
+      font-weight: 600;
+    }
+
+    /* Department badge hues */
+    .student-major {
+      display: inline-block;
+      margin: .75rem 0 1rem 0;
+      padding: .5rem 1rem;
+      border-radius: 20px;
+      font-size: .875rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+
+    .student-major.cs {
+      background: #f0fdf4;
+      color: #15803d;
+      border-color: #dcfce7;
+    }
+
+    .student-major.cm {
+      background: #fff7ed;
+      color: #c2410c;
+      border-color: #ffedd5;
+    }
+
+    .student-major.es {
+      background: #f5f3ff;
+      color: #6d28d9;
+      border-color: #ede9fe;
+    }
+
+    .student-major.ge {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #dbeafe;
+    }
+
+    /* Meta & skills */
+    .profile-meta.meta-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: .75rem;
+      margin-bottom: 1.25rem;
+      padding: .9rem;
+      background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+      border: 1px solid rgba(44, 90, 160, .12);
+      border-radius: 8px;
+      color: #495057;
+    }
+
+    .profile-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+    }
+
+    .skill-strip.profile-skills {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .profile-skills .skills-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #2c5aa0;
+      white-space: nowrap;
+      margin: 0 !important;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-tag {
+      background: linear-gradient(135deg, #f8f9ff, #e3f2fd);
+      color: #1976d2;
+      border: 1px solid #bbdefb;
+      padding: .375rem .75rem;
+      border-radius: 16px;
+      font-size: .75rem;
+      font-weight: 600;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .skill-tag:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    }
+
+    /* FAB */
+    .add-student-btn.fab-add {
+      background: linear-gradient(135deg, #2c5aa0, #1e3d72);
+      box-shadow: 0 8px 24px rgba(44, 90, 160, .4);
+    }
+
+    .add-student-btn.fab-add:hover {
+      transform: scale(1.07);
+      box-shadow: 0 12px 32px rgba(44, 90, 160, .5);
+    }
+
+    /* Main site font */
+    @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+
+    .header {
+      background: #ffffff;
+      border-bottom: 1px solid #dee2e6;
+      padding: 0;
+      /* Reduced padding to match main site compact look if needed, or keep 1rem */
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: static;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-radius: 12px;
+      font-family: "Rubik", sans-serif;
+    }
+
+    .header-title,
+    .header-nav,
+    .filters-section,
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-bar {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      min-height: 90px;
+      /* Reduced from 100px */
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-logo {
+      height: 90px;
+      /* Reduced from 110px */
+      width: auto;
+      object-fit: contain;
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* Main site link style */
+    .header-nav a {
+      color: #3c3c3c;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      position: relative;
+      transition: color 0.3s ease;
+      font-size: 15px;
+    }
+
+    .header-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 3px;
+      bottom: 0px;
+      left: 50%;
+      background-color: #1c8ffb;
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+      opacity: 0;
+    }
+
+    .header-nav a:hover {
+      color: #1967d2;
+    }
+
+    .header-nav a:hover::after {
+      width: 70%;
+      opacity: 1;
+    }
+
+    /* Auth buttons matching main site */
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-left: 2rem;
+      /* Added spacing between social icons and auth buttons */
+    }
+
+    .btn-main-site {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    /* "My Profile" / "Sign In" style (Blue) */
+    .btn-primary-blue {
+      background-color: #4597CB;
+      color: #fff;
+    }
+
+    .btn-primary-blue:hover {
+      background-color: #367ba8;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+      color: #fff;
+    }
+
+    /* "Log Out" / "Sign Up" style (Light Blue) */
+    .btn-light-blue {
+      background-color: #f0f6fe;
+      color: #1967d2;
+    }
+
+    .btn-light-blue:hover {
+      background-color: #1967d2;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Social icons - keeping them but styling to match if needed, or leaving as is */
+    .header-social {
+      display: flex;
+      gap: .5rem;
+      margin-left: 1.25rem;
+    }
+
+    .header-social a {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      color: #495057;
+      transition: all .2s ease;
+    }
+
+    /* Brand colors on hover */
+    .header-social a[aria-label="LinkedIn"]:hover {
+      background: #0077b5;
+      border-color: #0077b5;
+      color: #fff;
+    }
+
+    .header-social a[aria-label="Instagram"]:hover {
+      background: #E1306C;
+      border-color: #E1306C;
+      color: #fff;
+    }
+
+    .header-social a[aria-label="YouTube"]:hover {
+      background: #FF0000;
+      border-color: #FF0000;
+      color: #fff;
+    }
+
+    /* === Page title === */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Filter section and CV cards styles remain unchanged */
+    .filter-section {
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 5rem;
+      box-shadow: none;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: .5rem 1rem;
+      background: transparent;
+      color: #6c757d;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .875rem;
+      font-weight: 500;
+      transition: all .2s ease;
+    }
+
+    .filter-tab.active {
+      background: #2c5aa0;
+      color: #fff;
+      border-color: #2c5aa0;
+    }
+
+    .filter-tab:not(.active):hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+    }
+
+    .dropdown {
+      width: 100%;
+      padding: .5rem .75rem;
+      background: #fff;
+      color: #495057;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      font-size: .875rem;
+      cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .dropdown:focus {
+      outline: none;
+      border-color: #2c5aa0;
+      box-shadow: 0 0 0 2px rgba(44, 90, 160, .1);
+    }
 
 
-/* === Profiles grid & card (new look) === */
-.profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-.card-container { /* becomes profiles-grid */
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 2rem;
-}
-.student-card { /* transform to profile-card style */
-  background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 1.5rem; text-decoration: none; color: inherit;
-  transition: all .2s ease; position: relative;
-}
-.student-card:hover { border-color: #2c5aa0; box-shadow: 0 4px 12px rgba(44,90,160,.1); transform: translateY(-1px); }
+    /* === Profiles grid & card (new look) === */
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .card-container {
+      /* becomes profiles-grid */
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .student-card {
+      /* transform to profile-card style */
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all .2s ease;
+      position: relative;
+    }
+
+    .student-card:hover {
+      border-color: #2c5aa0;
+      box-shadow: 0 4px 12px rgba(44, 90, 160, .1);
+      transform: translateY(-1px);
+    }
 
 
 
-.meta-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: .75rem; font-size: .875rem; color: #6c757d; }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: .75rem;
+      font-size: .875rem;
+      color: #6c757d;
+    }
 
-.skill-strip { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .skill-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
 
 
-/* floating action button - HIDDEN */
-.fab-add {
-  display: none;
-}
+    /* floating action button - HIDDEN */
+    .fab-add {
+      display: none;
+    }
 
-@media (max-width: 768px) {
-  .header-bar { flex-direction: column; gap: 1rem; padding: 0 1rem; }
-  .header-nav { flex-wrap: wrap; justify-content: center; }
-  .main-content { padding: 1rem; }
-  .filter-dropdowns { grid-template-columns: 1fr; }
-  .filter-search-sort { flex-direction: column; align-items: stretch; }
-}
-</style>
+    @media (max-width: 768px) {
+      .header-bar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1rem;
+      }
+
+      .header-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .main-content {
+        padding: 1rem;
+      }
+
+      .filter-dropdowns {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-search-sort {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div id="root"></div>
-<script type="text/babel">
-{% verbatim %}
-const { useState, useEffect } = React;
+  <div id="root"></div>
+  <script type="text/babel">
+    {% verbatim %}
+    const { useState, useEffect, useRef } = React;
 
-// If you previously had: export default NavBar;  ← REMOVE this line
+    // If you previously had: export default NavBar;  ← REMOVE this line
 
-const NavBar = ({ token, setToken }) => {
-  const currentHash = window.location.hash || '#login';
+    const NavBar = ({ token, setToken }) => {
+      const currentHash = window.location.hash || '#login';
 
-  // ✅ Hide NavBar on login, signup, or pending-approval pages
-  // Also hide if no hash (default is login)
-  if (!currentHash || currentHash === '' || ['#login', '#signup', '#pending-approval'].includes(currentHash)) {
-    return null;
-  }
+      // ✅ Hide NavBar on login, signup, or pending-approval pages
+      // Also hide if no hash (default is login)
+      if (!currentHash || currentHash === '' || ['#login', '#signup', '#pending-approval'].includes(currentHash)) {
+        return null;
+      }
 
-  return (
-    <nav className="header">
-      <div className="header-bar">
-        <div className="header-left">
-          <img src="/static/cv/UCA_Logo_Eng_web.png" alt="UCA Logo" className="header-logo" />
-        </div>
-        <nav className="header-nav">
-          <a href="https://www.ucentralasia.org/" target="_blank" rel="noopener noreferrer">Home Page</a>
-          <a href="https://ucentralasia.org/about/about-uca" target="_blank" rel="noopener noreferrer">About</a>
-          <a href="https://ucentralasia.org/faqs" target="_blank" rel="noopener noreferrer">FAQ</a>
+      return (
+        <nav className="header">
+          <div className="header-bar">
+            <div className="header-left">
+              <img src="/static/cv/UCA_Logo_Eng_web.png" alt="UCA Logo" className="header-logo" />
+            </div>
+            <nav className="header-nav">
+              <a href="https://ucacoop.org" target="_blank" rel="noopener noreferrer">Home Page</a>
+              <a href="https://ucentralasia.org/schools/school-of-arts-and-sciences/co-operative-education-programme" target="_blank" rel="noopener noreferrer">About</a>
+              <a href="https://ucacoop.org/faq/#category-all" target="_blank" rel="noopener noreferrer">FAQ</a>
+            </nav>
+            <div className="header-social">
+              <a href="https://www.linkedin.com/in/uca-career-opportunities/" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
+              <a href="https://www.instagram.com/uca_career_opportunities/?igshid=YmMyMTA2M2Y%3D" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
+              <a href="https://www.youtube.com/@ucacareeropportunities1011" aria-label="YouTube"><i className="fab fa-youtube"></i></a>
+            </div>
+            <div className="auth-buttons">
+              {token ? (
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    setToken(null);
+                    window.location.hash = '#login';
+                  }}
+                  className="btn-main-site btn-light-blue"
+                >
+                  <i className="fas fa-sign-out-alt"></i> Log Out
+                </button>
+              ) : (
+                <>
+                  <button onClick={() => window.location.hash = '#signup'} className="btn-main-site btn-light-blue">
+                    <i className="fas fa-user-plus"></i> Sign Up
+                  </button>
+                  <button onClick={() => window.location.hash = '#login'} className="btn-main-site btn-primary-blue">
+                    <i className="fas fa-sign-in-alt"></i> Sign In
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
         </nav>
-        <div className="header-social">
-          <a href="https://www.linkedin.com/in/uca-career-opportunities/" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
-          <a href="https://www.instagram.com/uca_career_opportunities/?igshid=YmMyMTA2M2Y%3D" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
-          <a href="https://www.youtube.com/@ucacareeropportunities1011" aria-label="YouTube"><i className="fab fa-youtube"></i></a>
-        </div>
-        <div className="auth-buttons">
-          {token ? (
-            <button
-              onClick={() => { 
-                localStorage.removeItem('token'); 
-                setToken(null); 
-                window.location.hash = '#login';
-              }}
-              className="mr-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors duration-200"
-            >
-              <i className="fas fa-sign-out-alt mr-2"></i>Logout
-            </button>
-          ) : (
-            <>
-              <button onClick={() => window.location.hash = '#signup'} className="mr-4 text-white hover:text-gray-300">Sign Up</button>
-              <button onClick={() => window.location.hash = '#login'} className="mr-4 text-white hover:text-gray-300">Login</button>
-            </>
-          )}
-        </div>
-      </div>
-    </nav>
-  );
-};
+      );
+    };
 
-// Optional: expose globally if other scripts need it
-window.NavBar = NavBar;
+    // Optional: expose globally if other scripts need it
+    window.NavBar = NavBar;
 
-const PendingApproval = () => {
-    const [animate, setAnimate] = React.useState(false);
-    const [userEmail, setUserEmail] = React.useState('');
-    
-    React.useEffect(() => {
+    const PendingApproval = () => {
+      const [animate, setAnimate] = React.useState(false);
+      const [userEmail, setUserEmail] = React.useState('');
+
+      React.useEffect(() => {
         setAnimate(true);
         // Try to get user email from localStorage (if saved during signup)
         const storedEmail = localStorage.getItem('userEmail') || '';
         setUserEmail(storedEmail);
-    }, []);
-    
-    return (
+      }, []);
+
+      return (
         <div style={{
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
-            fontFamily: 'Arial, sans-serif'
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '20px',
+          fontFamily: 'Arial, sans-serif'
         }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '500px',
+            background: 'white',
+            borderRadius: '18px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.12)',
+            overflow: 'hidden',
+            transform: animate ? 'scale(1)' : 'scale(0.95)',
+            opacity: animate ? 1 : 0,
+            transition: 'all 0.4s ease-out'
+          }}>
+            {/* Header Section */}
             <div style={{
-                width: '100%',
-                maxWidth: '500px',
-                background: 'white',
-                borderRadius: '18px',
-                boxShadow: '0 10px 40px rgba(0,0,0,0.12)',
-                overflow: 'hidden',
-                transform: animate ? 'scale(1)' : 'scale(0.95)',
-                opacity: animate ? 1 : 0,
-                transition: 'all 0.4s ease-out'
+              background: 'linear-gradient(135deg, #3498db 0%, #2563eb 100%)',
+              padding: '35px 30px',
+              textAlign: 'center',
+              position: 'relative'
             }}>
-                {/* Header Section */}
-                <div style={{
-                    background: 'linear-gradient(135deg, #3498db 0%, #2563eb 100%)',
-                    padding: '35px 30px',
-                    textAlign: 'center',
-                    position: 'relative'
-                }}>
-                    {/* Animated Clock Icon */}
-                    <div style={{
-                        width: '80px',
-                        height: '80px',
-                        margin: '0 auto 15px',
-                        background: 'rgba(255,255,255,0.2)',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        border: '3px solid rgba(255,255,255,0.3)',
-                        animation: 'pulse 2s ease-in-out infinite'
-                    }}>
-                        <i className="fas fa-clock" style={{
-                            fontSize: '40px',
-                            color: 'white'
-                        }}></i>
-                    </div>
-                    
-                    <h2 style={{
-                        fontSize: '28px',
-                        fontWeight: '700',
-                        color: 'white',
-                        margin: '0 0 8px 0'
-                    }}>
-                        Pending Approval
-                    </h2>
-                    
-                    <p style={{
-                        color: 'rgba(255,255,255,0.95)',
-                        fontSize: '15px',
-                        margin: '0'
-                    }}>
-                        Your account is under review
-                    </p>
-                </div>
+              {/* Animated Clock Icon */}
+              <div style={{
+                width: '80px',
+                height: '80px',
+                margin: '0 auto 15px',
+                background: 'rgba(255,255,255,0.2)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '3px solid rgba(255,255,255,0.3)',
+                animation: 'pulse 2s ease-in-out infinite'
+              }}>
+                <i className="fas fa-clock" style={{
+                  fontSize: '40px',
+                  color: 'white'
+                }}></i>
+              </div>
 
-                {/* Content Section */}
-                <div style={{ padding: '30px' }}>
-                    {/* Status Card */}
-                    <div style={{
-                        background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-                        borderRadius: '12px',
-                        padding: '20px',
-                        marginBottom: '25px',
-                        border: '2px solid #fbbf24'
-                    }}>
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px'
-                        }}>
-                            <div style={{
-                                fontSize: '28px'
-                            }}>⏳</div>
-                            <div style={{ flex: 1, textAlign: 'left' }}>
-                                <h3 style={{
-                                    fontSize: '16px',
-                                    fontWeight: '700',
-                                    color: '#92400e',
-                                    margin: '0 0 4px 0'
-                                }}>
-                                    Awaiting Admin Review
-                                </h3>
-                                <p style={{
-                                    fontSize: '13px',
-                                    color: '#b45309',
-                                    margin: '0'
-                                }}>
-                                    Usually takes 24-48 hours
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+              <h2 style={{
+                fontSize: '28px',
+                fontWeight: '700',
+                color: 'white',
+                margin: '0 0 8px 0'
+              }}>
+                Pending Approval
+              </h2>
 
-                    {/* Information List */}
-                    <div style={{ marginBottom: '25px' }}>
-                        <h4 style={{
-                            fontSize: '15px',
-                            fontWeight: '600',
-                            color: '#2c3e50',
-                            marginBottom: '15px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px'
-                        }}>
-                            <i className="fas fa-info-circle" style={{ color: '#3498db' }}></i>
-                            What happens next?
-                        </h4>
-                        
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '12px'
-                        }}>
-                            {[
-                                { icon: '📧', text: 'Admin reviews your registration' },
-                                { icon: '✅', text: 'Email notification when approved' },
-                                { icon: '👁️', text: 'Access to view student CVs' }
-                            ].map((item, idx) => (
-                                <div key={idx} style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    padding: '12px',
-                                    background: '#f9fafb',
-                                    borderRadius: '10px',
-                                    border: '1px solid #e5e7eb'
-                                }}>
-                                    <span style={{ fontSize: '20px' }}>{item.icon}</span>
-                                    <p style={{
-                                        fontSize: '14px',
-                                        color: '#4b5563',
-                                        margin: '0'
-                                    }}>
-                                        {item.text}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Help Section */}
-                    <div style={{
-                        background: '#eff6ff',
-                        borderRadius: '12px',
-                        padding: '18px',
-                        border: '1px solid #bfdbfe',
-                        marginBottom: '20px'
-                    }}>
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                            marginBottom: '10px'
-                        }}>
-                            <i className="fas fa-question-circle" style={{
-                                fontSize: '20px',
-                                color: '#3498db'
-                            }}></i>
-                            <h4 style={{
-                                fontSize: '15px',
-                                fontWeight: '600',
-                                color: '#1e40af',
-                                margin: '0'
-                            }}>
-                                Need Help?
-                            </h4>
-                        </div>
-                        <p style={{
-                            fontSize: '13px',
-                            color: '#2563eb',
-                            margin: '0 0 10px 30px',
-                            lineHeight: '1.5'
-                        }}>
-                            If you haven't received approval within 48 hours, contact the Co-op Office.
-                        </p>
-                        <div style={{ marginLeft: '30px' }}>
-                            <a href="mailto:" style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '8px 14px',
-                                background: 'white',
-                                borderRadius: '8px',
-                                color: '#3498db',
-                                textDecoration: 'none',
-                                fontSize: '13px',
-                                fontWeight: '600',
-                                border: '2px solid #3498db',
-                                transition: 'all 0.2s'
-                            }} onMouseEnter={(e) => {
-                                e.currentTarget.style.background = '#3498db';
-                                e.currentTarget.style.color = 'white';
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                            }} onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'white';
-                                e.currentTarget.style.color = '#3498db';
-                                e.currentTarget.style.transform = 'translateY(0)';
-                            }}>
-                                <i className="fas fa-envelope"></i>
-                                Contact Support
-                            </a>
-                        </div>
-                    </div>
-
-                    {/* Back to Home Button */}
-                    <button onClick={() => window.location.hash = '#cv-cards'} style={{
-                        width: '100%',
-                        padding: '14px',
-                        background: 'linear-gradient(135deg, #3498db 0%, #2563eb 100%)',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '10px',
-                        fontSize: '15px',
-                        fontWeight: '700',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        boxShadow: '0 4px 12px rgba(52, 152, 219, 0.3)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px'
-                    }} onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-2px)';
-                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(52, 152, 219, 0.4)';
-                    }} onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(52, 152, 219, 0.3)';
-                    }}>
-                        <i className="fas fa-home"></i>
-                        Back to CVBook Home
-                    </button>
-                </div>
+              <p style={{
+                color: 'rgba(255,255,255,0.95)',
+                fontSize: '15px',
+                margin: '0'
+              }}>
+                Your account is under review
+              </p>
             </div>
 
-            <style>{`
+            {/* Content Section */}
+            <div style={{ padding: '30px' }}>
+              {/* Status Card */}
+              <div style={{
+                background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+                borderRadius: '12px',
+                padding: '20px',
+                marginBottom: '25px',
+                border: '2px solid #fbbf24'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <div style={{
+                    fontSize: '32px',
+                    color: '#b45309',
+                    marginBottom: '5px'
+                  }}>
+                    <i className="fas fa-hourglass-half"></i>
+                  </div>
+                  <div style={{ flex: 1, textAlign: 'left' }}>
+                    <h3 style={{
+                      fontSize: '16px',
+                      fontWeight: '700',
+                      color: '#92400e',
+                      margin: '0 0 4px 0'
+                    }}>
+                      Awaiting Admin Review
+                    </h3>
+                    <p style={{
+                      fontSize: '13px',
+                      color: '#b45309',
+                      margin: '0'
+                    }}>
+                      Usually takes 24-48 hours
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Information List */}
+              <div style={{ marginBottom: '25px' }}>
+                <h4 style={{
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  color: '#2c3e50',
+                  marginBottom: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <i className="fas fa-info-circle" style={{ color: '#3498db' }}></i>
+                  What happens next?
+                </h4>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px'
+                }}>
+                  {[
+                    { icon: <i className="fas fa-envelope"></i>, text: 'Admin reviews your registration' },
+                    { icon: <i className="fas fa-check-circle"></i>, text: 'Email notification when approved' },
+                    { icon: <i className="fas fa-eye"></i>, text: 'Access to view student CVs' }
+                  ].map((item, idx) => (
+                    <div key={idx} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px',
+                      background: '#f9fafb',
+                      borderRadius: '10px',
+                      border: '1px solid #e5e7eb'
+                    }}>
+                      <span style={{ fontSize: '20px' }}>{item.icon}</span>
+                      <p style={{
+                        fontSize: '14px',
+                        color: '#4b5563',
+                        margin: '0'
+                      }}>
+                        {item.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Help Section */}
+              <div style={{
+                background: '#eff6ff',
+                borderRadius: '12px',
+                padding: '18px',
+                border: '1px solid #bfdbfe',
+                marginBottom: '20px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  marginBottom: '10px'
+                }}>
+                  <i className="fas fa-question-circle" style={{
+                    fontSize: '20px',
+                    color: '#3498db'
+                  }}></i>
+                  <h4 style={{
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    color: '#1e40af',
+                    margin: '0'
+                  }}>
+                    Need Help?
+                  </h4>
+                </div>
+                <p style={{
+                  fontSize: '13px',
+                  color: '#2563eb',
+                  margin: '0 0 10px 30px',
+                  lineHeight: '1.5'
+                }}>
+                  If you haven't received approval within 48 hours, contact the Co-op Office.
+                </p>
+                <div style={{ marginLeft: '30px' }}>
+                  <a href="mailto:" style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 14px',
+                    background: 'white',
+                    borderRadius: '8px',
+                    color: '#3498db',
+                    textDecoration: 'none',
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    border: '2px solid #3498db',
+                    transition: 'all 0.2s'
+                  }} onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#3498db';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }} onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'white';
+                    e.currentTarget.style.color = '#3498db';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}>
+                    <i className="fas fa-envelope"></i>
+                    Contact Support
+                  </a>
+                </div>
+              </div>
+
+              {/* Back to Home Button */}
+              <button onClick={() => window.location.hash = '#cv-cards'} style={{
+                width: '100%',
+                padding: '14px',
+                background: 'linear-gradient(135deg, #3498db 0%, #2563eb 100%)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '15px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                boxShadow: '0 4px 12px rgba(52, 152, 219, 0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }} onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(52, 152, 219, 0.4)';
+              }} onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(52, 152, 219, 0.3)';
+              }}>
+                <i className="fas fa-home"></i>
+                Back to CVBook Home
+              </button>
+            </div>
+          </div>
+
+          <style>{`
                 @keyframes pulse {
                     0%, 100% {
                         transform: scale(1);
@@ -616,1036 +1290,1113 @@ const PendingApproval = () => {
                 }
             `}</style>
         </div>
-    );
-};
+      );
+    };
 
-// ===== Sign Up =====
-const SignUp = () => {
-    const [formData, setFormData] = useState({
+    // ===== Sign Up =====
+    const SignUp = () => {
+      const [formData, setFormData] = useState({
         first_name: "", last_name: "", email: "", username: "", password: ""
-    });
-    const [message, setMessage] = useState("");
-    const [loading, setLoading] = useState(false);
+      });
+      const [message, setMessage] = useState("");
+      const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch("/api/auth/signup/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken")
-                },
-                body: JSON.stringify(formData),
-            });
-            const data = await response.json();
-            if (response.status === 201) {
-                window.location.hash = "#pending-approval";
-            } else if (response.status === 400) {
-                setMessage(data.error || "❌ Invalid information. Please check all fields and try again.");
-            } else if (response.status === 409) {
-                setMessage("❌ Username or email already exists. Please try different credentials.");
-            } else if (response.status === 500) {
-                setMessage("❌ Server error. Please try again later.");
-            } else {
-                setMessage(data.error || "❌ Registration failed. Please check your information and try again.");
-            }
+          const response = await fetch("/api/auth/signup/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify(formData),
+          });
+          const data = await response.json();
+          if (response.status === 201) {
+            window.location.hash = "#pending-approval";
+          } else if (response.status === 400) {
+            setMessage(data.error || "❌ Invalid information. Please check all fields and try again.");
+          } else if (response.status === 409) {
+            setMessage("❌ Username or email already exists. Please try different credentials.");
+          } else if (response.status === 500) {
+            setMessage("❌ Server error. Please try again later.");
+          } else {
+            setMessage(data.error || "❌ Registration failed. Please check your information and try again.");
+          }
         } catch (error) {
-            console.error('Signup error:', error);
-            setMessage("Network error. Please check your connection and try again.");
+          console.error('Signup error:', error);
+          setMessage("Network error. Please check your connection and try again.");
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    };
+      };
 
-    return (
+      return (
         <div style={{ position: 'relative', minHeight: '100vh' }}>
-            <div style={{
-                backgroundImage: 'url(/static/cv/foto1.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'blur(8px)',
-                WebkitFilter: 'blur(8px)',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 1
-            }} />
-            
-            <div className="container-fluid" style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-                <div className="row w-100">
-                    <div className="col-xl-8 col-lg-6 col-md-5 col-sm-4 d-none d-sm-block"></div>
-                    <div className="col-xl-4 col-lg-6 col-md-7 col-sm-8 col-12">
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            backdropFilter: 'blur(10px)',
-                            WebkitBackdropFilter: 'blur(10px)',
-                            padding: '40px',
-                            borderRadius: '20px',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-                            overflowY: 'auto',
-                            maxHeight: '95vh',
-                            margin: '20px 0'
-                        }}>
-                            <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-                                <a href="/" style={{ display: 'inline-block' }}>
-                                    <img src="/static/cv/UCA-Logo-Centre-whiteframe.png" alt="UCA Logo" style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }} />
-                                </a>
+          <div style={{
+            backgroundImage: 'url(/static/cv/foto1.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(8px)',
+            WebkitFilter: 'blur(8px)',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 1
+          }} />
+
+          <div className="container-fluid" style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+            <div className="row w-100">
+              <div className="col-xl-8 col-lg-6 col-md-5 col-sm-4 d-none d-sm-block"></div>
+              <div className="col-xl-4 col-lg-6 col-md-7 col-sm-8 col-12">
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  padding: '40px',
+                  borderRadius: '20px',
+                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+                  overflowY: 'auto',
+                  maxHeight: '95vh',
+                  margin: '20px 0'
+                }}>
+                  <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+                    <a href="/" style={{ display: 'inline-block' }}>
+                      <img src="/static/cv/UCA-Logo-Centre-whiteframe.png" alt="UCA Logo" style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }} />
+                    </a>
+                  </div>
+
+                  <div style={{ borderBottom: '3px solid #e0e0e0', margin: '0 0 30px 0' }} />
+
+                  <div>
+                    <div style={{ marginBottom: '25px', textAlign: 'center' }}>
+                      <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1a1a1a', margin: '0', letterSpacing: '-0.5px' }}>Sign Up</h2>
+                      <p style={{ color: '#6c757d', fontSize: '14px', marginTop: '8px' }}>Create your account to get started</p>
                     </div>
-                            
-                            <div style={{ borderBottom: '3px solid #e0e0e0', margin: '0 0 30px 0' }} />
-                            
-                            <div>
-                                <div style={{ marginBottom: '25px', textAlign: 'center' }}>
-                                    <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1a1a1a', margin: '0', letterSpacing: '-0.5px' }}>Sign Up</h2>
-                                    <p style={{ color: '#6c757d', fontSize: '14px', marginTop: '8px' }}>Create your account to get started</p>
-                                </div>
 
-                                {message && (
-                                    <div style={{
-                                        padding: '12px 15px',
-                                        marginBottom: '20px',
-                                        borderRadius: '8px',
-                                        backgroundColor: message.includes("successful") ? '#d1e7dd' : '#f8d7da',
-                                        border: message.includes("successful") ? '1px solid #badbcc' : '1px solid #f5c2c7',
-                                        color: message.includes("successful") ? '#0f5132' : '#842029'
-                                    }}>
-                                        {message}
-                                    </div>
-                                )}
+                    {message && (
+                      <div style={{
+                        padding: '12px 15px',
+                        marginBottom: '20px',
+                        borderRadius: '8px',
+                        backgroundColor: message.includes("successful") ? '#d1e7dd' : '#f8d7da',
+                        border: message.includes("successful") ? '1px solid #badbcc' : '1px solid #f5c2c7',
+                        color: message.includes("successful") ? '#0f5132' : '#842029'
+                      }}>
+                        {message}
+                      </div>
+                    )}
 
-                                <form onSubmit={handleSubmit}>
-                                    <div className="row" style={{ margin: '0 -8px 20px -8px' }}>
-                                        <div className="col-md-6" style={{ padding: '0 8px', marginBottom: '15px' }}>
-                                            <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                                <i className="fas fa-id-card" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                                First Name
-                                            </label>
-                            <input
-                                                type="text"
-                                                placeholder="Enter first name"
-                                value={formData.first_name}
-                                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '12px 15px',
-                                                    border: '2px solid #e0e0e0',
-                                                    borderRadius: '10px',
-                                                    fontSize: '15px',
-                                                    transition: 'all 0.3s ease',
-                                                    backgroundColor: '#f8f9fa'
-                                                }}
-                                                onFocus={(e) => {
-                                                    e.target.style.borderColor = '#007bff';
-                                                    e.target.style.backgroundColor = '#fff';
-                                                    e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                                }}
-                                                onBlur={(e) => {
-                                                    e.target.style.borderColor = '#e0e0e0';
-                                                    e.target.style.backgroundColor = '#f8f9fa';
-                                                    e.target.style.boxShadow = 'none';
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="col-md-6" style={{ padding: '0 8px', marginBottom: '15px' }}>
-                                            <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                                <i className="fas fa-id-card" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                                Last Name
-                                            </label>
-                            <input
-                                                type="text"
-                                                placeholder="Enter last name"
-                                value={formData.last_name}
-                                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                                                style={{
-                                                    width: '100%',
-                                                    padding: '12px 15px',
-                                                    border: '2px solid #e0e0e0',
-                                                    borderRadius: '10px',
-                                                    fontSize: '15px',
-                                                    transition: 'all 0.3s ease',
-                                                    backgroundColor: '#f8f9fa'
-                                                }}
-                                                onFocus={(e) => {
-                                                    e.target.style.borderColor = '#007bff';
-                                                    e.target.style.backgroundColor = '#fff';
-                                                    e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                                }}
-                                                onBlur={(e) => {
-                                                    e.target.style.borderColor = '#e0e0e0';
-                                                    e.target.style.backgroundColor = '#f8f9fa';
-                                                    e.target.style.boxShadow = 'none';
-                                                }}
-                            />
+                    <form onSubmit={handleSubmit}>
+                      <div className="row" style={{ margin: '0 -8px 20px -8px' }}>
+                        <div className="col-md-6" style={{ padding: '0 8px', marginBottom: '15px' }}>
+                          <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                            <i className="fas fa-id-card" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                            First Name
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter first name"
+                            value={formData.first_name}
+                            onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                            style={{
+                              width: '100%',
+                              padding: '12px 15px',
+                              border: '2px solid #e0e0e0',
+                              borderRadius: '10px',
+                              fontSize: '15px',
+                              transition: 'all 0.3s ease',
+                              backgroundColor: '#f8f9fa'
+                            }}
+                            onFocus={(e) => {
+                              e.target.style.borderColor = '#007bff';
+                              e.target.style.backgroundColor = '#fff';
+                              e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                            }}
+                            onBlur={(e) => {
+                              e.target.style.borderColor = '#e0e0e0';
+                              e.target.style.backgroundColor = '#f8f9fa';
+                              e.target.style.boxShadow = 'none';
+                            }}
+                          />
                         </div>
-                                    </div>
+                        <div className="col-md-6" style={{ padding: '0 8px', marginBottom: '15px' }}>
+                          <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                            <i className="fas fa-id-card" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                            Last Name
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter last name"
+                            value={formData.last_name}
+                            onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                            style={{
+                              width: '100%',
+                              padding: '12px 15px',
+                              border: '2px solid #e0e0e0',
+                              borderRadius: '10px',
+                              fontSize: '15px',
+                              transition: 'all 0.3s ease',
+                              backgroundColor: '#f8f9fa'
+                            }}
+                            onFocus={(e) => {
+                              e.target.style.borderColor = '#007bff';
+                              e.target.style.backgroundColor = '#fff';
+                              e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                            }}
+                            onBlur={(e) => {
+                              e.target.style.borderColor = '#e0e0e0';
+                              e.target.style.backgroundColor = '#f8f9fa';
+                              e.target.style.boxShadow = 'none';
+                            }}
+                          />
+                        </div>
+                      </div>
 
-                                    <div style={{ marginBottom: '18px' }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Email <span style={{ color: '#dc3545' }}>*</span>
-                                        </label>
+                      <div style={{ marginBottom: '18px' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                          <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                          Email <span style={{ color: '#dc3545' }}>*</span>
+                        </label>
                         <input
-                                            type="email"
-                                            placeholder="your.email@example.com"
-                                            required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            style={{
-                                                width: '100%',
-                                                padding: '13px 16px',
-                                                border: '2px solid #e0e0e0',
-                                                borderRadius: '10px',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                backgroundColor: '#f8f9fa'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007bff';
-                                                e.target.style.backgroundColor = '#fff';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#e0e0e0';
-                                                e.target.style.backgroundColor = '#f8f9fa';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                    </div>
+                          type="email"
+                          placeholder="your.email@example.com"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          style={{
+                            width: '100%',
+                            padding: '13px 16px',
+                            border: '2px solid #e0e0e0',
+                            borderRadius: '10px',
+                            fontSize: '15px',
+                            transition: 'all 0.3s ease',
+                            backgroundColor: '#f8f9fa'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#007bff';
+                            e.target.style.backgroundColor = '#fff';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#e0e0e0';
+                            e.target.style.backgroundColor = '#f8f9fa';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
 
-                                    <div style={{ marginBottom: '18px' }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-building" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Representing company <span style={{ color: '#dc3545' }}>*</span>
-                                        </label>
+                      <div style={{ marginBottom: '18px' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                          <i className="fas fa-building" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                          Representing company <span style={{ color: '#dc3545' }}>*</span>
+                        </label>
                         <input
-                                            type="text"
-                                            placeholder="Enter company name"
-                                            required
-                            value={formData.username}
-                            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                                            style={{
-                                                width: '100%',
-                                                padding: '13px 16px',
-                                                border: '2px solid #e0e0e0',
-                                                borderRadius: '10px',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                backgroundColor: '#f8f9fa'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007bff';
-                                                e.target.style.backgroundColor = '#fff';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#e0e0e0';
-                                                e.target.style.backgroundColor = '#f8f9fa';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                    </div>
+                          type="text"
+                          placeholder="Enter company name"
+                          required
+                          value={formData.username}
+                          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                          style={{
+                            width: '100%',
+                            padding: '13px 16px',
+                            border: '2px solid #e0e0e0',
+                            borderRadius: '10px',
+                            fontSize: '15px',
+                            transition: 'all 0.3s ease',
+                            backgroundColor: '#f8f9fa'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#007bff';
+                            e.target.style.backgroundColor = '#fff';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#e0e0e0';
+                            e.target.style.backgroundColor = '#f8f9fa';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
 
-                                    <div style={{ marginBottom: '25px' }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-lock" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Password <span style={{ color: '#dc3545' }}>*</span>
-                                        </label>
+                      <div style={{ marginBottom: '25px' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                          <i className="fas fa-lock" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                          Password <span style={{ color: '#dc3545' }}>*</span>
+                        </label>
                         <input
-                                            type="password"
-                                            placeholder="Create a strong password"
-                                            required
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                            style={{
-                                                width: '100%',
-                                                padding: '13px 16px',
-                                                border: '2px solid #e0e0e0',
-                                                borderRadius: '10px',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                backgroundColor: '#f8f9fa'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007bff';
-                                                e.target.style.backgroundColor = '#fff';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#e0e0e0';
-                                                e.target.style.backgroundColor = '#f8f9fa';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                        <small style={{ color: '#6c757d', fontSize: '12px', marginTop: '6px', display: 'block' }}>
-                                            Must be at least 8 characters with uppercase, lowercase, number, and special character
-                                        </small>
-                                    </div>
+                          type="password"
+                          placeholder="Create a strong password"
+                          required
+                          value={formData.password}
+                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          style={{
+                            width: '100%',
+                            padding: '13px 16px',
+                            border: '2px solid #e0e0e0',
+                            borderRadius: '10px',
+                            fontSize: '15px',
+                            transition: 'all 0.3s ease',
+                            backgroundColor: '#f8f9fa'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#007bff';
+                            e.target.style.backgroundColor = '#fff';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#e0e0e0';
+                            e.target.style.backgroundColor = '#f8f9fa';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                        <small style={{ color: '#6c757d', fontSize: '12px', marginTop: '6px', display: 'block' }}>
+                          Must be at least 8 characters with uppercase, lowercase, number, and special character
+                        </small>
+                      </div>
 
-                                    <button
-                                        type="submit"
-                                        disabled={loading}
-                                        style={{
-                                            background: loading ? '#6c757d' : 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
-                                            border: 'none',
-                                            padding: '15px',
-                                            fontSize: '17px',
-                                            fontWeight: '700',
-                                            borderRadius: '12px',
-                                            width: '100%',
-                                            color: 'white',
-                                            cursor: loading ? 'not-allowed' : 'pointer',
-                                            transition: 'all 0.3s ease',
-                                            boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
-                                            opacity: loading ? 0.7 : 1
-                                        }}
-                                        onMouseOver={(e) => {
-                                            if (!loading) {
-                                                e.target.style.transform = 'translateY(-2px)';
-                                                e.target.style.boxShadow = '0 6px 25px rgba(0, 123, 255, 0.5)';
-                                            }
-                                        }}
-                                        onMouseOut={(e) => {
-                                            if (!loading) {
-                                                e.target.style.transform = 'translateY(0)';
-                                                e.target.style.boxShadow = '0 4px 15px rgba(0, 123, 255, 0.3)';
-                                            }
-                                        }}
-                                    >
-                                        {loading ? (
-                                            <><i className="fas fa-spinner fa-spin"></i> Creating account...</>
-                                        ) : (
-                                            <><i className="fas fa-user-plus"></i> Create Account</>
-                                        )}
-                                    </button>
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        style={{
+                          background: loading ? '#6c757d' : 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+                          border: 'none',
+                          padding: '15px',
+                          fontSize: '17px',
+                          fontWeight: '700',
+                          borderRadius: '12px',
+                          width: '100%',
+                          color: 'white',
+                          cursor: loading ? 'not-allowed' : 'pointer',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                          opacity: loading ? 0.7 : 1
+                        }}
+                        onMouseOver={(e) => {
+                          if (!loading) {
+                            e.target.style.transform = 'translateY(-2px)';
+                            e.target.style.boxShadow = '0 6px 25px rgba(0, 123, 255, 0.5)';
+                          }
+                        }}
+                        onMouseOut={(e) => {
+                          if (!loading) {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 4px 15px rgba(0, 123, 255, 0.3)';
+                          }
+                        }}
+                      >
+                        {loading ? (
+                          <><i className="fas fa-spinner fa-spin"></i> Creating account...</>
+                        ) : (
+                          <><i className="fas fa-user-plus"></i> Create Account</>
+                        )}
+                      </button>
                     </form>
 
-                                <div style={{ textAlign: 'center', marginTop: '25px', padding: '20px 0 0 0', borderTop: '1px solid #e0e0e0' }}>
-                                    <p style={{ color: '#6c757d', fontSize: '14px', margin: '0' }}>
-                                        Already have an account? <a href="#login" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Log in here</a>
-                                    </p>
+                    <div style={{ textAlign: 'center', marginTop: '25px', padding: '20px 0 0 0', borderTop: '1px solid #e0e0e0' }}>
+                      <p style={{ color: '#6c757d', fontSize: '14px', margin: '0' }}>
+                        Already have an account? <a href="#login" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Log in here</a>
+                      </p>
                     </div>
+                  </div>
                 </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-    );
-};
-
-// ===== Login =====
-const Login = ({ setToken }) => {
-    const [formData, setFormData] = useState({ email: "", password: "" });
-    const [message, setMessage] = useState("");
-    const [loading, setLoading] = useState(false);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const response = await fetch("/api/auth/signin/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": getCookie("csrftoken")
-                },
-                body: JSON.stringify(formData),
-            });
-            const data = await response.json();
-            if (response.status === 403) {
-                setMessage(data.error || "Account pending approval. Please wait for admin approval.");
-                setTimeout(() => (window.location.hash = "#pending-approval"), 1500);
-            } else if (response.ok) {
-                // Since JWT is disabled, use username as token identifier
-                const userToken = data.user?.username || 'logged_in';
-                localStorage.setItem("token", userToken);
-                localStorage.setItem("user", JSON.stringify(data.user));
-                setToken(userToken);
-                window.location.hash = "#cv-cards";
-            } else if (response.status === 401) {
-                setMessage("❌ Wrong credentials! Please check your username and password.");
-            } else if (response.status === 404) {
-                setMessage("❌ Service not found. Please contact support.");
-            } else if (response.status === 500) {
-                setMessage("❌ Server error. Please try again later.");
-            } else {
-                setMessage(data.error || "❌ Login failed. Please check your credentials and try again.");
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-            setMessage("Network error. Please check your connection and try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleLostPassword = () => {
-        window.location.href = "/api/auth/password/reset/request/";
-    };
-
-    return (
-        <div style={{ position: 'relative', minHeight: '100vh' }}>
-            <div style={{
-                backgroundImage: 'url(/static/cv/foto1.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'blur(8px)',
-                WebkitFilter: 'blur(8px)',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 1
-            }} />
-            
-            <div className="container-fluid" style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-                <div className="row w-100">
-                    <div className="col-xl-8 col-lg-6 col-md-5 col-sm-4 d-none d-sm-block"></div>
-                    <div className="col-xl-4 col-lg-6 col-md-7 col-sm-8 col-12">
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.95)',
-                            backdropFilter: 'blur(10px)',
-                            WebkitBackdropFilter: 'blur(10px)',
-                            padding: '50px 40px',
-                            borderRadius: '20px',
-                            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-                            overflowY: 'auto',
-                            maxHeight: '95vh',
-                            margin: '20px 0'
-                        }}>
-                            <div style={{ textAlign: 'center', marginBottom: '25px' }}>
-                                <a href="/" style={{ display: 'inline-block' }}>
-                                    <img src="/static/cv/UCA-Logo-Centre-whiteframe.png" alt="UCA Logo" style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }} />
-                                </a>
-                    </div>
-                            
-                            <div style={{ borderBottom: '3px solid #e0e0e0', margin: '0 0 30px 0' }} />
-                            
-                            <div>
-                                <div style={{ marginBottom: '25px', textAlign: 'center' }}>
-                                    <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1a1a1a', margin: '0', letterSpacing: '-0.5px' }}>Welcome Back</h2>
-                                    <p style={{ color: '#6c757d', fontSize: '14px', marginTop: '8px' }}>Log in to continue to your account</p>
-                                </div>
-
-                                {message && (
-                                    <div style={{
-                                        padding: '12px 15px',
-                                        marginBottom: '20px',
-                                        borderRadius: '8px',
-                                        backgroundColor: message.includes("successful") ? '#d1e7dd' : '#f8d7da',
-                                        border: message.includes("successful") ? '1px solid #badbcc' : '1px solid #f5c2c7',
-                                        color: message.includes("successful") ? '#0f5132' : '#842029'
-                                    }}>
-                                        {message}
-                                    </div>
-                                )}
-
-                                <form onSubmit={handleSubmit}>
-                                    <div style={{ marginBottom: '20px' }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Email <span style={{ color: '#dc3545' }}>*</span>
-                                        </label>
-                        <input
-                            type="email"
-                                            placeholder="Enter your email"
-                            required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            style={{
-                                                width: '100%',
-                                                padding: '13px 16px',
-                                                border: '2px solid #e0e0e0',
-                                                borderRadius: '10px',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                backgroundColor: '#f8f9fa'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007bff';
-                                                e.target.style.backgroundColor = '#fff';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#e0e0e0';
-                                                e.target.style.backgroundColor = '#f8f9fa';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div style={{ marginBottom: '15px' }}>
-                                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
-                                            <i className="fas fa-lock" style={{ marginRight: '8px', color: '#007bff' }}></i>
-                                            Password <span style={{ color: '#dc3545' }}>*</span>
-                                        </label>
-                        <input
-                            type="password"
-                                            placeholder="Enter your password"
-                            required
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                            style={{
-                                                width: '100%',
-                                                padding: '13px 16px',
-                                                border: '2px solid #e0e0e0',
-                                                borderRadius: '10px',
-                                                fontSize: '15px',
-                                                transition: 'all 0.3s ease',
-                                                backgroundColor: '#f8f9fa'
-                                            }}
-                                            onFocus={(e) => {
-                                                e.target.style.borderColor = '#007bff';
-                                                e.target.style.backgroundColor = '#fff';
-                                                e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-                                            }}
-                                            onBlur={(e) => {
-                                                e.target.style.borderColor = '#e0e0e0';
-                                                e.target.style.backgroundColor = '#f8f9fa';
-                                                e.target.style.boxShadow = 'none';
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div style={{ textAlign: 'right', marginBottom: '25px' }}>
-                                        <a 
-                                            href="#password/reset" 
-                                            onClick={(e) => { e.preventDefault(); handleLostPassword(); }}
-                                            style={{ color: '#007bff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', transition: 'color 0.2s' }}
-                                            onMouseOver={(e) => e.target.style.color = '#0056b3'}
-                                            onMouseOut={(e) => e.target.style.color = '#007bff'}
-                                        >
-                                            <i className="fas fa-key" style={{ marginRight: '5px' }}></i>
-                                            Forgot password?
-                                        </a>
-                                    </div>
-
-                                    <button
-                                        type="submit"
-                                        disabled={loading}
-                                        style={{
-                                            background: loading ? '#6c757d' : 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
-                                            border: 'none',
-                                            padding: '15px',
-                                            fontSize: '17px',
-                                            fontWeight: '700',
-                                            borderRadius: '12px',
-                                            width: '100%',
-                                            color: 'white',
-                                            cursor: loading ? 'not-allowed' : 'pointer',
-                                            transition: 'all 0.3s ease',
-                                            boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
-                                            opacity: loading ? 0.7 : 1
-                                        }}
-                                        onMouseOver={(e) => {
-                                            if (!loading) {
-                                                e.target.style.transform = 'translateY(-2px)';
-                                                e.target.style.boxShadow = '0 6px 25px rgba(0, 123, 255, 0.5)';
-                                            }
-                                        }}
-                                        onMouseOut={(e) => {
-                                            if (!loading) {
-                                                e.target.style.transform = 'translateY(0)';
-                                                e.target.style.boxShadow = '0 4px 15px rgba(0, 123, 255, 0.3)';
-                                            }
-                                        }}
-                                    >
-                                        {loading ? (
-                                            <><i className="fas fa-spinner fa-spin"></i> Logging in...</>
-                                        ) : (
-                                            <><i className="fas fa-sign-in-alt"></i> Log In</>
-                                        )}
-                        </button>
-                    </form>
-
-                                <div style={{ textAlign: 'center', marginTop: '25px', padding: '20px 0 0 0', borderTop: '1px solid #e0e0e0' }}>
-                                    <p style={{ color: '#6c757d', fontSize: '14px', margin: '0' }}>
-                                        Don't have an account? <a href="#signup" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Sign up here</a>
-                                    </p>
-                    </div>
-                </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-/* ---------------- CVCards (filters fixed) ---------------- */
-const CVCards = ({ token, filters, setFilters }) => {
-  const [allCvs, setAllCvs] = useState([]);
-  const [cvs, setCvs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // helpers for matching
-  const normalize = (v) => String(v ?? "").toLowerCase().trim();
-  const splitList = (v) =>
-    Array.isArray(v)
-      ? v.map(normalize).filter(Boolean)
-      : String(v ?? "")
-          .split(/[,;|]/)
-          .map(normalize)
-          .filter(Boolean);
-
-  const majorMatches = (major, cat) => {
-    if (!cat || cat === "all") return true;
-    const m = normalize(major);
-    const map = {
-      "computer-science": ["computer science", "cs", "comp sci"],
-      "communication-and-media": ["communication and media", "communication", "media"],
-      "global-economics": ["global economics", "economics", "econ"],
-      "earth-and-environmental-sciences": ["earth and environmental sciences", "earth", "environmental"],
-    };
-    const needles = map[cat] || [normalize(cat.replace(/-/g, " "))];
-    return needles.some((n) => m.includes(n));
-  };
-
-  useEffect(() => {
-    const fetchCVs = async () => {
-      try {
-        // API has AllowAny permission, no auth header needed
-        const response = await fetch('/cv/api/list/');
-        if (response.status === 401) {
-          setError("❌ Session expired. Please log in again.");
-          localStorage.removeItem('token');
-          window.location.hash = '#login';
-          return;
-        }
-        if (response.status === 403) {
-          setError("❌ Access denied. Your account may need approval.");
-          return;
-        }
-        if (response.status === 404) {
-          setError("❌ CV service not found. Please contact support.");
-          return;
-        }
-        if (response.status === 500) {
-          setError("❌ Server error. Please try again later.");
-          return;
-        }
-        if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
-        
-        const data = await response.json();
-        const arr = Array.isArray(data) ? data : [];
-        setAllCvs(arr);
-        setCvs(arr);
-      } catch (err) {
-        console.error('CV fetch error:', err);
-        setError(`❌ Failed to load CVs: ${err.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCVs();
-  }, [token]);
-
-  useEffect(() => {
-    let filtered = [...allCvs];
-
-    // Category -> major
-    if (filters.category && filters.category !== 'all') {
-      filtered = filtered.filter(cv => majorMatches(cv.major, filters.category));
-    }
-
-    // Country (strict equality, case-insensitive)
-    if (filters.country) {
-      const needle = normalize(filters.country);
-      filtered = filtered.filter(cv => normalize(cv.country) === needle);
-    }
-
-    // Language (allow CSV/array)
-    if (filters.language) {
-      const needle = normalize(filters.language);
-      filtered = filtered.filter(cv => splitList(cv.language).includes(needle));
-    }
-
-    // Technical skill contains
-    if (filters.techSkill) {
-      const needle = normalize(filters.techSkill);
-      filtered = filtered.filter(cv => {
-        if (!cv.technical_skills || cv.technical_skills.length === 0) return false;
-        const techSkills = cv.technical_skills[0];
-        const allSkills = [
-          techSkills.programming_languages,
-          techSkills.frameworks_databases,
-          techSkills.tools,
-          techSkills.web_development,
-          techSkills.multimedia,
-          techSkills.network,
-          techSkills.operating_systems
-        ].filter(Boolean).join(',');
-        return normalize(allSkills).includes(needle);
-      });
-    }
-
-    // Non-technical skill contains (languages)
-    if (filters.nonTechSkill) {
-      const needle = normalize(filters.nonTechSkill);
-      filtered = filtered.filter(cv => {
-        if (!cv.languages || cv.languages.length === 0) return false;
-        const langNames = cv.languages.map(l => l.name).join(',');
-        return normalize(langNames).includes(needle);
-      });
-    }
-
-    // Search by full name
-    if (filters.searchTerm) {
-      const q = normalize(filters.searchTerm);
-      filtered = filtered.filter(cv => (`${normalize(cv.name)} ${normalize(cv.surname)}`).includes(q));
-    }
-
-    // Sort
-    if (filters.sortOrder === 'A-Z') {
-      filtered.sort((a, b) => normalize(a.name).localeCompare(normalize(b.name)));
-    } else if (filters.sortOrder === 'Z-A') {
-      filtered.sort((a, b) => normalize(b.name).localeCompare(normalize(a.name)));
-    }
-
-    setCvs(filtered);
-  }, [filters, allCvs]);
-
-  if (loading) return <div className="text-center text-white mt-10">Loading...</div>;
-  if (error) return <div className="text-center text-red-600 mt-10">Error: {error}</div>;
-
-  // Extract unique values from all CVs for dynamic dropdowns
-  const getUniqueValues = (field) => {
-    const values = new Set();
-    allCvs.forEach(cv => {
-      const val = cv[field];
-      if (val) {
-        // Handle comma-separated or array values
-        if (typeof val === 'string' && val.includes(',')) {
-          val.split(/[,;|]/).forEach(v => {
-            const trimmed = v.trim();
-            if (trimmed) values.add(trimmed);
-          });
-        } else if (Array.isArray(val)) {
-          val.forEach(v => {
-            const trimmed = String(v).trim();
-            if (trimmed) values.add(trimmed);
-          });
-        } else {
-          const trimmed = String(val).trim();
-          if (trimmed) values.add(trimmed);
-        }
-      }
-    });
-    return Array.from(values).sort();
-  };
-
-  // Get unique technical skills from all CVs
-  const getUniqueTechSkills = () => {
-    const values = new Set();
-    allCvs.forEach(cv => {
-      if (cv.technical_skills && cv.technical_skills.length > 0) {
-        const ts = cv.technical_skills[0];
-        [ts.programming_languages, ts.frameworks_databases, ts.tools, 
-         ts.web_development, ts.multimedia, ts.network, ts.operating_systems]
-          .filter(Boolean)
-          .forEach(field => {
-            field.split(/[,;|]/).forEach(skill => {
-              const trimmed = skill.trim();
-              if (trimmed) values.add(trimmed);
-            });
-          });
-      }
-    });
-    return Array.from(values).sort();
-  };
-
-  // Get unique non-technical skills (languages) from all CVs
-  const getUniqueNonTechSkills = () => {
-    const values = new Set();
-    allCvs.forEach(cv => {
-      if (cv.languages && cv.languages.length > 0) {
-        cv.languages.forEach(lang => {
-          if (lang.name) values.add(lang.name.trim());
-        });
-      }
-    });
-    return Array.from(values).sort();
-  };
-
-  const uniqueCountries = getUniqueValues('country');
-  const uniqueLanguages = getUniqueValues('language');
-  const uniqueTechSkills = getUniqueTechSkills();
-  const uniqueNonTechSkills = getUniqueNonTechSkills();
-
-  return (
-  <main className="main-content">
-    {/* Filters */}
-    <section className="filters-section">
-      <div className="filters-header">
-        <h2 className="filters-title">🔍 Search &amp; Filter Students</h2>
-        <div className="active-filters">
-          <span className="filter-badge">
-            {filters.category === 'all'
-              ? 'All Departments'
-              : filters.category.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
-          </span>
-          {filters.country && <span className="filter-badge">Country: {filters.country}</span>}
-          {filters.techSkill && <span className="filter-badge">Tech: {filters.techSkill}</span>}
-          {filters.nonTechSkill && <span className="filter-badge">Soft: {filters.nonTechSkill}</span>}
-        </div>
-      </div>
-
-      <div className="department-tabs filter-tabs">
-        {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
-          <button
-            key={cat}
-            className={`tab filter-tab ${filters.category === cat ? 'active' : ''}`}
-            onClick={() => setFilters({ ...filters, category: cat })}
-            type="button"
-          >
-            {cat === 'all' ? 'All Programs' : cat.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
-          </button>
-        ))}
-      </div>
-
-      <div className="filters-grid">
-        <div className="filter-group">
-          <label>🌍 Country</label>
-          <select
-            className="filter-select dropdown"
-            onChange={e => setFilters({ ...filters, country: e.target.value })}
-            value={filters.country || ''}
-          >
-            <option value="">All Countries</option>
-            {uniqueCountries.map(country => (
-              <option key={country} value={country}>{country}</option>
-            ))}
-          </select>
-        </div>
-
-
-        <div className="filter-group">
-          <label>⚡ Technical Skills</label>
-          <select
-            className="filter-select dropdown"
-            onChange={e => setFilters({ ...filters, techSkill: e.target.value })}
-            value={filters.techSkill || ''}
-          >
-            <option value="">All Technical Skills</option>
-            {uniqueTechSkills.map(skill => (
-              <option key={skill} value={skill}>{skill}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label>🤝 Non-technical Skills</label>
-          <select
-            className="filter-select dropdown"
-            onChange={e => setFilters({ ...filters, nonTechSkill: e.target.value })}
-            value={filters.nonTechSkill || ''}
-          >
-            <option value="">All Non-technical Skills</option>
-            {uniqueNonTechSkills.map(skill => (
-              <option key={skill} value={skill}>{skill}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Full-width search (no inline style) */}
-        <div className="search-container">
-          <div className="search-inner">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search by name…"
-              onChange={e => setFilters({ ...filters, searchTerm: e.target.value })}
-              value={filters.searchTerm || ''}
-            />
           </div>
         </div>
-      </div>
-    </section>
+      );
+    };
 
-    {/* Profiles grid — SIZE UNCHANGED */}
-    <div className="card-container profiles-grid">
-      {cvs.map(cv => {
-        const deptClass =
-          (cv.major || '').toLowerCase().includes('computer') ? 'cs' :
-          (cv.major || '').toLowerCase().includes('communication') ? 'cm' :
-          (cv.major || '').toLowerCase().includes('earth') ? 'es' :
-          (cv.major || '').toLowerCase().includes('econom') ? 'ge' : '';
+    // ===== Login =====
+    const Login = ({ setToken }) => {
+      const [formData, setFormData] = useState({ email: "", password: "" });
+      const [message, setMessage] = useState("");
+      const [loading, setLoading] = useState(false);
 
-        // Extract skills based on major - max 2 skills
-        const getSkillsForMajor = (cv) => {
-          const majorLower = (cv.major || '').toLowerCase();
-          const techSkills = cv.technical_skills && cv.technical_skills.length > 0 ? cv.technical_skills[0] : null;
-          
-          if (!techSkills) return [];
-          
-          const extractFromField = (field) => {
-            return field ? field.split(/[,;|]/).map(s => s.trim()).filter(Boolean) : [];
-          };
-          
-          let skillsList = [];
-          
-          if (majorLower.includes('computer') || majorLower.includes('cs')) {
-            // Computer Science: programming languages, frameworks
-            skillsList = [
-              ...extractFromField(techSkills.programming_languages),
-              ...extractFromField(techSkills.frameworks_databases)
-            ];
-          } else if (majorLower.includes('communication') || majorLower.includes('media')) {
-            // Communication & Media: multimedia, web development
-            skillsList = [
-              ...extractFromField(techSkills.multimedia),
-              ...extractFromField(techSkills.web_development)
-            ];
-          } else if (majorLower.includes('earth') || majorLower.includes('environmental')) {
-            // Earth & Environmental: tools, operating systems
-            skillsList = [
-              ...extractFromField(techSkills.tools),
-              ...extractFromField(techSkills.operating_systems)
-            ];
-          } else if (majorLower.includes('econom')) {
-            // Economics: tools, frameworks
-            skillsList = [
-              ...extractFromField(techSkills.tools),
-              ...extractFromField(techSkills.frameworks_databases)
-            ];
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+          const response = await fetch("/api/auth/signin/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify(formData),
+          });
+          const data = await response.json();
+          if (response.status === 403) {
+            setMessage(data.error || "Account pending approval. Please wait for admin approval.");
+            setTimeout(() => (window.location.hash = "#pending-approval"), 1500);
+          } else if (response.ok) {
+            // Since JWT is disabled, use username as token identifier
+            const userToken = data.user?.username || 'logged_in';
+            localStorage.setItem("token", userToken);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            setToken(userToken);
+            window.location.hash = "#cv-cards";
+          } else if (response.status === 401) {
+            setMessage("❌ Wrong credentials! Please check your username and password.");
+          } else if (response.status === 404) {
+            setMessage("❌ Service not found. Please contact support.");
+          } else if (response.status === 500) {
+            setMessage("❌ Server error. Please try again later.");
           } else {
-            // Default: show programming languages and tools
-            skillsList = [
-              ...extractFromField(techSkills.programming_languages),
-              ...extractFromField(techSkills.tools)
-            ];
+            setMessage(data.error || "❌ Login failed. Please check your credentials and try again.");
           }
-          
-          return skillsList.slice(0, 2); // Max 2 skills
+        } catch (error) {
+          console.error('Login error:', error);
+          setMessage("Network error. Please check your connection and try again.");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const handleLostPassword = () => {
+        window.location.href = "/api/auth/password/reset/request/";
+      };
+
+      return (
+        <div style={{ position: 'relative', minHeight: '100vh' }}>
+          <div style={{
+            backgroundImage: 'url(/static/cv/foto1.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(8px)',
+            WebkitFilter: 'blur(8px)',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: 1
+          }} />
+
+          <div className="container-fluid" style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+            <div className="row w-100">
+              <div className="col-xl-8 col-lg-6 col-md-5 col-sm-4 d-none d-sm-block"></div>
+              <div className="col-xl-4 col-lg-6 col-md-7 col-sm-8 col-12">
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                  padding: '50px 40px',
+                  borderRadius: '20px',
+                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+                  overflowY: 'auto',
+                  maxHeight: '95vh',
+                  margin: '20px 0'
+                }}>
+                  <div style={{ textAlign: 'center', marginBottom: '25px' }}>
+                    <a href="/" style={{ display: 'inline-block' }}>
+                      <img src="/static/cv/UCA-Logo-Centre-whiteframe.png" alt="UCA Logo" style={{ width: '200px', height: 'auto', display: 'block', margin: '0 auto' }} />
+                    </a>
+                  </div>
+
+                  <div style={{ borderBottom: '3px solid #e0e0e0', margin: '0 0 30px 0' }} />
+
+                  <div>
+                    <div style={{ marginBottom: '25px', textAlign: 'center' }}>
+                      <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1a1a1a', margin: '0', letterSpacing: '-0.5px' }}>Welcome Back</h2>
+                      <p style={{ color: '#6c757d', fontSize: '14px', marginTop: '8px' }}>Log in to continue to your account</p>
+                    </div>
+
+                    {message && (
+                      <div style={{
+                        padding: '12px 15px',
+                        marginBottom: '20px',
+                        borderRadius: '8px',
+                        backgroundColor: message.includes("successful") ? '#d1e7dd' : '#f8d7da',
+                        border: message.includes("successful") ? '1px solid #badbcc' : '1px solid #f5c2c7',
+                        color: message.includes("successful") ? '#0f5132' : '#842029'
+                      }}>
+                        {message}
+                      </div>
+                    )}
+
+                    <form onSubmit={handleSubmit}>
+                      <div style={{ marginBottom: '20px' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                          <i className="fas fa-envelope" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                          Email <span style={{ color: '#dc3545' }}>*</span>
+                        </label>
+                        <input
+                          type="email"
+                          placeholder="Enter your email"
+                          required
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          style={{
+                            width: '100%',
+                            padding: '13px 16px',
+                            border: '2px solid #e0e0e0',
+                            borderRadius: '10px',
+                            fontSize: '15px',
+                            transition: 'all 0.3s ease',
+                            backgroundColor: '#f8f9fa'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#007bff';
+                            e.target.style.backgroundColor = '#fff';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#e0e0e0';
+                            e.target.style.backgroundColor = '#f8f9fa';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
+
+                      <div style={{ marginBottom: '15px' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', fontWeight: '600', color: '#333', marginBottom: '8px', fontSize: '14px' }}>
+                          <i className="fas fa-lock" style={{ marginRight: '8px', color: '#007bff' }}></i>
+                          Password <span style={{ color: '#dc3545' }}>*</span>
+                        </label>
+                        <input
+                          type="password"
+                          placeholder="Enter your password"
+                          required
+                          value={formData.password}
+                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          style={{
+                            width: '100%',
+                            padding: '13px 16px',
+                            border: '2px solid #e0e0e0',
+                            borderRadius: '10px',
+                            fontSize: '15px',
+                            transition: 'all 0.3s ease',
+                            backgroundColor: '#f8f9fa'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#007bff';
+                            e.target.style.backgroundColor = '#fff';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#e0e0e0';
+                            e.target.style.backgroundColor = '#f8f9fa';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
+
+                      <div style={{ textAlign: 'right', marginBottom: '25px' }}>
+                        <a
+                          href="#password/reset"
+                          onClick={(e) => { e.preventDefault(); handleLostPassword(); }}
+                          style={{ color: '#007bff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', transition: 'color 0.2s' }}
+                          onMouseOver={(e) => e.target.style.color = '#0056b3'}
+                          onMouseOut={(e) => e.target.style.color = '#007bff'}
+                        >
+                          <i className="fas fa-key" style={{ marginRight: '5px' }}></i>
+                          Forgot password?
+                        </a>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        style={{
+                          background: loading ? '#6c757d' : 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+                          border: 'none',
+                          padding: '15px',
+                          fontSize: '17px',
+                          fontWeight: '700',
+                          borderRadius: '12px',
+                          width: '100%',
+                          color: 'white',
+                          cursor: loading ? 'not-allowed' : 'pointer',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                          opacity: loading ? 0.7 : 1
+                        }}
+                        onMouseOver={(e) => {
+                          if (!loading) {
+                            e.target.style.transform = 'translateY(-2px)';
+                            e.target.style.boxShadow = '0 6px 25px rgba(0, 123, 255, 0.5)';
+                          }
+                        }}
+                        onMouseOut={(e) => {
+                          if (!loading) {
+                            e.target.style.transform = 'translateY(0)';
+                            e.target.style.boxShadow = '0 4px 15px rgba(0, 123, 255, 0.3)';
+                          }
+                        }}
+                      >
+                        {loading ? (
+                          <><i className="fas fa-spinner fa-spin"></i> Logging in...</>
+                        ) : (
+                          <><i className="fas fa-sign-in-alt"></i> Log In</>
+                        )}
+                      </button>
+                    </form>
+
+                    <div style={{ textAlign: 'center', marginTop: '25px', padding: '20px 0 0 0', borderTop: '1px solid #e0e0e0' }}>
+                      <p style={{ color: '#6c757d', fontSize: '14px', margin: '0' }}>
+                        Don't have an account? <a href="#signup" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Sign up here</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    /* ---------------- CVCards Components ---------------- */
+    const CustomDropdown = ({ options, value, onChange, placeholder, icon }) => {
+      const [isOpen, setIsOpen] = useState(false);
+      const dropdownRef = useRef(null);
+
+      useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsOpen(false);
+          }
         };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+      }, []);
 
-        const skills = getSkillsForMajor(cv);
+      const selectedOption = options.find(opt => opt.value === value) || { label: placeholder || "Select...", value: "" };
 
-        return (
-          <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card profile-card">
-            <div className="profile-header">
-              <div className="profile-info">
-                <div className="student-name">{cv.name} {cv.surname}</div>
+      return (
+        <div className="custom-dropdown-container" ref={dropdownRef}>
+          <button
+            type="button"
+            className={`custom-dropdown-trigger ${isOpen ? 'active' : ''}`}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span className="flex items-center gap-2">
+              {icon && <i className={icon + " text-blue-600 w-4 text-center"}></i>}
+              <span className={!value ? "text-slate-400" : ""}>{selectedOption.label}</span>
+            </span>
+          </button>
+          <div className={`custom-dropdown-menu ${isOpen ? 'show' : ''}`}>
+            {options.map((opt, idx) => (
+              <div
+                key={idx}
+                className={`custom-dropdown-option ${value === opt.value ? 'selected' : ''}`}
+                onClick={() => {
+                  onChange(opt.value);
+                  setIsOpen(false);
+                }}
+              >
+                {opt.label}
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
 
-            <div className={`student-major ${deptClass}`}>{cv.major || 'Department'}</div>
+    const CVCards = ({ token, filters, setFilters }) => {
+      const [allCvs, setAllCvs] = useState([]);
+      const [cvs, setCvs] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState(null);
 
-            <div className="meta-row profile-meta">
-              <span>🌍 {cv.country || 'Country'}</span>
-              <span>🎓 {cv.graduation_year ? `Class of ${cv.graduation_year}` : 'Class year'}</span>
-            </div>
+      // helpers for matching
+      const normalize = (v) => String(v ?? "").toLowerCase().trim();
+      const splitList = (v) =>
+        Array.isArray(v)
+          ? v.map(normalize).filter(Boolean)
+          : String(v ?? "")
+            .split(/[,;|]/)
+            .map(normalize)
+            .filter(Boolean);
 
-            <div className="skill-strip profile-skills">
-              <div className="skills-label">💻 Skills</div>
-              <div className="skills-list">
-                {skills.length
-                  ? skills.map((s, i) => <span key={i} className="skill-tag">{s}</span>)
-                  : <span className="skill-tag">Skills</span>}
-              </div>
-            </div>
-          </a>
-        );
-      })}
-    </div>
+      const majorMatches = (major, cat) => {
+        if (!cat || cat === "all") return true;
+        const m = normalize(major);
+        const map = {
+          "computer-science": ["computer science", "cs", "comp sci"],
+          "communication-and-media": ["communication and media", "communication", "media"],
+          "global-economics": ["global economics", "economics", "econ"],
+          "earth-and-environmental-sciences": ["earth and environmental sciences", "earth", "environmental"],
+        };
+        const needles = map[cat] || [normalize(cat.replace(/-/g, " "))];
+        return needles.some((n) => m.includes(n));
+      };
 
-    <button type="button" className="fab-add add-student-btn" aria-label="Add New Student">+</button>
-  </main>
-);
+      useEffect(() => {
+        const fetchCVs = async () => {
+          try {
+            // API has AllowAny permission, no auth header needed
+            const response = await fetch('/cv/api/list/');
+            if (response.status === 401) {
+              setError("❌ Session expired. Please log in again.");
+              localStorage.removeItem('token');
+              window.location.hash = '#login';
+              return;
+            }
+            if (response.status === 403) {
+              setError("❌ Access denied. Your account may need approval.");
+              return;
+            }
+            if (response.status === 404) {
+              setError("❌ CV service not found. Please contact support.");
+              return;
+            }
+            if (response.status === 500) {
+              setError("❌ Server error. Please try again later.");
+              return;
+            }
+            if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
 
-};
+            const data = await response.json();
+            const arr = Array.isArray(data) ? data : [];
+            setAllCvs(arr);
+            setCvs(arr);
+          } catch (err) {
+            console.error('CV fetch error:', err);
+            setError(`❌ Failed to load CVs: ${err.message}`);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchCVs();
+      }, [token]);
 
+      useEffect(() => {
+        let filtered = [...allCvs];
 
-/* ---------------- App (passes filters + setFilters) ---------------- */
-const App = () => {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [page, setPage] = useState('#login');
-
-
-  const [filters, setFilters] = useState({
-    category: 'all',
-    country: '',
-    language: '',
-    techSkill: '',
-    nonTechSkill: '',
-    sortOrder: '',
-    searchTerm: ''
-  });
-
-  useEffect(() => {
-    const onHash = () => setPage(window.location.hash || (token ? '#cv-cards' : '#login'));
-    window.addEventListener('hashchange', onHash);
-    return () => window.removeEventListener('hashchange', onHash);
-  }, [token]);
-
-  // Redirect helpers to keep URLs sensible
-  useEffect(() => {
-    if (token && (page === '#login' || page === '#signup' || page === '' )) {
-      window.location.hash = '#cv-cards';
-    }
-    if (!token && (page === '#cv-cards' || page === '')) {
-      window.location.hash = '#login';
-    }
-  }, [token, page]);
-
-  return (
-    <div>
-      <NavBar token={token} setToken={setToken} />
-
-      {/* Route by hash */}
-      {(() => {
-        if (!token) {
-          if (page === '#signup') return <SignUp />;
-          if (page === '#pending-approval') return <PendingApproval />;
-          // default for unauthenticated = login
-          return <Login setToken={setToken} />;
+        // Category -> major
+        if (filters.category && filters.category !== 'all') {
+          filtered = filtered.filter(cv => majorMatches(cv.major, filters.category));
         }
 
-        // Authenticated routes
-        if (page === '#cv-cards') return (
-          <CVCards
-            token={token}
-            filters={filters}
-            setFilters={setFilters}
-          />
-        );
-        if (page === '#pending-approval') return <PendingApproval />;
+        // Country (strict equality, case-insensitive)
+        if (filters.country) {
+          const needle = normalize(filters.country);
+          filtered = filtered.filter(cv => normalize(cv.country) === needle);
+        }
 
-        // Fallback (unknown hash)
-        return <CVCards token={token} filters={filters} setFilters={setFilters} />;
-      })()}
+        // Language (allow CSV/array)
+        if (filters.language) {
+          const needle = normalize(filters.language);
+          filtered = filtered.filter(cv => splitList(cv.language).includes(needle));
+        }
 
-    </div>
-  );
-};
+        // Technical skill contains
+        if (filters.techSkill) {
+          const needle = normalize(filters.techSkill);
+          filtered = filtered.filter(cv => {
+            if (!cv.technical_skills || cv.technical_skills.length === 0) return false;
+            const techSkills = cv.technical_skills[0];
+            const allSkills = [
+              techSkills.programming_languages,
+              techSkills.frameworks_databases,
+              techSkills.tools,
+              techSkills.web_development,
+              techSkills.multimedia,
+              techSkills.network,
+              techSkills.operating_systems
+            ].filter(Boolean).join(',');
+            return normalize(allSkills).includes(needle);
+          });
+        }
+
+        // Non-technical skill contains (languages)
+        if (filters.nonTechSkill) {
+          const needle = normalize(filters.nonTechSkill);
+          filtered = filtered.filter(cv => {
+            if (!cv.languages || cv.languages.length === 0) return false;
+            const langNames = cv.languages.map(l => l.name).join(',');
+            return normalize(langNames).includes(needle);
+          });
+        }
+
+        // Universal Search
+        if (filters.searchTerm) {
+          const q = normalize(filters.searchTerm);
+          filtered = filtered.filter(cv => {
+            const fullName = `${normalize(cv.name)} ${normalize(cv.surname)}`;
+            const major = normalize(cv.major);
+            const country = normalize(cv.country);
+            const gradYear = normalize(cv.graduation_year);
+
+            // Collect all technical skills
+            let techSkillsText = '';
+            if (cv.technical_skills && cv.technical_skills.length > 0) {
+              const ts = cv.technical_skills[0];
+              techSkillsText = normalize([
+                ts.programming_languages,
+                ts.frameworks_databases,
+                ts.tools,
+                ts.web_development,
+                ts.multimedia,
+                ts.network,
+                ts.operating_systems
+              ].filter(Boolean).join(' '));
+            }
+
+            // Collect all languages
+            const languagesText = cv.languages ? normalize(cv.languages.map(l => l.name).join(' ')) : '';
+
+            // Check if search query matches any of these fields
+            return fullName.includes(q) ||
+              major.includes(q) ||
+              country.includes(q) ||
+              gradYear.includes(q) ||
+              techSkillsText.includes(q) ||
+              languagesText.includes(q);
+          });
+        }
+
+        // Sort
+        if (filters.sortOrder === 'A-Z') {
+          filtered.sort((a, b) => normalize(a.name).localeCompare(normalize(b.name)));
+        } else if (filters.sortOrder === 'Z-A') {
+          filtered.sort((a, b) => normalize(b.name).localeCompare(normalize(a.name)));
+        }
+
+        setCvs(filtered);
+      }, [filters, allCvs]);
+
+      if (loading) return <div className="text-center text-white mt-10">Loading...</div>;
+      if (error) return <div className="text-center text-red-600 mt-10">Error: {error}</div>;
+
+      // Extract unique values from all CVs for dynamic dropdowns
+      const getUniqueValues = (field) => {
+        const values = new Set();
+        allCvs.forEach(cv => {
+          const val = cv[field];
+          if (val) {
+            // Handle comma-separated or array values
+            if (typeof val === 'string' && val.includes(',')) {
+              val.split(/[,;|]/).forEach(v => {
+                const trimmed = v.trim();
+                if (trimmed) values.add(trimmed);
+              });
+            } else if (Array.isArray(val)) {
+              val.forEach(v => {
+                const trimmed = String(v).trim();
+                if (trimmed) values.add(trimmed);
+              });
+            } else {
+              const trimmed = String(val).trim();
+              if (trimmed) values.add(trimmed);
+            }
+          }
+        });
+        return Array.from(values).sort();
+      };
+
+      // Get unique technical skills from all CVs
+      const getUniqueTechSkills = () => {
+        const values = new Set();
+        allCvs.forEach(cv => {
+          if (cv.technical_skills && cv.technical_skills.length > 0) {
+            const ts = cv.technical_skills[0];
+            [ts.programming_languages, ts.frameworks_databases, ts.tools,
+            ts.web_development, ts.multimedia, ts.network, ts.operating_systems]
+              .filter(Boolean)
+              .forEach(field => {
+                field.split(/[,;|]/).forEach(skill => {
+                  const trimmed = skill.trim();
+                  if (trimmed) values.add(trimmed);
+                });
+              });
+          }
+        });
+        return Array.from(values).sort();
+      };
+
+      // Get unique non-technical skills (languages) from all CVs
+      const getUniqueNonTechSkills = () => {
+        const values = new Set();
+        allCvs.forEach(cv => {
+          if (cv.languages && cv.languages.length > 0) {
+            cv.languages.forEach(lang => {
+              if (lang.name) values.add(lang.name.trim());
+            });
+          }
+        });
+        return Array.from(values).sort();
+      };
+
+      const uniqueCountries = getUniqueValues('country');
+      const uniqueLanguages = getUniqueValues('language');
+      const uniqueTechSkills = getUniqueTechSkills();
+      const uniqueNonTechSkills = getUniqueNonTechSkills();
+
+      return (
+        <main className="main-content">
+          {/* Filters */}
+          <section className="filters-section">
+            <div className="filters-header">
+              <h2 className="filters-title"><i className="fas fa-search me-2"></i> Search &amp; Filter Students</h2>
+              <div className="active-filters">
+                <span className="filter-badge">
+                  {filters.category === 'all'
+                    ? 'All Departments'
+                    : filters.category.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+                </span>
+                {filters.country && <span className="filter-badge">Country: {filters.country}</span>}
+                {filters.techSkill && <span className="filter-badge">Tech: {filters.techSkill}</span>}
+                {filters.nonTechSkill && <span className="filter-badge">Soft: {filters.nonTechSkill}</span>}
+              </div>
+            </div>
+
+            <div className="department-tabs filter-tabs">
+              {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
+                <button
+                  key={cat}
+                  className={`tab filter-tab ${filters.category === cat ? 'active' : ''}`}
+                  onClick={() => setFilters({ ...filters, category: cat })}
+                  type="button"
+                >
+                  {cat === 'all' ? 'All Programs' : cat.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+                </button>
+              ))}
+            </div>
+
+            <div className="filters-grid">
+              <div className="filter-group">
+                <label><i className="fas fa-globe-americas"></i> Country</label>
+                <CustomDropdown
+                  options={[
+                    { label: "All Countries", value: "" },
+                    ...uniqueCountries.map(c => ({ label: c, value: c }))
+                  ]}
+                  value={filters.country || ""}
+                  onChange={v => setFilters({ ...filters, country: v })}
+                  placeholder="All Countries"
+                />
+              </div>
 
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
+              <div className="filter-group">
+                <label><i className="fas fa-bolt"></i> Technical Skills</label>
+                <CustomDropdown
+                  options={[
+                    { label: "All Technical Skills", value: "" },
+                    ...uniqueTechSkills.map(s => ({ label: s, value: s }))
+                  ]}
+                  value={filters.techSkill || ""}
+                  onChange={v => setFilters({ ...filters, techSkill: v })}
+                  placeholder="All Technical Skills"
+                />
+              </div>
+
+              <div className="filter-group">
+                <label><i className="fas fa-handshake"></i> Non-technical Skills</label>
+                <CustomDropdown
+                  options={[
+                    { label: "All Non-technical Skills", value: "" },
+                    ...uniqueNonTechSkills.map(s => ({ label: s, value: s }))
+                  ]}
+                  value={filters.nonTechSkill || ""}
+                  onChange={v => setFilters({ ...filters, nonTechSkill: v })}
+                  placeholder="All Non-technical Skills"
+                />
+              </div>
+
+              {/* Full-width search (no inline style) */}
+              <div className="search-container">
+                <div className="search-inner">
+                  <span className="search-icon"><i className="fas fa-search"></i></span>
+                  <input
+                    type="text"
+                    className="search-input"
+                    placeholder="Search by name, major, country, skill…"
+                    onChange={e => setFilters({ ...filters, searchTerm: e.target.value })}
+                    value={filters.searchTerm || ''}
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Profiles grid — SIZE UNCHANGED */}
+          <div className="card-container profiles-grid">
+            {cvs.map(cv => {
+              const deptClass =
+                (cv.major || '').toLowerCase().includes('computer') ? 'cs' :
+                  (cv.major || '').toLowerCase().includes('communication') ? 'cm' :
+                    (cv.major || '').toLowerCase().includes('earth') ? 'es' :
+                      (cv.major || '').toLowerCase().includes('econom') ? 'ge' : '';
+
+              // Extract skills based on major - max 2 skills
+              const getSkillsForMajor = (cv) => {
+                const majorLower = (cv.major || '').toLowerCase();
+                const techSkills = cv.technical_skills && cv.technical_skills.length > 0 ? cv.technical_skills[0] : null;
+
+                if (!techSkills) return [];
+
+                const extractFromField = (field) => {
+                  return field ? field.split(/[,;|]/).map(s => s.trim()).filter(Boolean) : [];
+                };
+
+                let skillsList = [];
+
+                if (majorLower.includes('computer') || majorLower.includes('cs')) {
+                  // Computer Science: programming languages, frameworks
+                  skillsList = [
+                    ...extractFromField(techSkills.programming_languages),
+                    ...extractFromField(techSkills.frameworks_databases)
+                  ];
+                } else if (majorLower.includes('communication') || majorLower.includes('media')) {
+                  // Communication & Media: multimedia, web development
+                  skillsList = [
+                    ...extractFromField(techSkills.multimedia),
+                    ...extractFromField(techSkills.web_development)
+                  ];
+                } else if (majorLower.includes('earth') || majorLower.includes('environmental')) {
+                  // Earth & Environmental: tools, operating systems
+                  skillsList = [
+                    ...extractFromField(techSkills.tools),
+                    ...extractFromField(techSkills.operating_systems)
+                  ];
+                } else if (majorLower.includes('econom')) {
+                  // Economics: tools, frameworks
+                  skillsList = [
+                    ...extractFromField(techSkills.tools),
+                    ...extractFromField(techSkills.frameworks_databases)
+                  ];
+                } else {
+                  // Default: show programming languages and tools
+                  skillsList = [
+                    ...extractFromField(techSkills.programming_languages),
+                    ...extractFromField(techSkills.tools)
+                  ];
+                }
+
+                return skillsList.slice(0, 2); // Max 2 skills
+              };
+
+              const skills = getSkillsForMajor(cv);
+
+              return (
+                <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card profile-card">
+                  <div className="profile-header">
+                    <div className="profile-info">
+                      <div className="student-name">{cv.name} {cv.surname}</div>
+                    </div>
+                  </div>
+
+                  <div className={`student-major ${deptClass}`}>
+                    {cv.major || 'Department'}
+                  </div>
+
+                  <div className="meta-row profile-meta">
+                    <span><i className="fas fa-globe-americas me-1"></i> {cv.country || 'Country'}</span>
+                    <span><i className="fas fa-graduation-cap me-1"></i> {cv.graduation_year ? `Class of ${cv.graduation_year}` : 'Class year'}</span>
+                  </div>
+
+                  <div className="skill-strip profile-skills">
+                    <div className="skills-label"><i className="fas fa-laptop-code me-2"></i> Skills</div>
+                    <div className="skills-list">
+                      {skills.length
+                        ? skills.map((s, i) => <span key={i} className="skill-tag">{s}</span>)
+                        : <span className="skill-tag">Skills</span>}
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+
+          <button type="button" className="fab-add add-student-btn" aria-label="Add New Student">+</button>
+        </main>
+      );
+
+    };
+
+
+    /* ---------------- App (passes filters + setFilters) ---------------- */
+    const App = () => {
+      const [token, setToken] = useState(localStorage.getItem('token'));
+      const [page, setPage] = useState('#login');
+
+
+      const [filters, setFilters] = useState({
+        category: 'all',
+        country: '',
+        language: '',
+        techSkill: '',
+        nonTechSkill: '',
+        sortOrder: '',
+        searchTerm: ''
+      });
+
+      useEffect(() => {
+        const onHash = () => setPage(window.location.hash || (token ? '#cv-cards' : '#login'));
+        window.addEventListener('hashchange', onHash);
+        return () => window.removeEventListener('hashchange', onHash);
+      }, [token]);
+
+      // Redirect helpers to keep URLs sensible
+      useEffect(() => {
+        if (token && (page === '#login' || page === '#signup' || page === '')) {
+          window.location.hash = '#cv-cards';
+        }
+        if (!token && (page === '#cv-cards' || page === '')) {
+          window.location.hash = '#login';
+        }
+      }, [token, page]);
+
+      return (
+        <div>
+          <NavBar token={token} setToken={setToken} />
+
+          {/* Route by hash */}
+          {(() => {
+            if (!token) {
+              if (page === '#signup') return <SignUp />;
+              if (page === '#pending-approval') return <PendingApproval />;
+              // default for unauthenticated = login
+              return <Login setToken={setToken} />;
+            }
+
+            // Authenticated routes
+            if (page === '#cv-cards') return (
+              <CVCards
+                token={token}
+                filters={filters}
+                setFilters={setFilters}
+              />
+            );
+            if (page === '#pending-approval') return <PendingApproval />;
+
+            // Fallback (unknown hash)
+            return <CVCards token={token} filters={filters} setFilters={setFilters} />;
+          })()}
+
+        </div>
+      );
+    };
+
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let cookie of cookies) {
-            cookie = cookie.trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+          cookie = cookie.trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
         }
+      }
+      return cookieValue;
     }
-    return cookieValue;
-}
 
-// Use React 18 createRoot API
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
-{% endverbatim %}
-</script>
+    // Use React 18 createRoot API
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+    {% endverbatim %}
+  </script>
 </body>
+
 </html>

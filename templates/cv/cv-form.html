@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CV Builder Form - FIXED VERSION</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'cv/styles.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    />
-    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
-  </head>
-    <div class="cv-big">
-      <div class="site-wrap">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV Builder Form - FIXED VERSION</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'cv/styles.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
+</head>
+<div class="cv-big">
+  <div class="site-wrap">
     <div class="modal" id="cvFormModal">
       <div class="modal-content">
         <h2>CV Builder Form</h2>
@@ -47,14 +45,8 @@
                   <i class="fas fa-user"></i>
                   Name <span class="required">*</span>
                 </label>
-                <div class="input-group"> 
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    placeholder="Enter your name"
-                  />
+                <div class="input-group">
+                  <input type="text" id="name" name="name" required placeholder="Enter your name" />
                 </div>
                 <div class="error-message">This field is required</div>
               </div>
@@ -64,14 +56,8 @@
                   Surname <span class="required">*</span>
                 </label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="surname"
-                    name="surname"
-                    required
-                    placeholder="Enter your surname"
-                  />
+
+                  <input type="text" id="surname" name="surname" required placeholder="Enter your surname" />
                 </div>
                 <div class="error-message">This field is required</div>
               </div>
@@ -80,21 +66,15 @@
               <div class="form-group">
                 <label for="email"><i class="fas fa-envelope"></i>Email <span class="required">*</span></label>
                 <div class="input-group">
-                  
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    placeholder="Enter your email"
-                  />
+
+                  <input type="email" id="email" name="email" required placeholder="Enter your email" />
                 </div>
                 <div class="error-message">This field is required</div>
               </div>
               <div class="form-group">
                 <label for="major"><i class="fas fa-graduation-cap"></i>Major <span class="required">*</span></label>
                 <div class="input-group">
-                  
+
                   <select id="major" name="major" required>
                     <option value="">Select Major</option>
                     <option value="Computer Science">Computer Science</option>
@@ -168,84 +148,63 @@
 
           <!-- STEP 2: EDUCATION -->
           <!-- STEP 2: EDUCATION -->
-<div class="form-step" id="step-2" style="display: none">
-  <h3>Education</h3>
-  <div id="educationContainer">
-    <div class="education-entry">
-      <div class="row">
-        <div class="form-group">
-          <label for="degreeTitle1"><i class="fas fa-graduation-cap"></i>Degree Title <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="degreeTitle1"
-              name="degreeTitle1"
-              required
-              placeholder="Enter your degree title"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
+          <div class="form-step" id="step-2" style="display: none">
+            <h3>Education</h3>
+            <div id="educationContainer">
+              <div class="education-entry">
+                <div class="row">
+                  <div class="form-group">
+                    <label for="degreeTitle1"><i class="fas fa-graduation-cap"></i>Degree Title <span
+                        class="required">*</span></label>
+                    <div class="input-group">
 
-        <div class="form-group">
-          <label for="university1"><i class="fas fa-university"></i>University <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="university1"
-              name="university1"
-              required
-              placeholder="Enter your university"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
-      </div>
+                      <input type="text" id="degreeTitle1" name="degreeTitle1" required
+                        placeholder="Enter your degree title" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
 
-      <div class="row">
-        <div class="form-group">
-          <label for="universityLocation1"><i class="fas fa-map-marker-alt"></i>City & Country <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="universityLocation1"
-              name="universityLocation1"
-              required
-              placeholder="Enter city and country"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
-      </div>
+                  <div class="form-group">
+                    <label for="university1"><i class="fas fa-university"></i>University <span
+                        class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="text" id="university1" name="university1" required
+                        placeholder="Enter your university" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group">
+                    <label for="universityLocation1"><i class="fas fa-map-marker-alt"></i>City & Country <span
+                        class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="text" id="universityLocation1" name="universityLocation1" required
+                        placeholder="Enter city and country" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                </div>
 
 
                 <div class="row">
                   <div class="form-group">
                     <label for="eduStartDate1"><i class="fas fa-calendar"></i>Start Date *</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="date"
-                        id="eduStartDate1"
-                        name="eduStartDate1"
-                        required
-                      />
+
+                      <input type="date" id="eduStartDate1" name="eduStartDate1" required />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
-                    <label for="eduEndDate1"><i class="fas fa-calendar"></i>Expected End Date <span class="required">*</span></label>
+                    <label for="eduEndDate1"><i class="fas fa-calendar"></i>Expected End Date <span
+                        class="required">*</span></label>
                     <div class="input-group">
-                      
-                      <input
-                        type="date"
-                        id="eduEndDate1"
-                        name="eduEndDate1"
-                        required
-                      />
+
+                      <input type="date" id="eduEndDate1" name="eduEndDate1" required />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
@@ -255,25 +214,15 @@
                   <div class="form-group">
                     <label for="gpa1"><i class="fas fa-chart-line"></i>GPA (Optional)</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="gpa1"
-                        name="gpa1"
-                        placeholder="e.g., 3.8/4.0"
-                      />
+
+                      <input type="text" id="gpa1" name="gpa1" placeholder="e.g., 3.8/4.0" />
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="honours1"><i class="fas fa-award"></i>Honours (Optional)</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="honours1"
-                        name="honours1"
-                        placeholder="Enter your honours"
-                      />
+
+                      <input type="text" id="honours1" name="honours1" placeholder="Enter your honours" />
                     </div>
                   </div>
                 </div>
@@ -282,22 +231,13 @@
                   <div class="form-group">
                     <label for="courses1"><i class="fas fa-book"></i>Relevant Courses (Optional)</label>
                     <div class="input-group">
-                      
-                      <textarea
-                        id="courses1"
-                        name="courses1"
-                        placeholder="Enter your relevant courses"
-                      ></textarea>
+
+                      <textarea id="courses1" name="courses1" placeholder="Enter your relevant courses"></textarea>
                     </div>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  class="remove-btn"
-                  onclick="removeEducation(this)"
-                  style="display: none"
-                >
+                <button type="button" class="remove-btn" onclick="removeEducation(this)" style="display: none">
                   ×
                 </button>
               </div>
@@ -314,25 +254,17 @@
                   <div class="form-group">
                     <label for="certificateTitle1"><i class="fas fa-certificate"></i>Certificate Title</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="certificateTitle1"
-                        name="certificateTitle1"
-                        placeholder="Enter certificate title"
-                      />
+
+                      <input type="text" id="certificateTitle1" name="certificateTitle1"
+                        placeholder="Enter certificate title" />
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="certificateOrg1"><i class="fas fa-building"></i>Organization & Location</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="certificateOrg1"
-                        name="certificateOrg1"
-                        placeholder="Enter organization & location"
-                      />
+
+                      <input type="text" id="certificateOrg1" name="certificateOrg1"
+                        placeholder="Enter organization & location" />
                     </div>
                   </div>
                 </div>
@@ -341,18 +273,13 @@
                   <div class="form-group">
                     <label for="certDate1"><i class="fas fa-calendar"></i>Date Obtained</label>
                     <div class="input-group">
-                      
+
                       <input type="date" id="certDate1" name="certDate1" />
                     </div>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  class="remove-btn"
-                  onclick="removeCertificate(this)"
-                  style="display: none"
-                >
+                <button type="button" class="remove-btn" onclick="removeCertificate(this)" style="display: none">
                   ×
                 </button>
               </div>
@@ -372,28 +299,17 @@
                   <div class="form-group">
                     <label for="positionTitle1"><i class="fas fa-briefcase"></i>Position Title *</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="positionTitle1"
-                        name="positionTitle1"
-                        required
-                        placeholder="Enter your position title"
-                      />
+
+                      <input type="text" id="positionTitle1" name="positionTitle1" required
+                        placeholder="Enter your position title" />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
                     <label for="company1"><i class="fas fa-building"></i>Company *</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="company1"
-                        name="company1"
-                        required
-                        placeholder="Enter company name"
-                      />
+
+                      <input type="text" id="company1" name="company1" required placeholder="Enter company name" />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
@@ -403,21 +319,15 @@
                   <div class="form-group">
                     <label for="location1"><i class="fas fa-map-marker-alt"></i>Location *</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="location1"
-                        name="location1"
-                        required
-                        placeholder="City, Country"
-                      />
+
+                      <input type="text" id="location1" name="location1" required placeholder="City, Country" />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
                     <label for="employmentType1"><i class="fas fa-clock"></i>Employment Type</label>
                     <div class="input-group">
-                      
+
                       <select id="employmentType1" name="employmentType1">
                         <option value="">Select type</option>
                         <option value="Full-time">Full-time</option>
@@ -434,28 +344,18 @@
                   <div class="form-group">
                     <label for="expStartDate1"><i class="fas fa-calendar"></i>Start Date *</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="date"
-                        id="expStartDate1"
-                        name="expStartDate1"
-                        required
-                      />
+
+                      <input type="date" id="expStartDate1" name="expStartDate1" required />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
                     <label for="expEndDate1"><i class="fas fa-calendar"></i>End Date</label>
                     <div class="input-group">
-                      
+
                       <input type="date" id="expEndDate1" name="expEndDate1" />
                       <label class="checkbox-container">
-                        <input
-                          type="checkbox"
-                          id="currentJob1"
-                          name="currentJob1"
-                          onchange="toggleCurrentJob(1)"
-                        />
+                        <input type="checkbox" id="currentJob1" name="currentJob1" onchange="toggleCurrentJob(1)" />
                         <span class="checkmark"></span>
                         Currently working here
                       </label>
@@ -463,50 +363,36 @@
                   </div>
                 </div>
 
-                
+
                 <div class="accomplishments-section">
                   <h5>Key Accomplishments</h5>
                   <div class="form-group">
                     <label for="expAccomplishment1_1"><i class="fas fa-star"></i>Accomplishment 1</label>
                     <div class="input-group">
-                      
-                      <textarea
-                        id="expAccomplishment1_1"
-                        name="expAccomplishment1_1"
-                        placeholder="Enter your accomplishment"
-                      ></textarea>
+
+                      <textarea id="expAccomplishment1_1" name="expAccomplishment1_1"
+                        placeholder="Enter your accomplishment"></textarea>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="expAccomplishment1_2"><i class="fas fa-star"></i>Accomplishment 2</label>
                     <div class="input-group">
-                      
-                      <textarea
-                        id="expAccomplishment1_2"
-                        name="expAccomplishment1_2"
-                        placeholder="Enter your accomplishment"
-                      ></textarea>
+
+                      <textarea id="expAccomplishment1_2" name="expAccomplishment1_2"
+                        placeholder="Enter your accomplishment"></textarea>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="expAccomplishment1_3"><i class="fas fa-star"></i>Accomplishment 3</label>
                     <div class="input-group">
-                      
-                      <textarea
-                        id="expAccomplishment1_3"
-                        name="expAccomplishment1_3"
-                        placeholder="Enter your accomplishment"
-                      ></textarea>
+
+                      <textarea id="expAccomplishment1_3" name="expAccomplishment1_3"
+                        placeholder="Enter your accomplishment"></textarea>
                     </div>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  class="remove-btn"
-                  onclick="removeExperience(this)"
-                  style="display: none"
-                >
+                <button type="button" class="remove-btn" onclick="removeExperience(this)" style="display: none">
                   ×
                 </button>
               </div>
@@ -523,13 +409,9 @@
               <div class="form-group">
                 <label for="competencyType"><i class="fas fa-user-cog"></i>Competency Type</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="competencyType"
-                    name="competencyType"
-                    placeholder="e.g. Leadership, Communication, etc."
-                  />
+
+                  <input type="text" id="competencyType" name="competencyType"
+                    placeholder="e.g. Leadership, Communication, etc." />
                 </div>
               </div>
             </div>
@@ -537,23 +419,17 @@
               <div class="form-group">
                 <label for="compAccomplishment1"><i class="fas fa-check-circle"></i>Accomplishment 1</label>
                 <div class="input-group">
-                  
-                  <textarea
-                    id="compAccomplishment1"
-                    name="compAccomplishment1"
-                    placeholder="Enter your accomplishment"
-                  ></textarea>
+
+                  <textarea id="compAccomplishment1" name="compAccomplishment1"
+                    placeholder="Enter your accomplishment"></textarea>
                 </div>
               </div>
               <div class="form-group">
                 <label for="compAccomplishment2"><i class="fas fa-check-circle"></i>Accomplishment 2</label>
                 <div class="input-group">
-                  
-                  <textarea
-                    id="compAccomplishment2"
-                    name="compAccomplishment2"
-                    placeholder="Enter your accomplishment"
-                  ></textarea>
+
+                  <textarea id="compAccomplishment2" name="compAccomplishment2"
+                    placeholder="Enter your accomplishment"></textarea>
                 </div>
               </div>
             </div>
@@ -561,12 +437,9 @@
               <div class="form-group">
                 <label for="compAccomplishment3"><i class="fas fa-check-circle"></i>Accomplishment 3</label>
                 <div class="input-group">
-                  
-                  <textarea
-                    id="compAccomplishment3"
-                    name="compAccomplishment3"
-                    placeholder="Enter your accomplishment"
-                  ></textarea>
+
+                  <textarea id="compAccomplishment3" name="compAccomplishment3"
+                    placeholder="Enter your accomplishment"></textarea>
                 </div>
               </div>
             </div>
@@ -581,69 +454,45 @@
                   <div class="form-group">
                     <label for="projectTitle1"><i class="fas fa-project-diagram"></i>Project Title *</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="projectTitle1"
-                        name="projectTitle1"
-                        required
-                        placeholder="Enter project title"
-                      />
+
+                      <input type="text" id="projectTitle1" name="projectTitle1" required
+                        placeholder="Enter project title" />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
                   <div class="form-group">
                     <label for="year1">Year *</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="year1"
-                        name="year1"
-                        required
-                        placeholder="e.g., 2023"
-                      />
+
+                      <input type="text" id="year1" name="year1" required placeholder="e.g., 2023" />
                     </div>
                     <div class="error-message">This field is required</div>
                   </div>
                 </div>
                 <div class="row">
-  <div class="form-group">
-    <label for="technologiesUsed1"><i class="fas fa-tools"></i>Technologies Used <span class="required">*</span></label>
-    <div class="input-group">
-      
-      <input
-        type="text"
-        id="technologiesUsed1"
-        name="technologiesUsed1"
-        required
-        placeholder="e.g., HTML, CSS, JavaScript"
-      />
-    </div>
-    <div class="error-message">This field is required</div>
-  </div>
-</div>
+                  <div class="form-group">
+                    <label for="technologiesUsed1"><i class="fas fa-tools"></i>Technologies Used <span
+                        class="required">*</span></label>
+                    <div class="input-group">
 
-<div class="row">
-  <div class="form-group">
-    <label for="summary1"><i class="fas fa-list"></i>Summary</label>
-    <div class="input-group">
-      
-      <textarea
-        id="summary1"
-        name="summary1"
-        placeholder="Brief project summary"
-      ></textarea>
-    </div>
-  </div>
-</div>
+                      <input type="text" id="technologiesUsed1" name="technologiesUsed1" required
+                        placeholder="e.g., HTML, CSS, JavaScript" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                </div>
 
-                <button
-                  type="button"
-                  class="remove-btn"
-                  onclick="removeProject(this)"
-                  style="display: none"
-                >
+                <div class="row">
+                  <div class="form-group">
+                    <label for="summary1"><i class="fas fa-list"></i>Summary</label>
+                    <div class="input-group">
+
+                      <textarea id="summary1" name="summary1" placeholder="Brief project summary"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="button" class="remove-btn" onclick="removeProject(this)" style="display: none">
                   - Remove
                 </button>
               </div>
@@ -660,25 +509,17 @@
               <div class="form-group">
                 <label for="programmingLanguages"><i class="fas fa-code"></i>Programming Languages</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="programmingLanguages"
-                    name="programmingLanguages"
-                    placeholder="e.g., Python, Java, C++"
-                  />
+
+                  <input type="text" id="programmingLanguages" name="programmingLanguages"
+                    placeholder="e.g., Python, Java, C++" />
                 </div>
               </div>
               <div class="form-group">
                 <label for="frameworksDatabases"><i class="fas fa-database"></i>Frameworks & Databases</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="frameworksDatabases"
-                    name="frameworksDatabases"
-                    placeholder="e.g., React, Node.js, MySQL"
-                  />
+
+                  <input type="text" id="frameworksDatabases" name="frameworksDatabases"
+                    placeholder="e.g., React, Node.js, MySQL" />
                 </div>
               </div>
             </div>
@@ -687,25 +528,16 @@
               <div class="form-group">
                 <label for="tools"><i class="fas fa-tools"></i>Tools</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="tools"
-                    name="tools"
-                    placeholder="e.g., Git, Docker, Figma"
-                  />
+
+                  <input type="text" id="tools" name="tools" placeholder="e.g., Git, Docker, Figma" />
                 </div>
               </div>
               <div class="form-group">
                 <label for="webDevelopment"><i class="fas fa-laptop-code"></i>Web Development</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="webDevelopment"
-                    name="webDevelopment"
-                    placeholder="e.g., HTML, CSS, JavaScript"
-                  />
+
+                  <input type="text" id="webDevelopment" name="webDevelopment"
+                    placeholder="e.g., HTML, CSS, JavaScript" />
                 </div>
               </div>
             </div>
@@ -714,25 +546,15 @@
               <div class="form-group">
                 <label for="multimedia"><i class="fas fa-photo-video"></i>Multimedia</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="multimedia"
-                    name="multimedia"
-                    placeholder="e.g., Adobe Photoshop"
-                  />
+
+                  <input type="text" id="multimedia" name="multimedia" placeholder="e.g., Adobe Photoshop" />
                 </div>
               </div>
               <div class="form-group">
                 <label for="network"><i class="fas fa-network-wired"></i>Network</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="network"
-                    name="network"
-                    placeholder="e.g., TCP/IP, Routing"
-                  />
+
+                  <input type="text" id="network" name="network" placeholder="e.g., TCP/IP, Routing" />
                 </div>
               </div>
             </div>
@@ -741,13 +563,9 @@
               <div class="form-group">
                 <label for="operatingSystems"><i class="fas fa-desktop"></i>Operating Systems</label>
                 <div class="input-group">
-                  
-                  <input
-                    type="text"
-                    id="operatingSystems"
-                    name="operatingSystems"
-                    placeholder="e.g., Windows, Linux, macOS"
-                  />
+
+                  <input type="text" id="operatingSystems" name="operatingSystems"
+                    placeholder="e.g., Windows, Linux, macOS" />
                 </div>
               </div>
             </div>
@@ -762,19 +580,14 @@
                   <div class="form-group">
                     <label for="language1"><i class="fas fa-language"></i>Language</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="language1"
-                        name="language1"
-                        placeholder="e.g., English"
-                      />
+
+                      <input type="text" id="language1" name="language1" placeholder="e.g., English" />
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="proficiency1"><i class="fas fa-star"></i>Proficiency Level</label>
                     <div class="input-group">
-                      
+
                       <select id="proficiency1" name="proficiency1">
                         <option value="">Select level</option>
                         <option value="Native">Native</option>
@@ -786,12 +599,7 @@
                     </div>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  class="remove-btn"
-                  onclick="removeLanguage(this)"
-                  style="display: none"
-                >
+                <button type="button" class="remove-btn" onclick="removeLanguage(this)" style="display: none">
                   ×
                 </button>
               </div>
@@ -810,27 +618,17 @@
                   <div class="form-group">
                     <label for="communityPosition1"><i class="fas fa-handshake"></i>Position Title</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="communityPosition1"
-                        name="communityPosition1"
-                        placeholder="Enter position title"
-                      />
+
+                      <input type="text" id="communityPosition1" name="communityPosition1"
+                        placeholder="Enter position title" />
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="communityOrg1"
-                      ><i class="fas fa-building"></i>Organization, City, Country</label
-                    >
+                    <label for="communityOrg1"><i class="fas fa-building"></i>Organization, City, Country</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="text"
-                        id="communityOrg1"
-                        name="communityOrg1"
-                        placeholder="Enter organization details"
-                      />
+
+                      <input type="text" id="communityOrg1" name="communityOrg1"
+                        placeholder="Enter organization details" />
                     </div>
                   </div>
                 </div>
@@ -838,43 +636,27 @@
                   <div class="form-group">
                     <label for="communityStartDate1"><i class="fas fa-calendar"></i>Start Date</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="date"
-                        id="communityStartDate1"
-                        name="communityStartDate1"
-                      />
+
+                      <input type="date" id="communityStartDate1" name="communityStartDate1" />
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="communityEndDate1"><i class="fas fa-calendar"></i>End Date</label>
                     <div class="input-group">
-                      
-                      <input
-                        type="date"
-                        id="communityEndDate1"
-                        name="communityEndDate1"
-                      />
+
+                      <input type="date" id="communityEndDate1" name="communityEndDate1" />
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="communityAccomplishment1"><i class="fas fa-check-circle"></i>Accomplishment</label>
                   <div class="input-group">
-                    
-                    <textarea
-                      id="communityAccomplishment1"
-                      name="communityAccomplishment1"
-                      placeholder="Enter accomplishment"
-                    ></textarea>
+
+                    <textarea id="communityAccomplishment1" name="communityAccomplishment1"
+                      placeholder="Enter accomplishment"></textarea>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  class="remove-btn"
-                  onclick="removeCommunity(this)"
-                  style="display: none"
-                >
+                <button type="button" class="remove-btn" onclick="removeCommunity(this)" style="display: none">
                   ×
                 </button>
               </div>
@@ -885,222 +667,161 @@
           </div>
 
           <!-- STEP 9: AWARDS -->
-<div class="form-step" id="step-9" style="display: block">
-  <h3>Awards</h3>
-  <div id="awardsContainer">
-    <div class="award-entry">
-      <div class="row">
-        <div class="form-group">
-          <label for="awardName1"><i class="fas fa-trophy"></i>Award Name</label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="awardName1"
-              name="awardName1"
-              placeholder="Enter award name"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="awardYear1"><i class="fas fa-calendar-alt"></i>Year</label>
-          <div class="input-group">
-            
-            <input
-              type="number"
-              id="awardYear1"
-              name="awardYear1"
-              min="1900"
-              max="2030"
-              placeholder="2024"
-            />
-          </div>
-        </div>
-      </div>
+          <div class="form-step" id="step-9" style="display: block">
+            <h3>Awards</h3>
+            <div id="awardsContainer">
+              <div class="award-entry">
+                <div class="row">
+                  <div class="form-group">
+                    <label for="awardName1"><i class="fas fa-trophy"></i>Award Name</label>
+                    <div class="input-group">
 
-      <div class="row">
-        <div class="form-group">
-          <label for="awardOrg1"><i class="fas fa-building"></i>Presenting Organization</label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="awardOrg1"
-              name="awardOrg1"
-              placeholder="Enter organization"
-            />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="awardDescription1"><i class="fas fa-align-left"></i>Short Description</label>
-          <div class="input-group">
-            
-            <textarea
-              id="awardDescription1"
-              name="awardDescription1"
-              placeholder="Enter description"
-            ></textarea>
-          </div>
-        </div>
-      </div>
+                      <input type="text" id="awardName1" name="awardName1" placeholder="Enter award name" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="awardYear1"><i class="fas fa-calendar-alt"></i>Year</label>
+                    <div class="input-group">
 
-      <button
-        type="button"
-        class="remove-btn"
-        onclick="removeAward(this)"
-        style="display: none"
-      >
-        ×
-      </button>
-    </div>
-  </div>
+                      <input type="number" id="awardYear1" name="awardYear1" min="1900" max="2030" placeholder="2024" />
+                    </div>
+                  </div>
+                </div>
 
-  <button type="button" class="add-btn" onclick="addAward()">+ Add Award</button>
+                <div class="row">
+                  <div class="form-group">
+                    <label for="awardOrg1"><i class="fas fa-building"></i>Presenting Organization</label>
+                    <div class="input-group">
 
-  <!-- REFERENCE SECTION -->
-  <h3 style="margin-top: 2rem">References</h3>
-  <div id="referencesContainer">
-    <div class="reference-entry">
-      <div class="row">
-        <div class="form-group">
-          <label for="refName1"><i class="fas fa-user"></i>Reference Name <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="refName1"
-              name="refName1"
-              required
-              placeholder="Enter reference name"
-            />
+                      <input type="text" id="awardOrg1" name="awardOrg1" placeholder="Enter organization" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="awardDescription1"><i class="fas fa-align-left"></i>Short Description</label>
+                    <div class="input-group">
+
+                      <textarea id="awardDescription1" name="awardDescription1"
+                        placeholder="Enter description"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="button" class="remove-btn" onclick="removeAward(this)" style="display: none">
+                  ×
+                </button>
+              </div>
+            </div>
+
+            <button type="button" class="add-btn" onclick="addAward()">+ Add Award</button>
+
+            <!-- REFERENCE SECTION -->
+            <h3 style="margin-top: 2rem">References</h3>
+            <div id="referencesContainer">
+              <div class="reference-entry">
+                <div class="row">
+                  <div class="form-group">
+                    <label for="refName1"><i class="fas fa-user"></i>Reference Name <span
+                        class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="text" id="refName1" name="refName1" required placeholder="Enter reference name" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="refPosition1"><i class="fas fa-user-tag"></i>Position <span
+                        class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="text" id="refPosition1" name="refPosition1" required placeholder="Enter position" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group">
+                    <label for="refCompany1"><i class="fas fa-building"></i>Company <span
+                        class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="text" id="refCompany1" name="refCompany1" required placeholder="Enter company" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="refPhone1"><i class="fas fa-phone"></i>Phone <span class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="tel" id="refPhone1" name="refPhone1" required placeholder="Enter phone" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group">
+                    <label for="refEmail1"><i class="fas fa-envelope"></i>Email <span class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="email" id="refEmail1" name="refEmail1" required placeholder="Enter email" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="refRelation1"><i class="fas fa-user-friends"></i>Relation to You <span
+                        class="required">*</span></label>
+                    <div class="input-group">
+
+                      <input type="text" id="refRelation1" name="refRelation1" required
+                        placeholder="e.g., Instructor, Manager" />
+                    </div>
+                    <div class="error-message">This field is required</div>
+                  </div>
+                </div>
+
+                <button type="button" class="remove-btn" onclick="removeReference(this)" style="display: none">
+                  ×
+                </button>
+              </div>
+            </div>
+
+            <button type="button" class="add-btn" onclick="addReference()">+ Add Reference</button>
           </div>
-          <div class="error-message">This field is required</div>
-        </div>
-        <div class="form-group">
-          <label for="refPosition1"><i class="fas fa-user-tag"></i>Position <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="refPosition1"
-              name="refPosition1"
-              required
-              placeholder="Enter position"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group">
-          <label for="refCompany1"><i class="fas fa-building"></i>Company <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="refCompany1"
-              name="refCompany1"
-              required
-              placeholder="Enter company"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
-        <div class="form-group">
-          <label for="refPhone1"><i class="fas fa-phone"></i>Phone <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="tel"
-              id="refPhone1"
-              name="refPhone1"
-              required
-              placeholder="Enter phone"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group">
-          <label for="refEmail1"><i class="fas fa-envelope"></i>Email <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="email"
-              id="refEmail1"
-              name="refEmail1"
-              required
-              placeholder="Enter email"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
-
-        <div class="form-group">
-          <label for="refRelation1"><i class="fas fa-user-friends"></i>Relation to You <span class="required">*</span></label>
-          <div class="input-group">
-            
-            <input
-              type="text"
-              id="refRelation1"
-              name="refRelation1"
-              required
-              placeholder="e.g., Instructor, Manager"
-            />
-          </div>
-          <div class="error-message">This field is required</div>
-        </div>
-      </div>
-
-      <button
-        type="button"
-        class="remove-btn"
-        onclick="removeReference(this)"
-        style="display: none"
-      >
-        ×
-      </button>
-    </div>
-  </div>
-
-  <button type="button" class="add-btn" onclick="addReference()">+ Add Reference</button>
-</div>
 
           <!-- STEP 10: REVIEW AND SUBMIT -->
-          
+
           <div class="form-step" id="step-10" style="display: none">
             <h3>Review Your CV & Submit</h3>
             <div id="reviewInfo" class="review-section">
               <!-- Review content will be dynamically inserted here -->
             </div>
           </div>
-<!-- STEP 11: SUBMIT SUCCESS (full-screen card) -->
-<div class="form-step" id="step-11" style="display:none">
-  <div class="result-card success">
-    <div class="result-icon">✔</div>
-    <h3>Success!</h3>
-    <p>Your CV was submitted successfully.</p>
-    <button type="button" id="successContinueBtn" class="btn-primary">
-      Create another CV
-    </button>
-    <a href="#" class="download-btn" id="downloadPdfLink" download>Download PDF</a>
-  </div>
-</div>
+          <!-- STEP 11: SUBMIT SUCCESS (full-screen card) -->
+          <div class="form-step" id="step-11" style="display:none">
+            <div class="result-card success">
+              <div class="result-icon">✔</div>
+              <h3>Success!</h3>
+              <p>Your CV was submitted successfully.</p>
+              <button type="button" id="successContinueBtn" class="btn-primary">
+                Create another CV
+              </button>
+              <a href="#" class="download-btn" id="downloadPdfLink" download>Download PDF</a>
+            </div>
+          </div>
 
-<!-- STEP 12: SUBMIT ERROR (full-screen card) -->
-<div class="form-step" id="step-12" style="display:none">
-  <div class="result-card error">
-    <div class="result-icon">✖</div>
-    <h3>Oops!</h3>
-    <p id="resultErrorText">Something went wrong. Please try again.</p>
-    <button type="button" id="errorBackBtn" class="btn-danger">
-      Back to Review
-    </button>
-  </div>
-</div>
+          <!-- STEP 12: SUBMIT ERROR (full-screen card) -->
+          <div class="form-step" id="step-12" style="display:none">
+            <div class="result-card error">
+              <div class="result-icon">✖</div>
+              <h3>Oops!</h3>
+              <p id="resultErrorText">Something went wrong. Please try again.</p>
+              <button type="button" id="errorBackBtn" class="btn-danger">
+                Back to Review
+              </button>
+            </div>
+          </div>
 
           <div class="form-navigation">
             <!--<button type="button" class="save-draft-btn" id="saveDraftBtn">
@@ -1119,179 +840,179 @@
   </div>
 </div>
 
-    <script>
-      // Global state
-      let currentStep = 1;
-      const totalSteps = 10;
-      let formCounters = {
-        education: 1,
-        experience: 1,
-        competency: 1,
-        project: 1,
-        language: 1,
-        community: 1,
-        award: 1,
-      };
-      let certificateCount = {};
+<script>
+  // Global state
+  let currentStep = 1;
+  const totalSteps = 10;
+  let formCounters = {
+    education: 1,
+    experience: 1,
+    competency: 1,
+    project: 1,
+    language: 1,
+    community: 1,
+    award: 1,
+  };
+  let certificateCount = {};
 
-      // Initialize form
-      document.addEventListener("DOMContentLoaded", () => {
-        const modal = document.getElementById("cvFormModal");
-        if (modal) {
-          modal.style.display = "block";
-          showStep(currentStep);
-          setupEventListeners();
-        } else {
-          console.error("cvFormModal not found");
-        }
-        const form = document.getElementById("cvForm");
-  if (form) {
-    form.addEventListener("submit", submitForm);
-  } else {
-    console.error("cvForm not found");
+  // Initialize form
+  document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("cvFormModal");
+    if (modal) {
+      modal.style.display = "block";
+      showStep(currentStep);
+      setupEventListeners();
+    } else {
+      console.error("cvFormModal not found");
+    }
+    const form = document.getElementById("cvForm");
+    if (form) {
+      form.addEventListener("submit", submitForm);
+    } else {
+      console.error("cvForm not found");
+    }
+  });
+
+  function setupEventListeners() {
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const saveDraftBtn = document.getElementById("saveDraftBtn");
+    const clearFormBtn = document.getElementById("clearFormBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const form = document.getElementById("cvForm");
+
+    if (prevBtn) prevBtn.addEventListener("click", () => nextPrev(-1));
+    if (nextBtn) nextBtn.addEventListener("click", () => nextPrev(1));
+    if (saveDraftBtn) saveDraftBtn.addEventListener("click", saveDraft);
+    if (clearFormBtn) clearFormBtn.addEventListener("click", clearForm);
+    if (form && submitBtn) form.addEventListener("submit", submitForm);
+    else console.error("submitBtn or cvForm not found");
+
+    const successContinueBtn = document.getElementById("successContinueBtn");
+    if (successContinueBtn) successContinueBtn.addEventListener("click", startNewForm);
+
+    const errorBackBtn = document.getElementById("errorBackBtn");
+    if (errorBackBtn) errorBackBtn.addEventListener("click", backToReview);
+
+    // Initialize new dropdown fields
+    populateCountryDropdown();
+    populateGraduationYearDropdown();
+
+    // Auto-fill user data from URL parameters (for UCA students)
+    autoFillUserData();
   }
-      });
 
-      function setupEventListeners() {
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        const saveDraftBtn = document.getElementById("saveDraftBtn");
-        const clearFormBtn = document.getElementById("clearFormBtn");
-        const submitBtn = document.getElementById("submitBtn");
-        const form = document.getElementById("cvForm");
+  // Populate country dropdown
+  function populateCountryDropdown() {
+    const countrySelect = document.getElementById("country");
+    if (!countrySelect) return;
 
-        if (prevBtn) prevBtn.addEventListener("click", () => nextPrev(-1));
-        if (nextBtn) nextBtn.addEventListener("click", () => nextPrev(1));
-        if (saveDraftBtn) saveDraftBtn.addEventListener("click", saveDraft);
-        if (clearFormBtn) clearFormBtn.addEventListener("click", clearForm);
-        if (form && submitBtn) form.addEventListener("submit", submitForm);
-        else console.error("submitBtn or cvForm not found");
+    const countries = [
+      "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia",
+      "Austria", "Azerbaijan", "Bahrain", "Bangladesh", "Belarus", "Belgium", "Belize", "Benin",
+      "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
+      "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic",
+      "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba",
+      "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
+      "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland",
+      "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala",
+      "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India",
+      "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
+      "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
+      "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar",
+      "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius",
+      "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
+      "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger",
+      "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine",
+      "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar",
+      "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
+      "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles",
+      "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
+      "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland",
+      "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga",
+      "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine",
+      "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu",
+      "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+    ];
 
-        const successContinueBtn = document.getElementById("successContinueBtn");
-if (successContinueBtn) successContinueBtn.addEventListener("click", startNewForm);
+    countries.forEach(country => {
+      const option = document.createElement("option");
+      option.value = country;
+      option.textContent = country;
+      countrySelect.appendChild(option);
+    });
+  }
 
-const errorBackBtn = document.getElementById("errorBackBtn");
-if (errorBackBtn) errorBackBtn.addEventListener("click", backToReview);
+  // Populate graduation year dropdown
+  function populateGraduationYearDropdown() {
+    const yearSelect = document.getElementById("graduationYear");
+    if (!yearSelect) return;
 
-        // Initialize new dropdown fields
-        populateCountryDropdown();
-        populateGraduationYearDropdown();
-        
-        // Auto-fill user data from URL parameters (for UCA students)
-        autoFillUserData();
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - 5; // 5 years back
+    const endYear = currentYear + 10; // 10 years forward
+
+    for (let year = startYear; year <= endYear; year++) {
+      const option = document.createElement("option");
+      option.value = year;
+      option.textContent = year;
+      yearSelect.appendChild(option);
+    }
+  }
+
+  // Auto-fill user data from URL parameters (for UCA students)
+  function autoFillUserData() {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // Check if this is a student from UCA main website
+    if (urlParams.get('user_type') === 'student') {
+      const nameField = document.getElementById('name');
+      const surnameField = document.getElementById('surname');
+      const emailField = document.getElementById('email');
+      const majorField = document.getElementById('major');
+
+      // Auto-fill and disable editing for name, surname, and email
+      if (urlParams.get('name') && nameField) {
+        nameField.value = urlParams.get('name');
+        nameField.disabled = true;
+        nameField.style.backgroundColor = '#f8f9fa';
+        nameField.style.cursor = 'not-allowed';
       }
 
-      // Populate country dropdown
-      function populateCountryDropdown() {
-        const countrySelect = document.getElementById("country");
-        if (!countrySelect) return;
-
-        const countries = [
-          "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia",
-          "Austria", "Azerbaijan", "Bahrain", "Bangladesh", "Belarus", "Belgium", "Belize", "Benin",
-          "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
-          "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic",
-          "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba",
-          "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
-          "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland",
-          "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala",
-          "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India",
-          "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan",
-          "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
-          "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar",
-          "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius",
-          "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
-          "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger",
-          "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine",
-          "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar",
-          "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
-          "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles",
-          "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
-          "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland",
-          "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga",
-          "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine",
-          "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu",
-          "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-        ];
-
-        countries.forEach(country => {
-          const option = document.createElement("option");
-          option.value = country;
-          option.textContent = country;
-          countrySelect.appendChild(option);
-        });
+      if (urlParams.get('surname') && surnameField) {
+        surnameField.value = urlParams.get('surname');
+        surnameField.disabled = true;
+        surnameField.style.backgroundColor = '#f8f9fa';
+        surnameField.style.cursor = 'not-allowed';
       }
 
-      // Populate graduation year dropdown
-      function populateGraduationYearDropdown() {
-        const yearSelect = document.getElementById("graduationYear");
-        if (!yearSelect) return;
-
-        const currentYear = new Date().getFullYear();
-        const startYear = currentYear - 5; // 5 years back
-        const endYear = currentYear + 10; // 10 years forward
-
-        for (let year = startYear; year <= endYear; year++) {
-          const option = document.createElement("option");
-          option.value = year;
-          option.textContent = year;
-          yearSelect.appendChild(option);
-        }
+      if (urlParams.get('email') && emailField) {
+        emailField.value = urlParams.get('email');
+        emailField.disabled = true;
+        emailField.style.backgroundColor = '#f8f9fa';
+        emailField.style.cursor = 'not-allowed';
       }
 
-      // Auto-fill user data from URL parameters (for UCA students)
-      function autoFillUserData() {
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        // Check if this is a student from UCA main website
-        if (urlParams.get('user_type') === 'student') {
-          const nameField = document.getElementById('name');
-          const surnameField = document.getElementById('surname');
-          const emailField = document.getElementById('email');
-          const majorField = document.getElementById('major');
-          
-          // Auto-fill and disable editing for name, surname, and email
-          if (urlParams.get('name') && nameField) {
-            nameField.value = urlParams.get('name');
-            nameField.disabled = true;
-            nameField.style.backgroundColor = '#f8f9fa';
-            nameField.style.cursor = 'not-allowed';
-          }
-          
-          if (urlParams.get('surname') && surnameField) {
-            surnameField.value = urlParams.get('surname');
-            surnameField.disabled = true;
-            surnameField.style.backgroundColor = '#f8f9fa';
-            surnameField.style.cursor = 'not-allowed';
-          }
-          
-          if (urlParams.get('email') && emailField) {
-            emailField.value = urlParams.get('email');
-            emailField.disabled = true;
-            emailField.style.backgroundColor = '#f8f9fa';
-            emailField.style.cursor = 'not-allowed';
-          }
-          
-          // Auto-fill major if available
-          if (urlParams.get('major') && majorField) {
-            // Wait for the select options to be available
-            setTimeout(() => {
-              majorField.value = urlParams.get('major');
-            }, 100);
-          }
-          
-          // Add visual indicators for UCA students
-          addUCAStudentIndicators();
-        }
+      // Auto-fill major if available
+      if (urlParams.get('major') && majorField) {
+        // Wait for the select options to be available
+        setTimeout(() => {
+          majorField.value = urlParams.get('major');
+        }, 100);
       }
-      
-      function addUCAStudentIndicators() {
-        // Add a notice at the top of the form for UCA students
-        const formStep1 = document.getElementById('step-1');
-        if (formStep1) {
-          const notice = document.createElement('div');
-          notice.className = 'uca-student-notice';
-          notice.innerHTML = `
+
+      // Add visual indicators for UCA students
+      addUCAStudentIndicators();
+    }
+  }
+
+  function addUCAStudentIndicators() {
+    // Add a notice at the top of the form for UCA students
+    const formStep1 = document.getElementById('step-1');
+    if (formStep1) {
+      const notice = document.createElement('div');
+      notice.className = 'uca-student-notice';
+      notice.innerHTML = `
             <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #17a2b8;">
               <div style="display: flex; align-items: center;">
                 <i class="fas fa-university" style="color: #17a2b8; margin-right: 10px; font-size: 18px;"></i>
@@ -1304,195 +1025,195 @@ if (errorBackBtn) errorBackBtn.addEventListener("click", backToReview);
               </div>
             </div>
           `;
-          formStep1.insertBefore(notice, formStep1.querySelector('h3').nextSibling);
-        }
-      }
-
-/**
- * Show the "result step" (success or error) as a full screen step.
- * This hides progress UI and all other steps, like a step-11/12.
- * 
- * @param {"success"|"error"} kind 
- * @param {string=} message optional error text
- */
-function showResultStep(kind, message) {
-  // Hide all steps
-  document.querySelectorAll(".form-step").forEach(s => (s.style.display = "none"));
-
-  // Hide progress UI because result steps are not part of the 10-step flow
-  const progressBarEl  = document.getElementById("progressBar");
-  const progressTextEl = document.querySelector(".progress-text");
-  if (progressBarEl)  progressBarEl.style.display  = "none";
-  if (progressTextEl) progressTextEl.style.display = "none";
-
-  // Decide which step to show
-  const successEl = document.getElementById("step-11");
-  const errorEl   = document.getElementById("step-12");
-
-  if (kind === "success" && successEl) {
-    successEl.style.display = "block";
-    // optional: scroll to top
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  } else if (kind === "error" && errorEl) {
-    if (message) {
-      const msgNode = document.getElementById("resultErrorText");
-      if (msgNode) msgNode.textContent = message;
+      formStep1.insertBefore(notice, formStep1.querySelector('h3').nextSibling);
     }
-    errorEl.style.display = "block";
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-}
-
-/** From success step: start a new form and go back to step 1 */
-function startNewForm() {
-  // Reset form
-  const form = document.getElementById("cvForm");
-  if (form) form.reset();
-
-  // Reset dynamic counters if needed
-  formCounters = {
-    education: 1,
-    experience: 1,
-    competency: 1,
-    project: 1,
-    language: 1,
-    community: 1,
-    award: 1,
-  };
-
-  // Hide result steps
-  const s11 = document.getElementById("step-11");
-  const s12 = document.getElementById("step-12");
-  if (s11) s11.style.display = "none";
-  if (s12) s12.style.display = "none";
-
-  // Return to normal progress UI and show step 1
-  const progressBarEl  = document.getElementById("progressBar");
-  const progressTextEl = document.querySelector(".progress-text");
-  if (progressBarEl)  progressBarEl.style.display  = "";
-  if (progressTextEl) progressTextEl.style.display = "";
-
-  currentStep = 1;
-  showStep(currentStep);
-}
-
-/** From error step: go back to Review (step 10) to fix things */
-function backToReview() {
-  // Hide result steps
-  const s11 = document.getElementById("step-11");
-  const s12 = document.getElementById("step-12");
-  if (s11) s11.style.display = "none";
-  if (s12) s12.style.display = "none";
-
-  // Restore progress UI
-  const progressBarEl  = document.getElementById("progressBar");
-  const progressTextEl = document.querySelector(".progress-text");
-  if (progressBarEl)  progressBarEl.style.display  = "";
-  if (progressTextEl) progressTextEl.style.display = "";
-
-  // Show Review step again
-  currentStep = totalSteps; // 10
-  showStep(currentStep);
-}
-
-
-function showStep(step) {
-  // Hide all steps
-  document.querySelectorAll(".form-step").forEach(s => s.style.display = "none");
-
-  // Show the current step
-  const currentStepElement = document.getElementById(`step-${step}`);
-  if (currentStepElement) {
-    currentStepElement.style.display = "block";
-  } else {
-    console.error(`Step-${step} not found`);
   }
 
-  // Toggle progress UI (bar + "Step X of 10") for review step
-  const progressBarEl  = document.getElementById("progressBar");
-  const progressTextEl = document.querySelector(".progress-text");
+  /**
+   * Show the "result step" (success or error) as a full screen step.
+   * This hides progress UI and all other steps, like a step-11/12.
+   * 
+   * @param {"success"|"error"} kind 
+   * @param {string=} message optional error text
+   */
+  function showResultStep(kind, message) {
+    // Hide all steps
+    document.querySelectorAll(".form-step").forEach(s => (s.style.display = "none"));
 
-  if (step === totalSteps) {
-    if (progressBarEl)  progressBarEl.style.display  = "none";
+    // Hide progress UI because result steps are not part of the 10-step flow
+    const progressBarEl = document.getElementById("progressBar");
+    const progressTextEl = document.querySelector(".progress-text");
+    if (progressBarEl) progressBarEl.style.display = "none";
     if (progressTextEl) progressTextEl.style.display = "none";
-    // Build review content
-    populateReview();
-  } else {
-    if (progressBarEl)  progressBarEl.style.display  = "";
-    if (progressTextEl) progressTextEl.style.display = "";
+
+    // Decide which step to show
+    const successEl = document.getElementById("step-11");
+    const errorEl = document.getElementById("step-12");
+
+    if (kind === "success" && successEl) {
+      successEl.style.display = "block";
+      // optional: scroll to top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (kind === "error" && errorEl) {
+      if (message) {
+        const msgNode = document.getElementById("resultErrorText");
+        if (msgNode) msgNode.textContent = message;
+      }
+      errorEl.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }
 
-  // Keep your existing indicators/progress logic
-  updateStepIndicator(step);
-  updateProgressBar(step);
-}
+  /** From success step: start a new form and go back to step 1 */
+  function startNewForm() {
+    // Reset form
+    const form = document.getElementById("cvForm");
+    if (form) form.reset();
 
-      function updateStepIndicator(step) {
-        const currentStepEls = document.querySelectorAll("#currentStep");
-        const totalStepsEl = document.getElementById("totalSteps");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
-        const submitBtn = document.getElementById("submitBtn");
+    // Reset dynamic counters if needed
+    formCounters = {
+      education: 1,
+      experience: 1,
+      competency: 1,
+      project: 1,
+      language: 1,
+      community: 1,
+      award: 1,
+    };
 
-        if (
-          currentStepEls.length &&
-          totalStepsEl &&
-          prevBtn &&
-          nextBtn &&
-          submitBtn
-        ) {
-          currentStepEls.forEach((el) => (el.textContent = step));
-          document
-            .querySelectorAll("#progressBar .progress-step")
-            .forEach((el, i) => {
-              el.classList.toggle("active", i < step);
-            });
-          prevBtn.style.display = step > 1 ? "inline-block" : "none";
-          nextBtn.style.display = step < totalSteps ? "inline-block" : "none";
-          submitBtn.style.display =
-            step === totalSteps ? "inline-block" : "none";
-        } else {
-          console.error("One or more step indicator elements not found");
+    // Hide result steps
+    const s11 = document.getElementById("step-11");
+    const s12 = document.getElementById("step-12");
+    if (s11) s11.style.display = "none";
+    if (s12) s12.style.display = "none";
+
+    // Return to normal progress UI and show step 1
+    const progressBarEl = document.getElementById("progressBar");
+    const progressTextEl = document.querySelector(".progress-text");
+    if (progressBarEl) progressBarEl.style.display = "";
+    if (progressTextEl) progressTextEl.style.display = "";
+
+    currentStep = 1;
+    showStep(currentStep);
+  }
+
+  /** From error step: go back to Review (step 10) to fix things */
+  function backToReview() {
+    // Hide result steps
+    const s11 = document.getElementById("step-11");
+    const s12 = document.getElementById("step-12");
+    if (s11) s11.style.display = "none";
+    if (s12) s12.style.display = "none";
+
+    // Restore progress UI
+    const progressBarEl = document.getElementById("progressBar");
+    const progressTextEl = document.querySelector(".progress-text");
+    if (progressBarEl) progressBarEl.style.display = "";
+    if (progressTextEl) progressTextEl.style.display = "";
+
+    // Show Review step again
+    currentStep = totalSteps; // 10
+    showStep(currentStep);
+  }
+
+
+  function showStep(step) {
+    // Hide all steps
+    document.querySelectorAll(".form-step").forEach(s => s.style.display = "none");
+
+    // Show the current step
+    const currentStepElement = document.getElementById(`step-${step}`);
+    if (currentStepElement) {
+      currentStepElement.style.display = "block";
+    } else {
+      console.error(`Step-${step} not found`);
+    }
+
+    // Toggle progress UI (bar + "Step X of 10") for review step
+    const progressBarEl = document.getElementById("progressBar");
+    const progressTextEl = document.querySelector(".progress-text");
+
+    if (step === totalSteps) {
+      if (progressBarEl) progressBarEl.style.display = "none";
+      if (progressTextEl) progressTextEl.style.display = "none";
+      // Build review content
+      populateReview();
+    } else {
+      if (progressBarEl) progressBarEl.style.display = "";
+      if (progressTextEl) progressTextEl.style.display = "";
+    }
+
+    // Keep your existing indicators/progress logic
+    updateStepIndicator(step);
+    updateProgressBar(step);
+  }
+
+  function updateStepIndicator(step) {
+    const currentStepEls = document.querySelectorAll("#currentStep");
+    const totalStepsEl = document.getElementById("totalSteps");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const submitBtn = document.getElementById("submitBtn");
+
+    if (
+      currentStepEls.length &&
+      totalStepsEl &&
+      prevBtn &&
+      nextBtn &&
+      submitBtn
+    ) {
+      currentStepEls.forEach((el) => (el.textContent = step));
+      document
+        .querySelectorAll("#progressBar .progress-step")
+        .forEach((el, i) => {
+          el.classList.toggle("active", i < step);
+        });
+      prevBtn.style.display = step > 1 ? "inline-block" : "none";
+      nextBtn.style.display = step < totalSteps ? "inline-block" : "none";
+      submitBtn.style.display =
+        step === totalSteps ? "inline-block" : "none";
+    } else {
+      console.error("One or more step indicator elements not found");
+    }
+  }
+
+  function nextPrev(n) {
+    if (validateStep(currentStep)) {
+      currentStep += n;
+      if (currentStep < 1) currentStep = 1;
+      if (currentStep > totalSteps) currentStep = totalSteps;
+      showStep(currentStep);
+    }
+  }
+
+  function validateStep(step) {
+    let isValid = true;
+    const stepElement = document.getElementById(`step-${step}`);
+    if (stepElement) {
+      stepElement.querySelectorAll("[required]").forEach((input) => {
+        const errorEl = input
+          .closest(".form-group")
+          ?.querySelector(".error-message");
+        if (!input.value.trim()) {
+          if (errorEl) errorEl.style.display = "block";
+          isValid = false;
+        } else if (errorEl) {
+          errorEl.style.display = "none";
         }
-      }
+      });
+    } else {
+      console.error(`Step-${step} not found for validation`);
+    }
+    return isValid;
+  }
 
-      function nextPrev(n) {
-        if (validateStep(currentStep)) {
-          currentStep += n;
-          if (currentStep < 1) currentStep = 1;
-          if (currentStep > totalSteps) currentStep = totalSteps;
-          showStep(currentStep);
-        }
-      }
+  function addEducation() {
+    const container = document.getElementById("educationContainer");
+    const count = container.querySelectorAll(".education-entry").length + 1;
 
-      function validateStep(step) {
-        let isValid = true;
-        const stepElement = document.getElementById(`step-${step}`);
-        if (stepElement) {
-          stepElement.querySelectorAll("[required]").forEach((input) => {
-            const errorEl = input
-              .closest(".form-group")
-              ?.querySelector(".error-message");
-            if (!input.value.trim()) {
-              if (errorEl) errorEl.style.display = "block";
-              isValid = false;
-            } else if (errorEl) {
-              errorEl.style.display = "none";
-            }
-          });
-        } else {
-          console.error(`Step-${step} not found for validation`);
-        }
-        return isValid;
-      }
-
-      function addEducation() {
-  const container = document.getElementById("educationContainer");
-  const count = container.querySelectorAll(".education-entry").length + 1;
-
-  const entry = document.createElement("div");
-  entry.className = "education-entry";
-  entry.innerHTML = `
+    const entry = document.createElement("div");
+    entry.className = "education-entry";
+    entry.innerHTML = `
     <div class="row">
       <div class="form-group">
         <label for="degreeTitle${count}"><i class="fas fa-graduation-cap"></i>Degree Title <span class="required">*</span></label>
@@ -1576,23 +1297,23 @@ function showStep(step) {
     <button type="button" class="remove-btn" onclick="removeEducation(this)">×</button>
   `;
 
-  container.appendChild(entry);
-  updateRemoveButtons("educationContainer", "education-entry");
-}
+    container.appendChild(entry);
+    updateRemoveButtons("educationContainer", "education-entry");
+  }
 
-      function removeEducation(btn) {
-        const entry = btn.closest(".education-entry");
-        if (entry) entry.remove();
-        updateRemoveButtons("educationContainer", "education-entry");
-      }
+  function removeEducation(btn) {
+    const entry = btn.closest(".education-entry");
+    if (entry) entry.remove();
+    updateRemoveButtons("educationContainer", "education-entry");
+  }
 
-      function addCertificate() {
-        const container = document.getElementById("certificatesContainer");
-        const count =
-          container.querySelectorAll(".certificate-entry").length + 1;
-        const entry = document.createElement("div");
-        entry.className = "certificate-entry";
-        entry.innerHTML = `
+  function addCertificate() {
+    const container = document.getElementById("certificatesContainer");
+    const count =
+      container.querySelectorAll(".certificate-entry").length + 1;
+    const entry = document.createElement("div");
+    entry.className = "certificate-entry";
+    entry.innerHTML = `
     <div class="row">
       <div class="form-group">
         <label for="certificateTitle${count}"><i class="fas fa-certificate"></i>Certificate Title</label>
@@ -1620,34 +1341,34 @@ function showStep(step) {
     </div>
     <button type="button" class="remove-btn" onclick="removeCertificate(this)">×</button>
   `;
-        container.appendChild(entry);
-        updateRemoveButtons("certificatesContainer", "certificate-entry");
+    container.appendChild(entry);
+    updateRemoveButtons("certificatesContainer", "certificate-entry");
+  }
+
+  function removeCertificate(btn) {
+    const entry = btn.closest(".certificate-entry");
+    if (entry) entry.remove();
+    updateRemoveButtons("certificatesContainer", "certificate-entry");
+  }
+
+  function updateRemoveButtons(containerId, entryClass) {
+    const container = document.getElementById(containerId);
+    const entries = container.querySelectorAll(`.${entryClass}`);
+    entries.forEach((entry, index) => {
+      const removeBtn = entry.querySelector(".remove-btn");
+      if (removeBtn) {
+        removeBtn.disabled = entries.length === 1;
       }
+    });
+  }
 
-      function removeCertificate(btn) {
-        const entry = btn.closest(".certificate-entry");
-        if (entry) entry.remove();
-        updateRemoveButtons("certificatesContainer", "certificate-entry");
-      }
+  function addExperience() {
+    const container = document.getElementById("experienceContainer");
+    const count = container.querySelectorAll(".experience-entry").length + 1;
 
-      function updateRemoveButtons(containerId, entryClass) {
-        const container = document.getElementById(containerId);
-        const entries = container.querySelectorAll(`.${entryClass}`);
-        entries.forEach((entry, index) => {
-          const removeBtn = entry.querySelector(".remove-btn");
-          if (removeBtn) {
-            removeBtn.disabled = entries.length === 1;
-          }
-        });
-      }
-
-function addExperience() {
-  const container = document.getElementById("experienceContainer");
-  const count = container.querySelectorAll(".experience-entry").length + 1;
-
-  const entry = document.createElement("div");
-  entry.className = "experience-entry";
-  entry.innerHTML = `
+    const entry = document.createElement("div");
+    entry.className = "experience-entry";
+    entry.innerHTML = `
     <div class="row">
       <div class="form-group">
         <label for="positionTitle${count}"><i class="fas fa-briefcase"></i>Position Title <span class="required">*</span></label>
@@ -1789,88 +1510,88 @@ function addExperience() {
     </button>
   `;
 
-  container.appendChild(entry);
-  updateRemoveButtons("experienceContainer", "experience-entry");
-}
+    container.appendChild(entry);
+    updateRemoveButtons("experienceContainer", "experience-entry");
+  }
 
-      function removeExperience(btn) {
-        const container = document.getElementById("experienceContainer");
-        const entries = container.querySelectorAll(".experience-entry");
+  function removeExperience(btn) {
+    const container = document.getElementById("experienceContainer");
+    const entries = container.querySelectorAll(".experience-entry");
 
-        if (entries.length > 1) {
-          // Only remove if more than one entry exists
-          const entry = btn.closest(".experience-entry");
-          if (entry) {
-            entry.remove();
+    if (entries.length > 1) {
+      // Only remove if more than one entry exists
+      const entry = btn.closest(".experience-entry");
+      if (entry) {
+        entry.remove();
 
-            // Optionally reindex the entries (update ids and names)
-            container
-              .querySelectorAll(".experience-entry")
-              .forEach((entry, index) => {
-                const count = index + 1;
-                entry
-                  .querySelectorAll("label, input, textarea, select")
-                  .forEach((el) => {
-                    // Update 'for' attributes on labels
-                    if (
-                      el.tagName.toLowerCase() === "label" &&
-                      el.hasAttribute("for")
-                    ) {
-                      el.setAttribute(
-                        "for",
-                        el
-                          .getAttribute("for")
-                          .replace(
-                            /\d+(_\d+)?$/,
-                            count +
-                              (el.getAttribute("for").match(/_\d+$/) || "")
-                          )
-                      );
-                    }
-                    // Update id attributes
-                    if (el.hasAttribute("id")) {
-                      el.id = el.id.replace(
+        // Optionally reindex the entries (update ids and names)
+        container
+          .querySelectorAll(".experience-entry")
+          .forEach((entry, index) => {
+            const count = index + 1;
+            entry
+              .querySelectorAll("label, input, textarea, select")
+              .forEach((el) => {
+                // Update 'for' attributes on labels
+                if (
+                  el.tagName.toLowerCase() === "label" &&
+                  el.hasAttribute("for")
+                ) {
+                  el.setAttribute(
+                    "for",
+                    el
+                      .getAttribute("for")
+                      .replace(
                         /\d+(_\d+)?$/,
-                        count + (el.id.match(/_\d+$/) || "")
-                      );
-                    }
-                    // Update name attributes
-                    if (el.hasAttribute("name")) {
-                      el.name = el.name.replace(
-                        /\d+(_\d+)?$/,
-                        count + (el.name.match(/_\d+$/) || "")
-                      );
-                    }
-                  });
-                // Update checkbox onchange attribute for currentJob
-                const checkbox = entry.querySelector(
-                  `input[type="checkbox"][id^="currentJob"]`
-                );
-                if (checkbox) {
-                  checkbox.setAttribute(
-                    "onchange",
-                    `toggleCurrentJob(${count})`
+                        count +
+                        (el.getAttribute("for").match(/_\d+$/) || "")
+                      )
+                  );
+                }
+                // Update id attributes
+                if (el.hasAttribute("id")) {
+                  el.id = el.id.replace(
+                    /\d+(_\d+)?$/,
+                    count + (el.id.match(/_\d+$/) || "")
+                  );
+                }
+                // Update name attributes
+                if (el.hasAttribute("name")) {
+                  el.name = el.name.replace(
+                    /\d+(_\d+)?$/,
+                    count + (el.name.match(/_\d+$/) || "")
                   );
                 }
               });
-
-            // Call your function to update remove buttons if you have it
-            if (typeof updateRemoveButtons === "function") {
-              updateRemoveButtons("experienceContainer", "experience-entry");
+            // Update checkbox onchange attribute for currentJob
+            const checkbox = entry.querySelector(
+              `input[type="checkbox"][id^="currentJob"]`
+            );
+            if (checkbox) {
+              checkbox.setAttribute(
+                "onchange",
+                `toggleCurrentJob(${count})`
+              );
             }
-          }
-        } else {
-          alert("At least one experience entry is required.");
+          });
+
+        // Call your function to update remove buttons if you have it
+        if (typeof updateRemoveButtons === "function") {
+          updateRemoveButtons("experienceContainer", "experience-entry");
         }
       }
+    } else {
+      alert("At least one experience entry is required.");
+    }
+  }
 
-      function addCompetency() {
-        formCounters.competency++;
-        const container = document.getElementById("competencyContainer");
-        const newEntry = document.createElement("div");
-        newEntry.className = "competency-entry";
-        newEntry.id = `competency-${formCounters.competency}`;
-        newEntry.innerHTML = `
+  function addCompetency() {
+    formCounters.competency++;
+    const container = document.getElementById("competencyContainer");
+    const newEntry = document.createElement("div");
+    newEntry.className = "competency-entry";
+    newEntry.id = `competency-${formCounters.competency}`;
+    newEntry.innerHTML = `
             <div class="row">
                 <div class="form-group">
                     <label for="competencyType${formCounters.competency}"><i class="fas fa-star"></i>Competency Type *</label>
@@ -1890,25 +1611,25 @@ function addExperience() {
             </div>
             <button type="button" class="remove-btn" onclick="removeCompetency(this)">- Remove</button>
         `;
-        if (container) container.appendChild(newEntry);
-      }
+    if (container) container.appendChild(newEntry);
+  }
 
-      function removeCompetency(btn) {
-        const entry = btn.closest(".competency-entry");
-        if (entry && formCounters.competency > 1) {
-          entry.remove();
-          formCounters.competency--;
-        }
-      }
+  function removeCompetency(btn) {
+    const entry = btn.closest(".competency-entry");
+    if (entry && formCounters.competency > 1) {
+      entry.remove();
+      formCounters.competency--;
+    }
+  }
 
-      function addProject() {
-  const container = document.getElementById("projectContainer");
-  const count = container.querySelectorAll(".project-entry").length + 1;
+  function addProject() {
+    const container = document.getElementById("projectContainer");
+    const count = container.querySelectorAll(".project-entry").length + 1;
 
-  const entry = document.createElement("div");
-  entry.className = "project-entry";
-  entry.id = `project-${count}`;
-  entry.innerHTML = `
+    const entry = document.createElement("div");
+    entry.className = "project-entry";
+    entry.id = `project-${count}`;
+    entry.innerHTML = `
     <div class="row">
       <div class="form-group">
         <label for="projectTitle${count}"><i class="fas fa-project-diagram"></i>Project Title <span class="required">*</span></label>
@@ -1980,25 +1701,25 @@ function addExperience() {
     </button>
   `;
 
-  container.appendChild(entry);
-  updateRemoveButtons("projectContainer", "project-entry");
-}
+    container.appendChild(entry);
+    updateRemoveButtons("projectContainer", "project-entry");
+  }
 
-      function removeProject(btn) {
-        const entry = btn.closest(".project-entry");
-        if (entry && formCounters.project > 1) {
-          entry.remove();
-          formCounters.project--;
-        }
-      }
+  function removeProject(btn) {
+    const entry = btn.closest(".project-entry");
+    if (entry && formCounters.project > 1) {
+      entry.remove();
+      formCounters.project--;
+    }
+  }
 
-      function addLanguage() {
-        const container = document.getElementById("languagesContainer");
-        const count = container.querySelectorAll(".language-entry").length + 1;
+  function addLanguage() {
+    const container = document.getElementById("languagesContainer");
+    const count = container.querySelectorAll(".language-entry").length + 1;
 
-        const entry = document.createElement("div");
-        entry.className = "language-entry";
-        entry.innerHTML = `
+    const entry = document.createElement("div");
+    entry.className = "language-entry";
+    entry.innerHTML = `
     <div class="row">
       <div class="form-group">
         <label for="language${count}"><i class="fas fa-language"></i>Language</label>
@@ -2025,48 +1746,48 @@ function addExperience() {
     <button type="button" class="remove-btn" onclick="removeLanguage(this)">×</button>
   `;
 
-        container.appendChild(entry);
-        updateRemoveButtons("languagesContainer", "language-entry");
+    container.appendChild(entry);
+    updateRemoveButtons("languagesContainer", "language-entry");
+  }
+
+  function removeLanguage(button) {
+    const entry = button.closest(".language-entry");
+    if (entry) {
+      entry.remove();
+      updateRemoveButtons("languagesContainer", "language-entry");
+    }
+  }
+
+  function updateRemoveButtons(containerId, entryClass) {
+    const container = document.getElementById(containerId);
+    const entries = container.querySelectorAll(`.${entryClass}`);
+    entries.forEach((entry, index) => {
+      const removeBtn = entry.querySelector(".remove-btn");
+      if (removeBtn) {
+        removeBtn.style.display =
+          entries.length > 1 ? "inline-block" : "none";
       }
 
-      function removeLanguage(button) {
-        const entry = button.closest(".language-entry");
-        if (entry) {
-          entry.remove();
-          updateRemoveButtons("languagesContainer", "language-entry");
-        }
+      // Optional: update input IDs and names if needed
+      const langInput = entry.querySelector('input[type="text"]');
+      const selectInput = entry.querySelector("select");
+      if (langInput) {
+        langInput.id = `language${index + 1}`;
+        langInput.name = `language${index + 1}`;
       }
-
-      function updateRemoveButtons(containerId, entryClass) {
-        const container = document.getElementById(containerId);
-        const entries = container.querySelectorAll(`.${entryClass}`);
-        entries.forEach((entry, index) => {
-          const removeBtn = entry.querySelector(".remove-btn");
-          if (removeBtn) {
-            removeBtn.style.display =
-              entries.length > 1 ? "inline-block" : "none";
-          }
-
-          // Optional: update input IDs and names if needed
-          const langInput = entry.querySelector('input[type="text"]');
-          const selectInput = entry.querySelector("select");
-          if (langInput) {
-            langInput.id = `language${index + 1}`;
-            langInput.name = `language${index + 1}`;
-          }
-          if (selectInput) {
-            selectInput.id = `proficiency${index + 1}`;
-            selectInput.name = `proficiency${index + 1}`;
-          }
-        });
+      if (selectInput) {
+        selectInput.id = `proficiency${index + 1}`;
+        selectInput.name = `proficiency${index + 1}`;
       }
+    });
+  }
 
-      function addCommunity() {
-        const container = document.getElementById("communityContainer");
-        const count = container.querySelectorAll(".community-entry").length + 1;
-        const entry = document.createElement("div");
-        entry.className = "community-entry";
-        entry.innerHTML = `
+  function addCommunity() {
+    const container = document.getElementById("communityContainer");
+    const count = container.querySelectorAll(".community-entry").length + 1;
+    const entry = document.createElement("div");
+    entry.className = "community-entry";
+    entry.innerHTML = `
     <div class="row">
       <div class="form-group">
         <label for="communityPosition${count}"><i class="fas fa-handshake"></i>Position Title</label>
@@ -2108,41 +1829,41 @@ function addExperience() {
     </div>
     <button type="button" class="remove-btn" onclick="removeCommunity(this)">×</button>
   `;
-        container.appendChild(entry);
-        updateRemoveButtons("communityContainer", "community-entry");
-      }
+    container.appendChild(entry);
+    updateRemoveButtons("communityContainer", "community-entry");
+  }
 
-      function removeCommunity(button) {
-        const entry = button.closest(".community-entry");
-        if (!entry) return;
+  function removeCommunity(button) {
+    const entry = button.closest(".community-entry");
+    if (!entry) return;
 
-        const container = document.getElementById("communityContainer");
-        if (container.querySelectorAll(".community-entry").length > 1) {
-          entry.remove();
-          updateRemoveButtons("communityContainer", "community-entry");
-        }
-      }
+    const container = document.getElementById("communityContainer");
+    if (container.querySelectorAll(".community-entry").length > 1) {
+      entry.remove();
+      updateRemoveButtons("communityContainer", "community-entry");
+    }
+  }
 
-      function updateRemoveButtons(containerId, entryClass) {
-        const container = document.getElementById(containerId);
-        const entries = container.querySelectorAll(`.${entryClass}`);
+  function updateRemoveButtons(containerId, entryClass) {
+    const container = document.getElementById(containerId);
+    const entries = container.querySelectorAll(`.${entryClass}`);
 
-        // Show remove buttons only if more than one entry exists
-        entries.forEach((entry, index) => {
-          const btn = entry.querySelector(".remove-btn");
-          if (btn)
-            btn.style.display = entries.length > 1 ? "inline-block" : "none";
-        });
-      }
+    // Show remove buttons only if more than one entry exists
+    entries.forEach((entry, index) => {
+      const btn = entry.querySelector(".remove-btn");
+      if (btn)
+        btn.style.display = entries.length > 1 ? "inline-block" : "none";
+    });
+  }
 
-      function addAward() {
-        formCounters.award++;
-        const container = document.getElementById("awardsContainer");
-        const count = formCounters.award;
-        const newEntry = document.createElement("div");
-        newEntry.className = "award-entry";
-        newEntry.id = `award-${count}`;
-        newEntry.innerHTML = `
+  function addAward() {
+    formCounters.award++;
+    const container = document.getElementById("awardsContainer");
+    const count = formCounters.award;
+    const newEntry = document.createElement("div");
+    newEntry.className = "award-entry";
+    newEntry.id = `award-${count}`;
+    newEntry.innerHTML = `
     <div class="row">
       <div class="form-group">
         <label for="awardName${count}"><i class="fas fa-trophy"></i>Award Name</label>
@@ -2177,319 +1898,319 @@ function addExperience() {
     </div>
     <button type="button" class="remove-btn" onclick="removeAward(this)">×</button>
   `;
-        container.appendChild(newEntry);
-        updateRemoveButtons("awardsContainer", "award-entry");
-      }
+    container.appendChild(newEntry);
+    updateRemoveButtons("awardsContainer", "award-entry");
+  }
 
-      function removeAward(btn) {
-        const entry = btn.closest(".award-entry");
-        const container = document.getElementById("awardsContainer");
-        if (entry && container.querySelectorAll(".award-entry").length > 1) {
-          entry.remove();
-          formCounters.award--;
-          updateRemoveButtons("awardsContainer", "award-entry");
-        }
-      }
-
-      // Helper to show/hide remove buttons based on count
-      function updateRemoveButtons(containerId, entryClass) {
-        const container = document.getElementById(containerId);
-        const entries = container.querySelectorAll(`.${entryClass}`);
-        entries.forEach((entry) => {
-          const btn = entry.querySelector(".remove-btn");
-          if (btn)
-            btn.style.display = entries.length > 1 ? "inline-block" : "none";
-        });
-      }
-
-      function addReference() {
-  const container = document.getElementById("referencesContainer");
-  const references = container.getElementsByClassName("reference-entry");
-  const newIndex = references.length + 1;
-
-  const first = references[0];
-  const clone = first.cloneNode(true);
-
-  // Update IDs, names, and clear values
-  const inputs = clone.querySelectorAll("input, textarea");
-  inputs.forEach((input) => {
-    if (input.id) input.id = input.id.replace(/\d+/, newIndex);
-    if (input.name) input.name = input.name.replace(/\d+/, newIndex);
-    input.value = "";
-  });
-
-  const labels = clone.querySelectorAll("label");
-  labels.forEach((label) => {
-    const htmlFor = label.getAttribute("for");
-    if (htmlFor) label.setAttribute("for", htmlFor.replace(/\d+/, newIndex));
-  });
-
-  // Show remove button
-  const removeBtn = clone.querySelector(".remove-btn");
-  removeBtn.style.display = "inline-block";
-
-  container.appendChild(clone);
-}
-
-      function removeReference(btn) {
-        const container = document.getElementById("referencesContainer");
-        const entry = btn.closest(".reference-entry");
-        if (
-          entry &&
-          container.querySelectorAll(".reference-entry").length > 1
-        ) {
-          entry.remove();
-          updateRemoveButtons("referencesContainer", "reference-entry");
-        }
-      }
-
-      function updateRemoveButtons(containerId, entryClass) {
-        const container = document.getElementById(containerId);
-        const entries = container.querySelectorAll(`.${entryClass}`);
-        entries.forEach((entry) => {
-          const btn = entry.querySelector(".remove-btn");
-          if (btn)
-            btn.style.display = entries.length > 1 ? "inline-block" : "none";
-        });
-      }
-
-function updateProgressBar(currentStep){
-  const bar   = document.getElementById('progressBar');
-  const fill  = document.getElementById('progressFill');
-  const steps = Array.from(bar.querySelectorAll('.progress-step'));
-
-  // states
-  steps.forEach((el, i) => {
-    el.classList.toggle('active', i === currentStep - 1);
-    el.classList.toggle('completed', i <  currentStep - 1);
-  });
-
-  // line width: from first dot center to current dot center
-  const first = steps[0];
-  const curr  = steps[currentStep - 1];
-
-  const firstCenter = first.offsetLeft + first.offsetWidth/2;
-  const currCenter  = curr.offsetLeft  + curr.offsetWidth/2;
-
-  fill.style.width = Math.max(0, currCenter - firstCenter) + 'px';
-}
-
-// keep in sync on resize
-window.addEventListener('resize', () => updateProgressBar(currentStep));
-
-      function saveDraft() {
-        showMessage("Draft saved (feature not implemented yet)", "success");
-        console.log("Draft saved");
-      }
-
-      function clearForm() {
-        if (confirm("Are you sure you want to clear the form?")) {
-          const form = document.getElementById("cvForm");
-          if (form) form.reset();
-          formCounters = {
-            education: 1,
-            experience: 1,
-            competency: 1,
-            project: 1,
-            language: 1,
-            community: 1,
-            award: 1,
-          };
-          certificateCount = {};
-          const containers = [
-            "educationContainer",
-            "experienceContainer",
-            "competencyContainer",
-            "projectContainer",
-            "languageContainer",
-            "communityContainer",
-            "awardContainer",
-          ];
-          containers.forEach((containerId) => {
-            const container = document.getElementById(containerId);
-            const baseId = containerId.replace("Container", "-1");
-            if (container && document.getElementById(baseId)) {
-              container.innerHTML = document.getElementById(baseId).outerHTML;
-            }
-          });
-          showStep(1);
-          console.log("Form cleared");
-        }
-      }
-
-      function buildCVData() {
-  const val = id => document.getElementById(id)?.value.trim() || "";
-
-  // Gather Education entries
-  const educations = [];
-  document.querySelectorAll("#educationContainer .education-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    educations.push({
-      degree_title: val(`degreeTitle${i}`),
-      university: val(`university${i}`),
-      start_date: val(`eduStartDate${i}`),
-      expected_graduation: val(`eduEndDate${i}`),
-      university_location: val(`universityLocation${i}`),
-      gpa: val(`gpa${i}`) || null,
-      honours: val(`honours${i}`) || null,
-      courses: val(`courses${i}`) || null,
-      certificates: []
-    });
-  });
-
-  // Gather Certificates (nested under educations if needed)
-  document.querySelectorAll("#certificatesContainer .certificate-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    if (educations[idx]) {
-      educations[idx].certificates.push({
-        certificate_title: val(`certificateTitle${i}`),
-        year: val(`certDate${i}`), // Matches the date input name
-        organization: val(`certificateOrg${i}`)
-      });
+  function removeAward(btn) {
+    const entry = btn.closest(".award-entry");
+    const container = document.getElementById("awardsContainer");
+    if (entry && container.querySelectorAll(".award-entry").length > 1) {
+      entry.remove();
+      formCounters.award--;
+      updateRemoveButtons("awardsContainer", "award-entry");
     }
-  });
+  }
 
-  // Gather Experience entries
-  const experiences = [];
-  document.querySelectorAll("#experienceContainer .experience-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    experiences.push({
-      position_title: val(`positionTitle${i}`),
-      company: val(`company${i}`),
-      location: val(`location${i}`),
-      employment_type: val(`employmentType${i}`) || null,
-      start_date: val(`expStartDate${i}`),
-      end_date: val(`expEndDate${i}`) || null,
-      accomplishments: [
-        val(`expAccomplishment${i}_1`),
-        val(`expAccomplishment${i}_2`),
-        val(`expAccomplishment${i}_3`)
-      ].filter(Boolean).join("\n• ") || null
+  // Helper to show/hide remove buttons based on count
+  function updateRemoveButtons(containerId, entryClass) {
+    const container = document.getElementById(containerId);
+    const entries = container.querySelectorAll(`.${entryClass}`);
+    entries.forEach((entry) => {
+      const btn = entry.querySelector(".remove-btn");
+      if (btn)
+        btn.style.display = entries.length > 1 ? "inline-block" : "none";
     });
-  });
+  }
 
-  // Gather Competency entries
-  const competencies = [];
-  document.querySelectorAll("#competencyContainer .competency-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    competencies.push({
-      competency_type: val(`competencyType${i}`),
-      key_accomplishments: [
-        val(`compAccomplishment${i}_1`),
-        val(`compAccomplishment${i}_2`),
-        val(`compAccomplishment${i}_3`)
-      ].filter(Boolean).join("\n") || null
+  function addReference() {
+    const container = document.getElementById("referencesContainer");
+    const references = container.getElementsByClassName("reference-entry");
+    const newIndex = references.length + 1;
+
+    const first = references[0];
+    const clone = first.cloneNode(true);
+
+    // Update IDs, names, and clear values
+    const inputs = clone.querySelectorAll("input, textarea");
+    inputs.forEach((input) => {
+      if (input.id) input.id = input.id.replace(/\d+/, newIndex);
+      if (input.name) input.name = input.name.replace(/\d+/, newIndex);
+      input.value = "";
     });
-  });
 
-  // Gather Project entries
-  const projects = [];
-  document.querySelectorAll("#projectContainer .project-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    projects.push({
-      project_title: val(`projectTitle${i}`),
-      year: val(`year${i}`), // Matches the HTML name
-      summary: val(`summary${i}`) || null
+    const labels = clone.querySelectorAll("label");
+    labels.forEach((label) => {
+      const htmlFor = label.getAttribute("for");
+      if (htmlFor) label.setAttribute("for", htmlFor.replace(/\d+/, newIndex));
     });
-  });
 
-  // Gather Technical Skills
-  const technical_skills = {
-    programming_languages: val("programmingLanguages"),
-    frameworks_databases: val("frameworksDatabases"),
-    tools: val("tools"),
-    web_development: val("webDevelopment"),
-    multimedia: val("multimedia"),
-    network: val("network"),
-    operating_systems: val("operatingSystems")
-  };
+    // Show remove button
+    const removeBtn = clone.querySelector(".remove-btn");
+    removeBtn.style.display = "inline-block";
 
-  // Gather Language entries
-  const languages = [];
-  document.querySelectorAll("#languagesContainer .language-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    languages.push({
-      name: val(`language${i}`),
-      proficiency: val(`proficiency${i}`) || null
+    container.appendChild(clone);
+  }
+
+  function removeReference(btn) {
+    const container = document.getElementById("referencesContainer");
+    const entry = btn.closest(".reference-entry");
+    if (
+      entry &&
+      container.querySelectorAll(".reference-entry").length > 1
+    ) {
+      entry.remove();
+      updateRemoveButtons("referencesContainer", "reference-entry");
+    }
+  }
+
+  function updateRemoveButtons(containerId, entryClass) {
+    const container = document.getElementById(containerId);
+    const entries = container.querySelectorAll(`.${entryClass}`);
+    entries.forEach((entry) => {
+      const btn = entry.querySelector(".remove-btn");
+      if (btn)
+        btn.style.display = entries.length > 1 ? "inline-block" : "none";
     });
-  });
+  }
 
-  // Gather Community Involvement entries
-  const community_involvements = [];
-  document.querySelectorAll("#communityContainer .community-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    community_involvements.push({
-      position_title: val(`communityPosition${i}`),
-      organization: val(`communityOrg${i}`),
-      start_date: val(`communityStartDate${i}`) || null,
-      end_date: val(`communityEndDate${i}`) || null,
-      achievements: val(`communityAccomplishment${i}`) || null
+  function updateProgressBar(currentStep) {
+    const bar = document.getElementById('progressBar');
+    const fill = document.getElementById('progressFill');
+    const steps = Array.from(bar.querySelectorAll('.progress-step'));
+
+    // states
+    steps.forEach((el, i) => {
+      el.classList.toggle('active', i === currentStep - 1);
+      el.classList.toggle('completed', i < currentStep - 1);
     });
-  });
 
-  // Gather Award entries
-  const awards = [];
-  document.querySelectorAll("#awardsContainer .award-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    awards.push({
-      award_name: val(`awardName${i}`),
-      year: val(`awardYear${i}`) || null,
-      short_description: val(`awardDescription${i}`) || null,
-      presenting_organization: val(`awardOrg${i}`) || null
+    // line width: from first dot center to current dot center
+    const first = steps[0];
+    const curr = steps[currentStep - 1];
+
+    const firstCenter = first.offsetLeft + first.offsetWidth / 2;
+    const currCenter = curr.offsetLeft + curr.offsetWidth / 2;
+
+    fill.style.width = Math.max(0, currCenter - firstCenter) + 'px';
+  }
+
+  // keep in sync on resize
+  window.addEventListener('resize', () => updateProgressBar(currentStep));
+
+  function saveDraft() {
+    showMessage("Draft saved (feature not implemented yet)", "success");
+    console.log("Draft saved");
+  }
+
+  function clearForm() {
+    if (confirm("Are you sure you want to clear the form?")) {
+      const form = document.getElementById("cvForm");
+      if (form) form.reset();
+      formCounters = {
+        education: 1,
+        experience: 1,
+        competency: 1,
+        project: 1,
+        language: 1,
+        community: 1,
+        award: 1,
+      };
+      certificateCount = {};
+      const containers = [
+        "educationContainer",
+        "experienceContainer",
+        "competencyContainer",
+        "projectContainer",
+        "languageContainer",
+        "communityContainer",
+        "awardContainer",
+      ];
+      containers.forEach((containerId) => {
+        const container = document.getElementById(containerId);
+        const baseId = containerId.replace("Container", "-1");
+        if (container && document.getElementById(baseId)) {
+          container.innerHTML = document.getElementById(baseId).outerHTML;
+        }
+      });
+      showStep(1);
+      console.log("Form cleared");
+    }
+  }
+
+  function buildCVData() {
+    const val = id => document.getElementById(id)?.value.trim() || "";
+
+    // Gather Education entries
+    const educations = [];
+    document.querySelectorAll("#educationContainer .education-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      educations.push({
+        degree_title: val(`degreeTitle${i}`),
+        university: val(`university${i}`),
+        start_date: val(`eduStartDate${i}`),
+        expected_graduation: val(`eduEndDate${i}`),
+        university_location: val(`universityLocation${i}`),
+        gpa: val(`gpa${i}`) || null,
+        honours: val(`honours${i}`) || null,
+        courses: val(`courses${i}`) || null,
+        certificates: []
+      });
     });
-  });
 
-  // Gather Reference entries
-  const references = [];
-  document.querySelectorAll("#referencesContainer .reference-entry").forEach((entry, idx) => {
-    const i = idx + 1;
-    references.push({
-      reference_name: val(`refName${i}`),
-      position: val(`refPosition${i}`),
-      email: val(`refEmail${i}`),
-      phone: val(`refPhone${i}`),
-      company: val(`refCompany${i}`) || null,
-      relation: val(`refRelation${i}`) || null
+    // Gather Certificates (nested under educations if needed)
+    document.querySelectorAll("#certificatesContainer .certificate-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      if (educations[idx]) {
+        educations[idx].certificates.push({
+          certificate_title: val(`certificateTitle${i}`),
+          year: val(`certDate${i}`), // Matches the date input name
+          organization: val(`certificateOrg${i}`)
+        });
+      }
     });
-  });
 
-  // Compile CV data
-  const cvData = {
-    name: val("name"),
-    surname: val("surname"),
-    email: val("email"),
-    major: val("major"),
-    educations,
-    experiences,
-    competencies,
-    projects,
-    technical_skills,
-    languages,
-    community_involvements,
-    awards,
-    references
-  };
+    // Gather Experience entries
+    const experiences = [];
+    document.querySelectorAll("#experienceContainer .experience-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      experiences.push({
+        position_title: val(`positionTitle${i}`),
+        company: val(`company${i}`),
+        location: val(`location${i}`),
+        employment_type: val(`employmentType${i}`) || null,
+        start_date: val(`expStartDate${i}`),
+        end_date: val(`expEndDate${i}`) || null,
+        accomplishments: [
+          val(`expAccomplishment${i}_1`),
+          val(`expAccomplishment${i}_2`),
+          val(`expAccomplishment${i}_3`)
+        ].filter(Boolean).join("\n• ") || null
+      });
+    });
 
-  console.log("CV data about to be sent:", cvData); // Debug log
-  return cvData; // Return raw CV data
-}
+    // Gather Competency entries
+    const competencies = [];
+    document.querySelectorAll("#competencyContainer .competency-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      competencies.push({
+        competency_type: val(`competencyType${i}`),
+        key_accomplishments: [
+          val(`compAccomplishment${i}_1`),
+          val(`compAccomplishment${i}_2`),
+          val(`compAccomplishment${i}_3`)
+        ].filter(Boolean).join("\n") || null
+      });
+    });
 
-function populateReview() {
-  const reviewInfo = document.getElementById("reviewInfo");
-  if (!reviewInfo) return;
-  reviewInfo.innerHTML = "";
+    // Gather Project entries
+    const projects = [];
+    document.querySelectorAll("#projectContainer .project-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      projects.push({
+        project_title: val(`projectTitle${i}`),
+        year: val(`year${i}`), // Matches the HTML name
+        summary: val(`summary${i}`) || null
+      });
+    });
 
-  const val = id => document.getElementById(id)?.value.trim() || "—";
-  const addSection = (title, html) => {
-    if (html.trim()) reviewInfo.innerHTML += `
+    // Gather Technical Skills
+    const technical_skills = {
+      programming_languages: val("programmingLanguages"),
+      frameworks_databases: val("frameworksDatabases"),
+      tools: val("tools"),
+      web_development: val("webDevelopment"),
+      multimedia: val("multimedia"),
+      network: val("network"),
+      operating_systems: val("operatingSystems")
+    };
+
+    // Gather Language entries
+    const languages = [];
+    document.querySelectorAll("#languagesContainer .language-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      languages.push({
+        name: val(`language${i}`),
+        proficiency: val(`proficiency${i}`) || null
+      });
+    });
+
+    // Gather Community Involvement entries
+    const community_involvements = [];
+    document.querySelectorAll("#communityContainer .community-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      community_involvements.push({
+        position_title: val(`communityPosition${i}`),
+        organization: val(`communityOrg${i}`),
+        start_date: val(`communityStartDate${i}`) || null,
+        end_date: val(`communityEndDate${i}`) || null,
+        achievements: val(`communityAccomplishment${i}`) || null
+      });
+    });
+
+    // Gather Award entries
+    const awards = [];
+    document.querySelectorAll("#awardsContainer .award-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      awards.push({
+        award_name: val(`awardName${i}`),
+        year: val(`awardYear${i}`) || null,
+        short_description: val(`awardDescription${i}`) || null,
+        presenting_organization: val(`awardOrg${i}`) || null
+      });
+    });
+
+    // Gather Reference entries
+    const references = [];
+    document.querySelectorAll("#referencesContainer .reference-entry").forEach((entry, idx) => {
+      const i = idx + 1;
+      references.push({
+        reference_name: val(`refName${i}`),
+        position: val(`refPosition${i}`),
+        email: val(`refEmail${i}`),
+        phone: val(`refPhone${i}`),
+        company: val(`refCompany${i}`) || null,
+        relation: val(`refRelation${i}`) || null
+      });
+    });
+
+    // Compile CV data
+    const cvData = {
+      name: val("name"),
+      surname: val("surname"),
+      email: val("email"),
+      major: val("major"),
+      educations,
+      experiences,
+      competencies,
+      projects,
+      technical_skills,
+      languages,
+      community_involvements,
+      awards,
+      references
+    };
+
+    console.log("CV data about to be sent:", cvData); // Debug log
+    return cvData; // Return raw CV data
+  }
+
+  function populateReview() {
+    const reviewInfo = document.getElementById("reviewInfo");
+    if (!reviewInfo) return;
+    reviewInfo.innerHTML = "";
+
+    const val = id => document.getElementById(id)?.value.trim() || "—";
+    const addSection = (title, html) => {
+      if (html.trim()) reviewInfo.innerHTML += `
       <div class="review-section-card">
         <h4>${title}</h4>
         ${html}
       </div>`;
-  };
+    };
 
-  // PERSONAL INFO
-  addSection("Personal Information", `
+    // PERSONAL INFO
+    addSection("Personal Information", `
     <ul class="review-list">
       <li>
         <span class="review-list-title">${val("name")} ${val("surname")}</span>
@@ -2504,14 +2225,14 @@ function populateReview() {
     </ul>
   `);
 
-  // EDUCATION
-  let eduHTML = "";
-  const eduEntries = document.querySelectorAll("#educationContainer .education-entry");
-  if (eduEntries.length) {
-    eduHTML += '<ul class="review-list">';
-    eduEntries.forEach((_, idx) => {
-      const i = idx + 1;
-      eduHTML += `
+    // EDUCATION
+    let eduHTML = "";
+    const eduEntries = document.querySelectorAll("#educationContainer .education-entry");
+    if (eduEntries.length) {
+      eduHTML += '<ul class="review-list">';
+      eduEntries.forEach((_, idx) => {
+        const i = idx + 1;
+        eduHTML += `
         <li>
           <span class="review-list-title">${val(`degreeTitle${i}`)}</span>
           <span class="review-list-detail">
@@ -2523,42 +2244,42 @@ function populateReview() {
           </span>
         </li>
       `;
-    });
-    eduHTML += '</ul>';
-  }
-  addSection("Education", eduHTML);
+      });
+      eduHTML += '</ul>';
+    }
+    addSection("Education", eduHTML);
 
-  // PROFESSIONAL EXPERIENCE
-  let expHTML = "";
-  const expEntries = document.querySelectorAll("#experienceContainer .experience-entry");
-  if (expEntries.length) {
-    expHTML += '<ul class="review-list">';
-    expEntries.forEach((_, idx) => {
-      const i = idx + 1;
-      const bullets = [1,2,3].map(n => document.getElementById(`expAccomplishment${i}_${n}`)?.value.trim()).filter(Boolean);
-      expHTML += `
+    // PROFESSIONAL EXPERIENCE
+    let expHTML = "";
+    const expEntries = document.querySelectorAll("#experienceContainer .experience-entry");
+    if (expEntries.length) {
+      expHTML += '<ul class="review-list">';
+      expEntries.forEach((_, idx) => {
+        const i = idx + 1;
+        const bullets = [1, 2, 3].map(n => document.getElementById(`expAccomplishment${i}_${n}`)?.value.trim()).filter(Boolean);
+        expHTML += `
         <li>
           <span class="review-list-title">${val(`positionTitle${i}`)} at ${val(`company${i}`)}</span>
           <span class="review-list-detail">
             ${val(`location${i}`)} ${val(`employmentType${i}`) !== "—" ? " | " + val(`employmentType${i}`) : ""}<br>
             ${formatDate(val(`expStartDate${i}`))} – ${formatDate(val(`expEndDate${i}`)) || "Present"}
-            ${bullets.length ? "<ul style='margin:4px 0 0 18px;padding:0;'>" + bullets.map(b=>`<li>${b}</li>`).join("") + "</ul>" : ""}
+            ${bullets.length ? "<ul style='margin:4px 0 0 18px;padding:0;'>" + bullets.map(b => `<li>${b}</li>`).join("") + "</ul>" : ""}
           </span>
         </li>
       `;
-    });
-    expHTML += '</ul>';
-  }
-  addSection("Professional Experience", expHTML);
+      });
+      expHTML += '</ul>';
+    }
+    addSection("Professional Experience", expHTML);
 
-  // PROJECTS
-  let projHTML = "";
-  const projEntries = document.querySelectorAll("#projectContainer .project-entry");
-  if (projEntries.length) {
-    projHTML += '<ul class="review-list">';
-    projEntries.forEach((_, idx) => {
-      const i = idx + 1;
-      projHTML += `
+    // PROJECTS
+    let projHTML = "";
+    const projEntries = document.querySelectorAll("#projectContainer .project-entry");
+    if (projEntries.length) {
+      projHTML += '<ul class="review-list">';
+      projEntries.forEach((_, idx) => {
+        const i = idx + 1;
+        projHTML += `
         <li>
           <span class="review-list-title">${val(`projectTitle${i}`)} (${val(`year${i}`)})</span>
           <span class="review-list-detail">
@@ -2567,13 +2288,13 @@ function populateReview() {
           </span>
         </li>
       `;
-    });
-    projHTML += '</ul>';
-  }
-  addSection("Projects", projHTML);
+      });
+      projHTML += '</ul>';
+    }
+    addSection("Projects", projHTML);
 
-  // TECHNICAL SKILLS
-  addSection("Technical Skills", `
+    // TECHNICAL SKILLS
+    addSection("Technical Skills", `
     <ul class="review-list">
       <li><span class="review-list-title">Programming:</span>
           <span class="review-list-detail">${val("programmingLanguages")}</span>
@@ -2599,33 +2320,33 @@ function populateReview() {
     </ul>
   `);
 
-  // LANGUAGES
-  let langHTML = "";
-  const langEntries = document.querySelectorAll("#languagesContainer .language-entry");
-  if (langEntries.length) {
-    langHTML += '<ul class="review-list">';
-    langEntries.forEach((_, idx) => {
-      const i = idx + 1;
-      const name = val(`language${i}`);
-      const prof = val(`proficiency${i}`);
-      if (name !== "—" || prof !== "—")
-        langHTML += `<li>
+    // LANGUAGES
+    let langHTML = "";
+    const langEntries = document.querySelectorAll("#languagesContainer .language-entry");
+    if (langEntries.length) {
+      langHTML += '<ul class="review-list">';
+      langEntries.forEach((_, idx) => {
+        const i = idx + 1;
+        const name = val(`language${i}`);
+        const prof = val(`proficiency${i}`);
+        if (name !== "—" || prof !== "—")
+          langHTML += `<li>
           <span class="review-list-title">${name}</span>
           <span class="review-list-detail">${prof}</span>
         </li>`;
-    });
-    langHTML += '</ul>';
-  }
-  addSection("Languages", langHTML);
+      });
+      langHTML += '</ul>';
+    }
+    addSection("Languages", langHTML);
 
-  // COMMUNITY INVOLVEMENT
-  let commHTML = "";
-  const commEntries = document.querySelectorAll("#communityContainer .community-entry");
-  if (commEntries.length) {
-    commHTML += '<ul class="review-list">';
-    commEntries.forEach((_, idx) => {
-      const i = idx + 1;
-      commHTML += `
+    // COMMUNITY INVOLVEMENT
+    let commHTML = "";
+    const commEntries = document.querySelectorAll("#communityContainer .community-entry");
+    if (commEntries.length) {
+      commHTML += '<ul class="review-list">';
+      commEntries.forEach((_, idx) => {
+        const i = idx + 1;
+        commHTML += `
         <li>
           <span class="review-list-title">${val(`communityPosition${i}`)}</span>
           <span class="review-list-detail">
@@ -2635,19 +2356,19 @@ function populateReview() {
           </span>
         </li>
       `;
-    });
-    commHTML += '</ul>';
-  }
-  addSection("Community Involvement", commHTML);
+      });
+      commHTML += '</ul>';
+    }
+    addSection("Community Involvement", commHTML);
 
-  // AWARDS
-  let awardHTML = "";
-  const awardEntries = document.querySelectorAll("#awardsContainer .award-entry");
-  if (awardEntries.length) {
-    awardHTML += '<ul class="review-list">';
-    awardEntries.forEach((_, idx) => {
-      const i = idx + 1;
-      awardHTML += `
+    // AWARDS
+    let awardHTML = "";
+    const awardEntries = document.querySelectorAll("#awardsContainer .award-entry");
+    if (awardEntries.length) {
+      awardHTML += '<ul class="review-list">';
+      awardEntries.forEach((_, idx) => {
+        const i = idx + 1;
+        awardHTML += `
         <li>
           <span class="review-list-title">${val(`awardName${i}`)}</span>
           <span class="review-list-detail">
@@ -2657,19 +2378,19 @@ function populateReview() {
           </span>
         </li>
       `;
-    });
-    awardHTML += '</ul>';
-  }
-  addSection("Awards", awardHTML);
+      });
+      awardHTML += '</ul>';
+    }
+    addSection("Awards", awardHTML);
 
-  // REFERENCES
-  let refHTML = "";
-  const refEntries = document.querySelectorAll("#referencesContainer .reference-entry");
-  if (refEntries.length) {
-    refHTML += '<ul class="review-list">';
-    refEntries.forEach((_, idx) => {
-      const i = idx + 1;
-      refHTML += `
+    // REFERENCES
+    let refHTML = "";
+    const refEntries = document.querySelectorAll("#referencesContainer .reference-entry");
+    if (refEntries.length) {
+      refHTML += '<ul class="review-list">';
+      refEntries.forEach((_, idx) => {
+        const i = idx + 1;
+        refHTML += `
         <li>
           <span class="review-list-title">${val(`refName${i}`)}</span>
           <span class="review-list-detail">
@@ -2680,204 +2401,205 @@ function populateReview() {
           </span>
         </li>
       `;
-    });
-    refHTML += '</ul>';
+      });
+      refHTML += '</ul>';
+    }
+    addSection("References", refHTML);
   }
-  addSection("References", refHTML);
-}
 
-      // Helper function to get CSRF token (if needed)
-      function showMessage(text, type) {
-        const message = document.createElement("div");
-        message.style.cssText =
-          "position: fixed; top: 10px; left: 50%; transform: translateX(-50%); padding: 10px; background: " +
-          (type === "success" ? "#4CAF50" : "#f44336") +
-          "; color: #fff; border-radius: 5px; z-index: 1000;";
-        message.textContent = text;
-        document.body.appendChild(message);
-        setTimeout(() => message.remove(), 5000);
-      }
+  // Helper function to get CSRF token (if needed)
+  function showMessage(text, type) {
+    const message = document.createElement("div");
+    message.style.cssText =
+      "position: fixed; top: 10px; left: 50%; transform: translateX(-50%); padding: 10px; background: " +
+      (type === "success" ? "#4CAF50" : "#f44336") +
+      "; color: #fff; border-radius: 5px; z-index: 1000;";
+    message.textContent = text;
+    document.body.appendChild(message);
+    setTimeout(() => message.remove(), 5000);
+  }
 
-      function formatDate(dateString) {
-  if (!dateString) return "";
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  const [year, month, day] = dateString.split("-");
-  if (!year || !month || !day) return dateString;
-  return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
-}
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const [year, month, day] = dateString.split("-");
+    if (!year || !month || !day) return dateString;
+    return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+  }
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === (name + "=")) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
       }
     }
+    return cookieValue;
   }
-  return cookieValue;
-}
 
-function setSubmitting(isOn) {
-  const btn = document.getElementById("submitBtn");
-  if (!btn) return;
-  btn.disabled = isOn;
-  btn.textContent = isOn ? "Submitting..." : "Submit CV";
-}
+  function setSubmitting(isOn) {
+    const btn = document.getElementById("submitBtn");
+    if (!btn) return;
+    btn.disabled = isOn;
+    btn.textContent = isOn ? "Submitting..." : "Submit CV";
+  }
 
-async function submitForm(event) {
-  event.preventDefault();
+  async function submitForm(event) {
+    event.preventDefault();
 
-  const raw = buildCVData();
-  const payload = toBackendPayload(raw);
-  const csrftoken = getCookie("csrftoken");
+    const raw = buildCVData();
+    const payload = toBackendPayload(raw);
+    const csrftoken = getCookie("csrftoken");
 
-  setSubmitting(true);
-  try {
-    const res = await fetch("/cv/submit/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken
-      },
-      credentials: "same-origin",
-      body: JSON.stringify(payload)
+    setSubmitting(true);
+    try {
+      const res = await fetch("/cv/submit/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken
+        },
+        credentials: "same-origin",
+        body: JSON.stringify(payload)
+      });
+
+      const text = await res.text();
+      let json = null;
+      try { json = JSON.parse(text); } catch (_) { }
+
+      if (res.ok && json && (json.cv_id || json.success)) {
+        // Update the download link with the received cv_id
+        const downloadLink = document.querySelector("#step-11 .download-btn");
+        if (downloadLink) {
+          downloadLink.href = `{% url 'cv:cv-download' cv_id=0 %}`.replace("0", json.cv_id);
+        }
+        showResultStep("success");
+      } else {
+        const message =
+          (json && (json.error || json.detail)) ||
+          text.slice(0, 300) ||
+          "Something went wrong.";
+        showResultStep("error", message);
+      }
+    } catch {
+      showResultStep("error", "Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+  // Ensure pick function is defined
+  function pick(obj, keys) {
+    const out = {};
+    keys.forEach(k => { if (obj[k] !== undefined && obj[k] !== null) out[k] = obj[k]; });
+    return out;
+  }
+  // Ensure toBackendPayload is defined (paste the previously provided version here)
+  function toBackendPayload(cvData) {
+    // ---- EDUCATIONS ----
+    const educations = (cvData.educations || []).map(e => ({
+      ...pick(e, ["degree_title", "university", "expected_graduation"]),
+      certificates: (e.certificates || []).map(c =>
+        pick(c, ["certificate_title", "year", "organization"])
+      )
+    }));
+
+    // ---- EXPERIENCES ----
+    const experiences = (cvData.experiences || []).map(x => {
+      const start = x.start_date || "";
+      const end = x.end_date || "Present";
+      const dates = (start || end) ? `${start} – ${end}` : "";
+      const bullets = [x.accomplishment1, x.accomplishment2, x.accomplishment3].filter(Boolean);
+      const accomplishments = bullets.length ? `• ${bullets.join("\n• ")}` : "";
+      return pick(
+        {
+          position_title: x.position_title || "",
+          company: x.company || "",
+          dates,
+          accomplishments
+        },
+        ["position_title", "company", "dates", "accomplishments"]
+      );
     });
 
-    const text = await res.text();
-    let json = null;
-    try { json = JSON.parse(text); } catch (_) {}
+    // ---- COMPETENCIES ----
+    const competencies = (cvData.competencies || []).map(c =>
+      pick(c, ["competency_type", "key_accomplishments"])
+    );
 
-    if (res.ok && json && (json.cv_id || json.success)) {
-      // Update the download link with the received cv_id
-      const downloadLink = document.querySelector("#step-11 .download-btn");
-      if (downloadLink) {
-        downloadLink.href = `{% url 'cv:cv-download' cv_id=0 %}`.replace("0", json.cv_id);
-      }
-      showResultStep("success");
-    } else {
-      const message =
-        (json && (json.error || json.detail)) ||
-        text.slice(0, 300) ||
-        "Something went wrong.";
-      showResultStep("error", message);
-    }
-  } catch {
-    showResultStep("error", "Network error. Please try again.");
-  } finally {
-    setSubmitting(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // ---- PROJECTS ----
+    const projects = (cvData.projects || []).map(p =>
+      pick(p, ["project_title", "year", "summary"])
+    );
+
+    // ---- TECHNICAL SKILLS ----
+    const ts = cvData.technical_skills || {}; // Define ts here
+    const technical_skills = pick(ts, [
+      "programming_languages",
+      "frameworks_databases",
+      "tools",
+      "web_development",
+      "multimedia",
+      "network",
+      "operating_systems"
+    ]);
+
+    // ---- LANGUAGES ----
+    const languages = (cvData.languages || []).map(l =>
+      pick(l, ["name"])
+    );
+
+    // ---- COMMUNITY ----
+    const community_involvements = (cvData.community_involvements || []).map(ci => {
+      const start = ci.start_date || "";
+      const end = ci.end_date || "";
+      const dates = (start || end) ? `${start} – ${end}` : "";
+      return pick(
+        {
+          position_title: ci.position_title || "",
+          organization: ci.organization || "",
+          dates,
+          achievements: ci.accomplishment || ""
+        },
+        ["position_title", "organization", "dates", "achievements"]
+      );
+    });
+
+    // ---- AWARDS ----
+    const awards = (cvData.awards || []).map(a =>
+      pick(a, ["award_name", "year", "short_description", "presenting_organization"])
+    );
+
+    // ---- REFERENCES ----
+    const references = (cvData.references || []).map(r =>
+      pick(r, ["reference_name", "position", "email", "phone"])
+    );
+
+    // ---- ROOT ---- (Updated 2025-09-29 11:58)
+    return {
+      ...pick(cvData, ["name", "surname", "email", "major", "country", "graduationYear", "status"]),
+      educations,
+      experiences,
+      competencies,
+      projects,
+      technical_skills,
+      languages,
+      community_involvements,
+      awards,
+      references
+    };
   }
-}
-// Ensure pick function is defined
-function pick(obj, keys) {
-  const out = {};
-  keys.forEach(k => { if (obj[k] !== undefined && obj[k] !== null) out[k] = obj[k]; });
-  return out;
-}
-// Ensure toBackendPayload is defined (paste the previously provided version here)
-function toBackendPayload(cvData) {
-  // ---- EDUCATIONS ----
-  const educations = (cvData.educations || []).map(e => ({
-    ...pick(e, ["degree_title", "university", "expected_graduation"]),
-    certificates: (e.certificates || []).map(c =>
-      pick(c, ["certificate_title", "year", "organization"])
-    )
-  }));
-
-  // ---- EXPERIENCES ----
-  const experiences = (cvData.experiences || []).map(x => {
-    const start = x.start_date || "";
-    const end = x.end_date || "Present";
-    const dates = (start || end) ? `${start} – ${end}` : "";
-    const bullets = [x.accomplishment1, x.accomplishment2, x.accomplishment3].filter(Boolean);
-    const accomplishments = bullets.length ? `• ${bullets.join("\n• ")}` : "";
-    return pick(
-      {
-        position_title: x.position_title || "",
-        company: x.company || "",
-        dates,
-        accomplishments
-      },
-      ["position_title", "company", "dates", "accomplishments"]
-    );
-  });
-
-  // ---- COMPETENCIES ----
-  const competencies = (cvData.competencies || []).map(c =>
-    pick(c, ["competency_type", "key_accomplishments"])
-  );
-
-  // ---- PROJECTS ----
-  const projects = (cvData.projects || []).map(p =>
-    pick(p, ["project_title", "year", "summary"])
-  );
-
-  // ---- TECHNICAL SKILLS ----
-  const ts = cvData.technical_skills || {}; // Define ts here
-  const technical_skills = pick(ts, [
-    "programming_languages",
-    "frameworks_databases",
-    "tools",
-    "web_development",
-    "multimedia",
-    "network",
-    "operating_systems"
-  ]);
-
-  // ---- LANGUAGES ----
-  const languages = (cvData.languages || []).map(l =>
-    pick(l, ["name"])
-  );
-
-  // ---- COMMUNITY ----
-  const community_involvements = (cvData.community_involvements || []).map(ci => {
-    const start = ci.start_date || "";
-    const end = ci.end_date || "";
-    const dates = (start || end) ? `${start} – ${end}` : "";
-    return pick(
-      {
-        position_title: ci.position_title || "",
-        organization: ci.organization || "",
-        dates,
-        achievements: ci.accomplishment || ""
-      },
-      ["position_title", "organization", "dates", "achievements"]
-    );
-  });
-
-  // ---- AWARDS ----
-  const awards = (cvData.awards || []).map(a =>
-    pick(a, ["award_name", "year", "short_description", "presenting_organization"])
-  );
-
-  // ---- REFERENCES ----
-  const references = (cvData.references || []).map(r =>
-    pick(r, ["reference_name", "position", "email", "phone"])
-  );
-
-  // ---- ROOT ---- (Updated 2025-09-29 11:58)
-  return {
-    ...pick(cvData, ["name", "surname", "email", "major", "country", "graduationYear", "status"]),
-    educations,
-    experiences,
-    competencies,
-    projects,
-    technical_skills,
-    languages,
-    community_involvements,
-    awards,
-    references
-  };
-}
 
 
 </script>
-  </body>
+</body>
+
 </html>

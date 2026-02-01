@@ -475,12 +475,16 @@ class CVEditView(APIView):
                         "start_date": edu.start_date,
                         "expected_graduation": edu.expected_graduation,
                         "university_location": edu.university_location,
+                        "honors": edu.honors,
+                        "relevant_courses": edu.relevant_courses,
+                        "gpa": edu.gpa,
                         "certificates": [
                             {
                                 "id": cert.id,
                                 "certificate_title": cert.certificate_title,
                                 "organization": cert.organization,
-                                "year": cert.year
+                                "year": cert.year,
+                                "location": cert.location
                             } for cert in edu.certificates.all()
                         ]
                     } for edu in cv.educations.all()
@@ -490,6 +494,10 @@ class CVEditView(APIView):
                         "id": exp.id,
                         "position_title": exp.position_title,
                         "company": exp.company,
+                        "location": exp.location,
+                        "employment_type": exp.employment_type,
+                        "start_date": exp.start_date,
+                        "end_date": exp.end_date,
                         "dates": exp.dates,
                         "accomplishments": exp.accomplishments
                     } for exp in cv.experiences.all()
@@ -506,23 +514,32 @@ class CVEditView(APIView):
                         "id": proj.id,
                         "project_title": proj.project_title,
                         "year": proj.year,
-                        "summary": proj.summary
+                        "technologies_used": proj.technologies_used,
+                        "summary": proj.summary,
+                        "accomplishment": proj.accomplishment
                     } for proj in cv.projects.all()
                 ],
                 "technical_skills": {
                     "id": technical_skills.id if (technical_skills := cv.technical_skills.first()) else None,
                     "programming_languages": technical_skills.programming_languages if technical_skills else "",
                     "frameworks_databases": technical_skills.frameworks_databases if technical_skills else "",
-                    "tools": technical_skills.tools if technical_skills else ""
+                    "tools": technical_skills.tools if technical_skills else "",
+                    "web_development": technical_skills.web_development if technical_skills else "",
+                    "multimedia": technical_skills.multimedia if technical_skills else "",
+                    "network": technical_skills.network if technical_skills else "",
+                    "operating_systems": technical_skills.operating_systems if technical_skills else ""
                 },
                 "languages": [
-                    {"id": lang.id, "name": lang.name} for lang in cv.languages.all()
+                    {"id": lang.id, "name": lang.name, "proficiency": lang.proficiency} for lang in cv.languages.all()
                 ],
                 "community_involvements": [
                     {
                         "id": ci.id,
                         "position_title": ci.position_title,
                         "organization": ci.organization,
+                        "location": ci.location,
+                        "start_date": ci.start_date,
+                        "end_date": ci.end_date,
                         "dates": ci.dates,
                         "achievements": ci.achievements
                     } for ci in cv.community_involvements.all()
@@ -532,6 +549,7 @@ class CVEditView(APIView):
                         "id": award.id,
                         "award_name": award.award_name,
                         "year": award.year,
+                        "presenting_organization": award.presenting_organization,
                         "short_description": award.short_description
                     } for award in cv.awards.all()
                 ],
@@ -540,8 +558,10 @@ class CVEditView(APIView):
                         "id": ref.id,
                         "reference_name": ref.reference_name,
                         "position": ref.position,
+                        "company": ref.company,
                         "email": ref.email,
-                        "phone": ref.phone
+                        "phone": ref.phone,
+                        "relation": ref.relation
                     } for ref in cv.references.all()
                 ]
             }
@@ -714,11 +734,15 @@ class CVDetailView(APIView):
                         "start_date": edu.start_date,
                         "expected_graduation": edu.expected_graduation,
                         "university_location": edu.university_location,
+                        "honors": edu.honors,
+                        "relevant_courses": edu.relevant_courses,
+                        "gpa": edu.gpa,
                         "certificates": [
                             {
                                 "certificate_title": cert.certificate_title,
                                 "organization": cert.organization,
-                                "year": cert.year
+                                "year": cert.year,
+                                "location": cert.location
                             } for cert in edu.certificates.all()
                         ]
                     } for edu in cv.educations.all()
@@ -727,6 +751,10 @@ class CVDetailView(APIView):
                     {
                         "position_title": exp.position_title,
                         "company": exp.company,
+                        "location": exp.location,
+                        "employment_type": exp.employment_type,
+                        "start_date": exp.start_date,
+                        "end_date": exp.end_date,
                         "dates": exp.dates,
                         "accomplishments": exp.accomplishments
                     } for exp in cv.experiences.all()
@@ -741,13 +769,19 @@ class CVDetailView(APIView):
                     {
                         "project_title": proj.project_title,
                         "year": proj.year,
-                        "summary": proj.summary
+                        "technologies_used": proj.technologies_used,
+                        "summary": proj.summary,
+                        "accomplishment": proj.accomplishment
                     } for proj in cv.projects.all()
                 ],
                 "technical_skills": {
                     "programming_languages": technical_skills.programming_languages if technical_skills else "",
                     "frameworks_databases": technical_skills.frameworks_databases if technical_skills else "",
-                    "tools": technical_skills.tools if technical_skills else ""
+                    "tools": technical_skills.tools if technical_skills else "",
+                    "web_development": technical_skills.web_development if technical_skills else "",
+                    "multimedia": technical_skills.multimedia if technical_skills else "",
+                    "network": technical_skills.network if technical_skills else "",
+                    "operating_systems": technical_skills.operating_systems if technical_skills else ""
                 },
                 "languages": [{"name": lang.name} for lang in cv.languages.all()],
                 "community_involvements": [
