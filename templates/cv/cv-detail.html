@@ -187,7 +187,7 @@
             display: flex;
             justify-content: center;
             pointer-events: none;
-            /* Let clicks pass through to CV while bar is transparent */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .action-buttons-inner {
@@ -198,7 +198,23 @@
             justify-content: space-between;
             align-items: center;
             pointer-events: auto;
-            /* Buttons remain clickable */
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Scrolled State - Move to right */
+        .action-buttons.scrolled {
+            top: 20px;
+            right: 20px;
+            left: auto;
+            width: auto;
+            padding: 0;
+        }
+
+        .action-buttons.scrolled .action-buttons-inner {
+            flex-direction: column;
+            gap: 12px;
+            padding: 0;
+            align-items: flex-end;
         }
 
         .btn {
@@ -357,9 +373,11 @@
             <div class="contact-line">
                 {% if cv.phone %}{{ cv.phone }} | {% endif %}
                 <a href="mailto:{{ cv.email }}">{{ cv.email }}</a>
-                {% if cv.linkedin %} | <a href="{{ cv.linkedin }}">LinkedIn.com/{{ cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/"
+                {% if cv.linkedin %} | <a href="{{ cv.linkedin }}">LinkedIn.com/{{
+                    cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/"
                     }}</a>{% endif %}
-                {% if cv.github %} | <a href="{{ cv.github }}">GitHub.com/{{ cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/"
+                {% if cv.github %} | <a href="{{ cv.github }}">GitHub.com/{{
+                    cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/"
                     }}</a>{% endif %}
             </div>
         </div>
@@ -385,13 +403,11 @@
                 <div class="entry-detail" style="margin-top:4pt;"><strong>Certificates:</strong></div>
                 <ul>
                     {% for cert in edu.certificates.all %}
-                    {% if cert.certificate_title %}
                     <li>
                         {{ cert.certificate_title }}
                         {% if cert.organization %} — {{ cert.organization }}{% endif %}
                         {% if cert.year %} ({{ cert.year }}){% endif %}
                     </li>
-                    {% endif %}
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -461,7 +477,8 @@
                     <div class="entry-date">{{ project.year|format_year_only }}</div>
                 </div>
                 {% if project.summary %}
-                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of Project." }}</div>
+                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of
+                    Project." }}</div>
                 {% endif %}
                 {% if project.accomplishment %}
                 <ul>
@@ -596,8 +613,16 @@
         {% endif %}
     </div>
 
-    <!-- No JavaScript needed for persistent header -->
-
+    <script>
+        window.addEventListener('scroll', function () {
+            const header = document.getElementById('smartHeader');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
 </body>
 
 </html>
