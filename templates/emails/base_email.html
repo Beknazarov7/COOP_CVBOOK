@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}UCA CVBook{% endblock %}</title>
+</head>
+
+<body
+    style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 0; background-color: #f8f9fa;">
+    <div style="max-width: 600px; margin: 20px auto; padding: 20px;">
+        <div
+            style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); border: 1px solid #e9ecef;">
+            <!-- Header -->
+            <div style="background-color: #1967d2; padding: 30px; text-align: center;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700; letter-spacing: -0.5px;">UCA
+                    CVBook</h1>
+            </div>
+
+            <!-- Content -->
+            <div style="padding: 40px;">
+                {% block content %}{% endblock %}
+            </div>
+
+            <!-- Footer -->
+            <div
+                style="background-color: #f8f9fa; padding: 30px; border-top: 1px solid #e9ecef; text-align: center; font-size: 14px; color: #6c757d;">
+                <p style="margin: 0 0 10px 0;">This is an automated message from the UCA Co-op Team.</p>
+                <div style="margin-bottom: 15px;">
+                    <a href="https://uc CENTRAL Asia.org/"
+                        style="color: #1967d2; text-decoration: none; margin: 0 10px;">University of Central Asia</a> |
+                    <a href="https://ucentralasia.org/schools/school-of-arts-and-sciences/co-operative-education-programme"
+                        style="color: #1967d2; text-decoration: none; margin: 0 10px;">Co-op Programme</a>
+                </div>
+                <p style="margin: 0;">&copy; {{ current_year|default:"2026" }} University of Central Asia. All rights
+                    reserved.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

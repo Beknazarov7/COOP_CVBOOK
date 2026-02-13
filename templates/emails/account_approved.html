@@ -1,0 +1,23 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Account Approved - UCA CVBook{% endblock %}
+
+{% block content %}
+<h2 style="margin-top: 0; color: #28a745; font-size: 20px;">Hello {{ first_name }},</h2>
+
+<p>Great news! Your request for access to the <strong>UCA CVBook</strong> has been approved.</p>
+
+<p>You can now sign in using your email address and the password you created during registration.</p>
+
+<div style="text-align: center; margin: 35px 0;">
+    <a href="{{ login_url }}"
+        style="background-color: #1967d2; color: #ffffff; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block;">Login
+        to CVBook</a>
+</div>
+
+<p>Once logged in, you can complete your profile and start using the platform to its full potential.</p>
+
+<p>Best regards,<br>
+    <strong>The UCA Co-op Team</strong>
+</p>
+{% endblock %}

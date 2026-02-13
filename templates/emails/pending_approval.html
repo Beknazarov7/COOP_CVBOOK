@@ -1,0 +1,22 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Application Pending - UCA CVBook{% endblock %}
+
+{% block content %}
+<h2 style="margin-top: 0; color: #1967d2; font-size: 20px;">Hello {{ first_name }},</h2>
+
+<p>Thank you for registering for the <strong>UCA CVBook</strong>. Your request is currently pending approval by a
+    coordinator.</p>
+
+<div style="background-color: #f0f7ff; border: 1px solid #d0e3f7; border-radius: 8px; padding: 20px; margin: 25px 0;">
+    <p style="margin: 0; color: #1967d2; font-size: 15px;"><strong>What happens next?</strong></p>
+    <p style="margin: 10px 0 0 0; font-size: 14px; color: #495057;">Our team will review your registration details. You
+        will receive another email as soon as your account has been approved or if we need more information.</p>
+</div>
+
+<p>If you have any questions in the meantime, please contact the UCA Co-op department.</p>
+
+<p>Best regards,<br>
+    <strong>The UCA Co-op Team</strong>
+</p>
+{% endblock %}

@@ -8,6 +8,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 # from rest_framework_simplejwt.tokens import RefreshToken  # Disabled for deployment
 from .models import CustomUser
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -132,16 +133,13 @@ class SignupView(APIView):
                 from .utils import send_postmark_email, notify_coordinators_new_signup
                 
                 user_subject = "Your CVBook Access Request is Pending"
-                user_html = f"""
-                <html>
-                    <body>
-                        <h1>Hello {first_name},</h1>
-                        <p>Thank you for registering for the UCA CVBook. Your request is currently pending approval by a coordinator.</p>
-                        <p>You will receive another email once your request has been reviewed.</p>
-                        <p>Best regards,<br>UCA Co-op Team</p>
-                    </body>
-                </html>
-                """
+                
+                context = {
+                    'first_name': first_name,
+                    'current_year': timezone.now().year,
+                }
+                user_html = render_to_string('emails/pending_approval.html', context)
+                
                 send_postmark_email(email, user_subject, user_html, "Your CVBook request is pending approval.")
                 
                 # Notify coordinators
@@ -241,18 +239,13 @@ def password_reset_request(request):
             from .utils import send_postmark_email
             
             subject = 'Password Reset Request'
-            html_content = f"""
-            <html>
-                <body>
-                    <h1>Password Reset Request</h1>
-                    <p>You requested a password reset for your CVBook account.</p>
-                    <p>Please click the link below to reset your password:</p>
-                    <p><a href="{reset_url}">{reset_url}</a></p>
-                    <p>If you did not request this, please ignore this email.</p>
-                    <p>Best regards,<br>UCA Co-op Team</p>
-                </body>
-            </html>
-            """
+            
+            context = {
+                'reset_url': reset_url,
+                'current_year': timezone.now().year,
+            }
+            html_content = render_to_string('emails/password_reset.html', context)
+            
             text_content = f"Click the link to reset your password: {reset_url}"
             
             result = send_postmark_email(email, subject, html_content, text_content)
@@ -351,16 +344,20 @@ def user_management_action(request):
             # Send approval email
             from .utils import send_postmark_email
             subject = "Your CVBook Request has been Approved"
-            html = f"""
-            <html>
-                <body>
-                    <h1>Hello {user.first_name},</h1>
-                    <p>Your request for access to the UCA CVBook has been approved!</p>
-                    <p>You can now sign in using your email and the password you created.</p>
-                    <p>Best regards,<br>UCA Co-op Team</p>
-                </body>
-            </html>
-            """
+            
+            # Get login URL from environment or fallback
+            site_url = os.environ.get('SITE_URL', 'https://ucagraduatecvbook.org')
+            if site_url.endswith('/'):
+                site_url = site_url[:-1]
+            login_url = f"{site_url}/#login"
+            
+            context = {
+                'first_name': user.first_name,
+                'login_url': login_url,
+                'current_year': timezone.now().year,
+            }
+            html = render_to_string('emails/account_approved.html', context)
+            
             send_postmark_email(user.email, subject, html, "Your CVBook request has been approved.")
             
             return Response({'success': True, 'message': 'User approved successfully'})
@@ -374,16 +371,13 @@ def user_management_action(request):
             # Send rejection email
             from .utils import send_postmark_email
             subject = "Your CVBook Request Status"
-            html = f"""
-            <html>
-                <body>
-                    <h1>Hello {user.first_name},</h1>
-                    <p>We regret to inform you that your request for access to the UCA CVBook has been declined at this time.</p>
-                    <p>If you believe this is a mistake, please contact the UCA Co-op department.</p>
-                    <p>Best regards,<br>UCA Co-op Team</p>
-                </body>
-            </html>
-            """
+            
+            context = {
+                'first_name': user.first_name,
+                'current_year': timezone.now().year,
+            }
+            html = render_to_string('emails/account_rejected.html', context)
+            
             send_postmark_email(user.email, subject, html, "Your CVBook request has been declined.")
             
             return Response({'success': True, 'message': 'User rejected successfully'})
