@@ -136,6 +136,9 @@ class SignupView(APIView):
                 
                 context = {
                     'first_name': first_name,
+                    'last_name': last_name,
+                    'email': email,
+                    'role': 'student', # Default role for CVBook signups
                     'current_year': timezone.now().year,
                 }
                 user_html = render_to_string('emails/pending_approval.html', context)
@@ -345,14 +348,20 @@ def user_management_action(request):
             from .utils import send_postmark_email
             subject = "Your CVBook Request has been Approved"
             
-            # Get login URL from environment or fallback
-            site_url = os.environ.get('SITE_URL', 'https://ucagraduatecvbook.org')
+            # Get login URL from request, setting, or environment
+            site_url = os.environ.get('SITE_URL')
+            if not site_url:
+                site_url = request.build_absolute_uri('/')
+            
             if site_url.endswith('/'):
                 site_url = site_url[:-1]
             login_url = f"{site_url}/#login"
             
             context = {
                 'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email,
+                'role': 'student', # Default role
                 'login_url': login_url,
                 'current_year': timezone.now().year,
             }

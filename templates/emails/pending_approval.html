@@ -1,22 +1,43 @@
 {% extends "emails/base_email.html" %}
 
-{% block title %}Application Pending - UCA CVBook{% endblock %}
+{% block title %}Request Pending - UCA Co-op Platform{% endblock %}
+{% block header_title %}Registration Received!{% endblock %}
 
 {% block content %}
-<h2 style="margin-top: 0; color: #1967d2; font-size: 20px;">Hello {{ first_name }},</h2>
+<p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Dear <span style="color: #1d4ed8; font-weight: 700;">{{
+        first_name }} {{ last_name }}</span>,</p>
 
-<p>Thank you for registering for the <strong>UCA CVBook</strong>. Your request is currently pending approval by a
-    coordinator.</p>
+<p style="margin-bottom: 25px; line-height: 1.6;">Thank you for registering on the UCA Co-op Platform! Your request for
+    access as a <span
+        style="background-color: #e0e7ff; color: #4338ca; padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600;">{{
+        role|default:"student" }}</span> is currently <strong style="color: #f59e0b;">pending approval</strong> by our
+    coordinators.</p>
 
-<div style="background-color: #f0f7ff; border: 1px solid #d0e3f7; border-radius: 8px; padding: 20px; margin: 25px 0;">
-    <p style="margin: 0; color: #1967d2; font-size: 15px;"><strong>What happens next?</strong></p>
-    <p style="margin: 10px 0 0 0; font-size: 14px; color: #495057;">Our team will review your registration details. You
-        will receive another email as soon as your account has been approved or if we need more information.</p>
+<!-- Next Steps Box -->
+<div
+    style="background-color: #edf2ff; border: 1px solid #dbeafe; border-radius: 8px; padding: 25px; margin-bottom: 30px;">
+    <p style="margin: 0 0 15px 0; font-weight: 700; color: #1d4ed8; font-size: 16px;">What Happens Next?</p>
+    <p style="margin: 0; font-size: 15px; color: #495057; line-height: 1.5;">Our team will review your registration
+        details. You will receive another email as soon as your account has been approved or if we need more information
+        to process your request.</p>
 </div>
 
-<p>If you have any questions in the meantime, please contact the UCA Co-op department.</p>
+<p style="margin-bottom: 15px;">Your registration details:</p>
+<ul style="margin: 0 0 35px 0; padding-left: 0; list-style: none; font-size: 15px; color: #4b5563;">
+    <li style="margin-bottom: 10px;">
+        <span style="color: #6c757d; margin-right: 10px;">•</span> <strong style="color: #374151;">Name:</strong> {{
+        first_name }} {{ last_name }}
+    </li>
+    <li style="margin-bottom: 10px;">
+        <span style="color: #6c757d; margin-right: 10px;">•</span> <strong style="color: #374151;">Email:</strong> {{
+        email }}
+    </li>
+    <li style="margin-bottom: 0;">
+        <span style="color: #6c757d; margin-right: 10px;">•</span> <strong style="color: #374151;">Role:</strong> {{
+        role|default:"student" }}
+    </li>
+</ul>
 
-<p>Best regards,<br>
-    <strong>The UCA Co-op Team</strong>
-</p>
+<p style="margin-bottom: 0;">We appreciate your patience while we verify your account. If you have any questions, please
+    feel free to reach out to our support team listed below.</p>
 {% endblock %}

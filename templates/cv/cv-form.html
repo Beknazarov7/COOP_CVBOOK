@@ -2004,38 +2004,37 @@
   }
 
   function clearForm() {
-    if (confirm("Are you sure you want to clear the form?")) {
-      const form = document.getElementById("cvForm");
-      if (form) form.reset();
-      formCounters = {
-        education: 1,
-        experience: 1,
-        competency: 1,
-        project: 1,
-        language: 1,
-        community: 1,
-        award: 1,
-      };
-      certificateCount = {};
-      const containers = [
-        "educationContainer",
-        "experienceContainer",
-        "competencyContainer",
-        "projectContainer",
-        "languageContainer",
-        "communityContainer",
-        "awardContainer",
-      ];
-      containers.forEach((containerId) => {
-        const container = document.getElementById(containerId);
-        const baseId = containerId.replace("Container", "-1");
-        if (container && document.getElementById(baseId)) {
-          container.innerHTML = document.getElementById(baseId).outerHTML;
-        }
-      });
-      showStep(1);
-      console.log("Form cleared");
-    }
+    const form = document.getElementById("cvForm");
+    if (form) form.reset();
+    formCounters = {
+      education: 1,
+      experience: 1,
+      competency: 1,
+      project: 1,
+      language: 1,
+      community: 1,
+      award: 1,
+    };
+    certificateCount = {};
+    const containers = [
+      "educationContainer",
+      "experienceContainer",
+      "competencyContainer",
+      "projectContainer",
+      "languageContainer",
+      "communityContainer",
+      "awardContainer",
+    ];
+    containers.forEach((containerId) => {
+      const container = document.getElementById(containerId);
+      const baseId = containerId.replace("Container", "-1");
+      if (container && document.getElementById(baseId)) {
+        container.innerHTML = document.getElementById(baseId).outerHTML;
+      }
+    });
+    showStep(1);
+    console.log("Form cleared");
+  }
   }
 
   function buildCVData() {
