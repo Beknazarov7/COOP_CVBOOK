@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.utils import timezone
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes, force_str
@@ -73,6 +73,10 @@ class SignupView(APIView):
         return False
     
     def post(self, request):
+        # Admin token check for privileged actions (like auto-approval)
+        admin_token = request.GET.get('admin_token')
+        is_admin_system = (admin_token == 'ucacoop_admin_access_2025')
+            
         username = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
@@ -80,6 +84,13 @@ class SignupView(APIView):
         last_name = request.data.get('last_name', '')
         auto_approve = request.data.get('auto_approve', False)
         
+        # Security: only the admin system/token can trigger auto-approval
+        if auto_approve and not is_admin_system:
+            auto_approve = False
+        
+        if not username and email:
+            username = email
+            
         if not all([username, email, password]):
             return Response({'error': 'Username, email, and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -116,7 +127,8 @@ class SignupView(APIView):
                 first_name=first_name,
                 last_name=last_name,
                 is_pending=is_pending,
-                is_active=True
+                is_active=True,
+                company=request.data.get('company', '')
             )
             
             # If auto-approved, set approval timestamp
@@ -190,7 +202,7 @@ class SigninView(APIView):
             if user.rejected_at is not None:
                 return Response({'error': 'Your account has been rejected and cannot log in.'}, status=status.HTTP_403_FORBIDDEN)
             # JWT tokens disabled for deployment - using session authentication
-            # refresh = RefreshToken.for_user(user)
+            login(request, user)
             logger.info(f"User logged in: {username}")
             return Response({
                 # 'refresh': str(refresh),
@@ -291,7 +303,7 @@ class PasswordResetConfirmView(APIView):
         user.set_password(new_password)
         user.save()
         logger.info(f"Password reset successful for user: {user.username}")
-        return Response({"message": "Password has been reset successfully.", "redirect": "#login"}, status=status.HTTP_200_OK)
+        return Response({"message": "Password has been reset successfully.", "redirect": "/#login"}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])  # Allow access for management system
@@ -299,6 +311,11 @@ def users_list_api(request):
     """
     API endpoint to list external users for management system
     """
+    # Task 1 & 3: Authorization check with admin token bypass
+    admin_token = request.GET.get('admin_token')
+    if not request.user.is_authenticated and admin_token != 'ucacoop_admin_access_2025':
+        return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+        
     try:
         # Get all users (external users are those who signed up through CVBook)
         users = CustomUser.objects.all().order_by('-date_joined')
@@ -310,9 +327,10 @@ def users_list_api(request):
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 'email': user.email,
-                'company': getattr(user, 'company', ''),  # If company field exists
-                'is_approved': not user.is_pending,  # Use is_pending field (inverted)
+                'company': user.company or '',
+                'is_approved': not user.is_pending,
                 'date_joined': user.date_joined.isoformat() if user.date_joined else None,
+                'last_login': user.last_login.isoformat() if user.last_login else None,
             })
         
         return Response(users_data, status=status.HTTP_200_OK)
@@ -327,6 +345,11 @@ def user_management_action(request):
     """
     Handle user management actions from admin panel
     """
+    # Task 1 & 3: Authorization check with admin token bypass
+    admin_token = request.GET.get('admin_token')
+    if not request.user.is_authenticated and admin_token != 'ucacoop_admin_access_2025':
+        return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+        
     try:
         action = request.data.get('action')
         user_id = request.data.get('user_id')

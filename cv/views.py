@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -415,6 +416,18 @@ class CVSubmitView(APIView):
 
 class CVPDFView(APIView):
     def get(self, request, cv_id):
+        # Task 1 & 3: Authorization check with admin token bypass
+        admin_token = request.GET.get('admin_token')
+        
+        # Check authorization if not using admin bypass
+        if admin_token != 'ucacoop_admin_access_2025':
+            if not request.user.is_authenticated:
+                return redirect('home')
+            if getattr(request.user, 'is_pending', False) or getattr(request.user, 'rejected_at', None):
+                from django.contrib.auth import logout
+                logout(request)
+                return redirect('home')
+            
         logger.info("CVPDFView.get called for cv_id: %s", cv_id)
         from .models import CVSubmission
         try:
@@ -713,6 +726,11 @@ class CVEditView(APIView):
 
 class CVDetailView(APIView):
     def get(self, request, cv_id):
+        # Task 1 & 3: Authorization check with admin token bypass
+        admin_token = request.GET.get('admin_token')
+        if not request.user.is_authenticated and admin_token != 'ucacoop_admin_access_2025':
+            return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+        
         logger.info("CVDetailView.get called for cv_id: %s", cv_id)
         from .models import CVSubmission, Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
         try:
@@ -815,9 +833,18 @@ class CVDetailView(APIView):
             return Response({"error": "CV not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CVListView(APIView):
-    permission_classes = [AllowAny]
-
     def get(self, request):
+        # Task 1 & 3: Authorization check with admin token bypass
+        admin_token = request.GET.get('admin_token')
+        
+        # Admin bypass or active user check
+        if admin_token == 'ucacoop_admin_access_2025':
+            pass
+        elif not request.user.is_authenticated:
+            return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+        elif getattr(request.user, 'is_pending', False) or getattr(request.user, 'rejected_at', None):
+            return Response({"error": "Your account is pending approval or has been rejected."}, status=status.HTTP_403_FORBIDDEN)
+            
         logger.info("CVListView.get called")
         from .models import CVSubmission
         
@@ -871,6 +898,18 @@ class CVListView(APIView):
         return Response(serialized_data, status=status.HTTP_200_OK)
 
 def cv_detail_view(request, cv_id):
+    # Task 1 & 3: Authorization check with admin token bypass
+    admin_token = request.GET.get('admin_token')
+    
+    # Check authorization if not using admin bypass
+    if admin_token != 'ucacoop_admin_access_2025':
+        if not request.user.is_authenticated:
+            return redirect('home')
+        if getattr(request.user, 'is_pending', False) or getattr(request.user, 'rejected_at', None):
+            from django.contrib.auth import logout
+            logout(request)
+            return redirect('home')
+    
     from .models import CVSubmission, Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
     try:
         cv = CVSubmission.objects.get(id=cv_id)
@@ -885,6 +924,7 @@ def cv_detail_view(request, cv_id):
             'community_involvements': cv.community_involvements.all(),
             'awards': cv.awards.all(),
             'references': cv.references.all(),
+            'admin_token': admin_token,
         }
         return render(request, 'cv/cv-detail.html', context)
     except CVSubmission.DoesNotExist:
@@ -894,12 +934,24 @@ def cv_cards_view(request):
     """
     Public CV cards view - shows published and approved CVs
     """
+    # Task 1 & 3: Authorization check with admin token bypass
+    admin_token = request.GET.get('admin_token')
+    
+    # Check authorization if not using admin bypass
+    if admin_token != 'ucacoop_admin_access_2025':
+        if not request.user.is_authenticated:
+            return redirect('home')
+        if getattr(request.user, 'is_pending', False) or getattr(request.user, 'rejected_at', None):
+            from django.contrib.auth import logout
+            logout(request)
+            return redirect('home')
+        
     cvs = CVSubmission.objects.filter(
         is_published_to_cvbook=True,
         admin_approved=True
     ).order_by('-submitted_at')
     
-    return render(request, 'cv/cv-cards.html', {'cvs': cvs})
+    return render(request, 'cv/cv-cards.html', {'cvs': cvs, 'admin_token': admin_token})
 
 from rest_framework import serializers
 from .models import CVSubmission
@@ -934,6 +986,16 @@ def cv_management_action(request):
     """
     Handle CV management actions from admin panel
     """
+    admin_token = request.GET.get('admin_token')
+    
+    # Admin bypass or active user check
+    if admin_token == 'ucacoop_admin_access_2025':
+        pass
+    elif not request.user.is_authenticated:
+        return Response({"error": "Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
+    elif getattr(request.user, 'is_pending', False) or getattr(request.user, 'rejected_at', None):
+        return Response({"error": "Your account is pending approval or has been rejected."}, status=status.HTTP_403_FORBIDDEN)
+        
     try:
         action = request.data.get('action')
         cv_id = request.data.get('cv_id')

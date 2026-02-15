@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,31 +11,31 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 2rem;
         }
-        
+
         .header {
             text-align: center;
             color: white;
             margin-bottom: 3rem;
         }
-        
+
         .header h1 {
             font-size: 3rem;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        
+
         .header p {
             font-size: 1.2rem;
             opacity: 0.9;
         }
-        
+
         .cv-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -42,17 +43,17 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .cv-card {
             background: white;
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-        
+
         .cv-card:before {
             content: '';
             position: absolute;
@@ -62,41 +63,41 @@
             height: 4px;
             background: linear-gradient(90deg, #667eea, #764ba2);
         }
-        
+
         .cv-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        
+
         .cv-header {
             margin-bottom: 1.5rem;
         }
-        
+
         .cv-name {
             font-size: 1.8rem;
             color: #333;
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
-        
+
         .cv-email {
             color: #666;
             font-size: 0.95rem;
             margin-bottom: 0.5rem;
         }
-        
+
         .cv-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-        
+
         .info-item {
             display: flex;
             flex-direction: column;
         }
-        
+
         .info-label {
             font-size: 0.8rem;
             color: #888;
@@ -104,18 +105,18 @@
             letter-spacing: 0.5px;
             margin-bottom: 0.3rem;
         }
-        
+
         .info-value {
             font-size: 0.95rem;
             color: #333;
             font-weight: 500;
         }
-        
+
         .cv-actions {
             display: flex;
             gap: 1rem;
         }
-        
+
         .btn {
             flex: 1;
             padding: 0.8rem 1.5rem;
@@ -129,17 +130,17 @@
             text-align: center;
             display: inline-block;
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         .btn-secondary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -147,105 +148,104 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .btn-secondary::before {
             content: "⬇";
             margin-right: 6px;
             font-size: 16px;
         }
-        
+
         .btn-secondary:hover {
             background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.6);
         }
-        
+
         .empty-state {
             text-align: center;
             color: white;
             padding: 4rem 2rem;
         }
-        
+
         .empty-state h2 {
             font-size: 2rem;
             margin-bottom: 1rem;
             opacity: 0.9;
         }
-        
+
         .empty-state p {
             font-size: 1.1rem;
             opacity: 0.7;
         }
-        
+
         .stats {
             text-align: center;
             color: white;
             margin-bottom: 2rem;
         }
-        
+
         .stats span {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             padding: 0.5rem 1rem;
             border-radius: 25px;
             font-size: 0.9rem;
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1>CVBook</h1>
         <p>Discover talented students from University of Central Asia</p>
     </div>
-    
+
     {% if cvs %}
-        <div class="stats">
-            <span>{{ cvs|length }} CV{{ cvs|length|pluralize }} available</span>
-        </div>
-        
-        <div class="cv-grid">
-            {% for cv in cvs %}
-            <div class="cv-card">
-                <div class="cv-header">
-                    <h3 class="cv-name">{{ cv.name }} {{ cv.surname }}</h3>
-                    <p class="cv-email">{{ cv.email }}</p>
+    <div class="stats">
+        <span>{{ cvs|length }} CV{{ cvs|length|pluralize }} available</span>
+    </div>
+
+    <div class="cv-grid">
+        {% for cv in cvs %}
+        <div class="cv-card">
+            <div class="cv-header">
+                <h3 class="cv-name">{{ cv.name }} {{ cv.surname }}</h3>
+                <p class="cv-email">{{ cv.email }}</p>
+            </div>
+
+            <div class="cv-info">
+                <div class="info-item">
+                    <span class="info-label">Major</span>
+                    <span class="info-value">{{ cv.major|default:"Not specified" }}</span>
                 </div>
-                
-                <div class="cv-info">
-                    <div class="info-item">
-                        <span class="info-label">Major</span>
-                        <span class="info-value">{{ cv.major|default:"Not specified" }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Country</span>
-                        <span class="info-value">{{ cv.country|default:"Not specified" }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Class Year</span>
-                        <span class="info-value">{{ cv.graduation_year|default:"Not specified" }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Status</span>
-                        <span class="info-value">{{ cv.status_preference|default:"Not specified" }}</span>
-                    </div>
+                <div class="info-item">
+                    <span class="info-label">Country</span>
+                    <span class="info-value">{{ cv.country|default:"Not specified" }}</span>
                 </div>
-                
-                <div class="cv-actions">
-                    <a href="/cv/detail/{{ cv.id }}/" class="btn btn-primary">View Details</a>
-                    <a href="/cv/{{ cv.id }}/download/" class="btn btn-secondary">Download PDF</a>
+                <div class="info-item">
+                    <span class="info-label">Class Year</span>
+                    <span class="info-value">{{ cv.graduation_year|default:"Not specified" }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <span class="info-value">{{ cv.status_preference|default:"Not specified" }}</span>
                 </div>
             </div>
-            {% endfor %}
+
+            <div class="cv-actions">
+                <a href="/cv/detail/{{ cv.id }}/{% if admin_token %}?admin_token={{ admin_token }}{% endif %}"
+                    class="btn btn-primary">View Details</a>
+                <a href="/cv/{{ cv.id }}/download/{% if admin_token %}?admin_token={{ admin_token }}{% endif %}"
+                    class="btn btn-secondary">Download PDF</a>
+            </div>
         </div>
+        {% endfor %}
+    </div>
     {% else %}
-        <div class="empty-state">
-            <h2>No CVs Available</h2>
-            <p>There are currently no student CVs published to the CVBook.</p>
-        </div>
+    <div class="empty-state">
+        <h2>No CVs Available</h2>
+        <p>There are currently no student CVs published to the CVBook.</p>
+    </div>
     {% endif %}
 </body>
+
 </html>
-
-
-
-
-

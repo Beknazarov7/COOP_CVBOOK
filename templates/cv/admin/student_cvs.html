@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Student CVs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Copied styles from cv_dashboard.html + custom styles for table */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .filter-input {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            height: 42px;
+        }
+
+        .filter-btn:hover {
+            background: #5a67d8;
+        }
+
+        .cv-table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .cv-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cv-table th,
+        .cv-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .cv-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .cv-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-published {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        .badge-unpublished {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .badge-approved {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-pending {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-missing {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Red for missing */
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        .btn-view {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-edit {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .btn-create {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Green for create */
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            list-style: none;
+            gap: 5px;
+        }
+
+        .page-item .page-link {
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .page-item.active .page-link {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title"><i class="fas fa-graduation-cap"></i> Manage Student CVs</h1>
+                <p class="dashboard-subtitle">Combined list of all UCA Students and existing CV submissions</p>
+            </div>
+            <a href="{% url 'cv:cv-admin-dashboard' %}" class="action-btn btn-view"
+                style="color: white; background: rgba(255,255,255,0.2);">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <form class="filters-section" method="get">
+            <div class="filter-group">
+                <label class="filter-label">Search</label>
+                <input type="text" name="search" class="filter-input" placeholder="Name, Email..."
+                    value="{{ current_filters.search }}">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Cohort</label>
+                <select name="cohort" class="filter-input">
+                    <option value="">All Cohorts</option>
+                    {% for c in cohorts %}
+                    <option value="{{ c }}" {% if current_filters.cohort==c %}selected{% endif %}>{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Major</label>
+                <select name="major" class="filter-input">
+                    <option value="">All Majors</option>
+                    {% for m in majors %}
+                    <option value="{{ m }}" {% if current_filters.major==m %}selected{% endif %}>{{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select name="status" class="filter-input">
+                    <option value="">All Statuses</option>
+                    <option value="published" {% if current_filters.status=='published' %}selected{% endif %}>Published
+                    </option>
+                    <option value="unpublished" {% if current_filters.status=='unpublished' %}selected{% endif %}>
+                        Unpublished</option>
+                    <option value="approved" {% if current_filters.status=='approved' %}selected{% endif %}>Approved
+                    </option>
+                    <option value="pending" {% if current_filters.status=='pending' %}selected{% endif %}>Pending
+                        Approval</option>
+                    <option value="missing" {% if current_filters.status=='missing' %}selected{% endif %}>CV Not
+                        Submitted</option>
+                    <option value="submitted" {% if current_filters.status=='submitted' %}selected{% endif %}>CV
+                        Submitted</option>
+                </select>
+            </div>
+            <div class="filter-group" style="flex: 0;">
+                <button type="submit" class="filter-btn">Filter</button>
+            </div>
+            <div class="filter-group" style="flex: 0;">
+                <a href="{% url 'cv:admin-student-cvs' %}" class="filter-btn"
+                    style="background: #6c757d; text-align: center; text-decoration: none; line-height: 20px;">Reset</a>
+            </div>
+        </form>
+
+        <div class="cv-table-container">
+            <table class="cv-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Major</th>
+                        <th>Cohort</th>
+                        <th>CV Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in page_obj %}
+                    <tr>
+                        <td>{{ item.name }} {{ item.surname }}</td>
+                        <td>{{ item.email }}</td>
+                        <td>{{ item.major }}</td>
+                        <td>{{ item.cohort }}</td>
+                        <td>
+                            {% if item.has_cv %}
+                            {% if item.is_published %}
+                            <span class="status-badge badge-published">Published</span>
+                            {% elif item.is_approved %}
+                            <span class="status-badge badge-approved">Approved</span>
+                            {% else %}
+                            <span class="status-badge badge-pending">Pending</span>
+                            {% endif %}
+                            {% else %}
+                            <span class="status-badge badge-missing">Not Submitted</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.has_cv %}
+                            <a href="/cv/{{ item.cv_id }}/edit/" class="action-btn btn-edit" title="Edit CV">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <button class="action-btn btn-view" title="Toggle Publish">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            {% else %}
+                            <a href="/cv/create/?name={{ item.name }}&surname={{ item.surname }}&email={{ item.email }}&major={{ item.major }}&graduationYear={{ item.graduation_year }}&status=Open to full-time&user_type=student&cohort_status={{ item.cohort }}"
+                                class="action-btn btn-create" title="Create CV for Student">
+                                <i class="fas fa-plus"></i> Create CV
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #6c757d; padding: 30px;">
+                            No students found matching the criteria.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ page_obj.previous_page_number }}&search={{ current_filters.search }}&cohort={{ current_filters.cohort }}&major={{ current_filters.major }}&status={{ current_filters.status }}">&laquo;</a>
+                </li>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ i }}&search={{ current_filters.search }}&cohort={{ current_filters.cohort }}&major={{ current_filters.major }}&status={{ current_filters.status }}">{{
+                        i }}</a></li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="?page={{ page_obj.next_page_number }}&search={{ current_filters.search }}&cohort={{ current_filters.cohort }}&major={{ current_filters.major }}&status={{ current_filters.status }}">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

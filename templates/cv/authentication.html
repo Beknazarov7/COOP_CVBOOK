@@ -962,8 +962,8 @@ body {
 
     // If you previously had: export default NavBar;  ← REMOVE this line
 
-    const NavBar = ({ token, setToken }) => {
-      const currentHash = window.location.hash || '#login';
+    const NavBar = ({ token, setToken, page }) => {
+      const currentHash = page || window.location.hash || '#login';
 
       // ✅ Hide NavBar on login, signup, or pending-approval pages
       // Also hide if no hash (default is login)
@@ -1296,7 +1296,7 @@ body {
     // ===== Sign Up =====
     const SignUp = () => {
       const [formData, setFormData] = useState({
-        first_name: "", last_name: "", email: "", username: "", password: ""
+        first_name: "", last_name: "", email: "", username: "", password: "", company: ""
       });
       const [message, setMessage] = useState("");
       const [loading, setLoading] = useState(false);
@@ -1311,6 +1311,7 @@ body {
               "Content-Type": "application/json",
               "X-CSRFToken": getCookie("csrftoken")
             },
+            credentials: "include",
             body: JSON.stringify(formData),
           });
           const data = await response.json();
@@ -1499,8 +1500,8 @@ body {
                           type="text"
                           placeholder="Enter company name"
                           required
-                          value={formData.username}
-                          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                          value={formData.company}
+                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                           style={{
                             width: '100%',
                             padding: '13px 16px',
@@ -1627,6 +1628,7 @@ body {
               "Content-Type": "application/json",
               "X-CSRFToken": getCookie("csrftoken")
             },
+            credentials: "include",
             body: JSON.stringify(formData),
           });
           const data = await response.json();
@@ -1931,7 +1933,9 @@ body {
         const fetchCVs = async () => {
           try {
             // API has AllowAny permission, no auth header needed
-            const response = await fetch('/cv/api/list/');
+            const response = await fetch(`/cv/api/list/${window.location.search}`, {
+              credentials: "include"
+            });
             if (response.status === 401) {
               setError("❌ Session expired. Please log in again.");
               localStorage.removeItem('token');
@@ -2277,7 +2281,7 @@ body {
               const skills = getSkillsForMajor(cv);
 
               return (
-                <a key={cv.id} href={`/cv/detail/${cv.id}/`} className="student-card profile-card">
+                <a key={cv.id} href={`/cv/detail/${cv.id}/${window.location.search}`} className="student-card profile-card">
                   <div className="profile-header">
                     <div className="profile-info">
                       <div className="student-name">{cv.name} {cv.surname}</div>
@@ -2318,6 +2322,14 @@ body {
       const [token, setToken] = useState(localStorage.getItem('token'));
       const [page, setPage] = useState('#login');
 
+      useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const adminToken = urlParams.get('admin_token');
+        if (adminToken === 'ucacoop_admin_access_2025') {
+          setToken('admin_bypass_token');
+        }
+      }, []);
+
 
       const [filters, setFilters] = useState({
         category: 'all',
@@ -2332,6 +2344,7 @@ body {
       useEffect(() => {
         const onHash = () => setPage(window.location.hash || (token ? '#cv-cards' : '#login'));
         window.addEventListener('hashchange', onHash);
+        onHash(); // Call it once on mount
         return () => window.removeEventListener('hashchange', onHash);
       }, [token]);
 
@@ -2347,7 +2360,7 @@ body {
 
       return (
         <div>
-          <NavBar token={token} setToken={setToken} />
+          <NavBar token={token} setToken={setToken} page={page} />
 
           {/* Route by hash */}
           {(() => {

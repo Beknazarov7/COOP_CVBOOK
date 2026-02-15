@@ -3650,6 +3650,65 @@
 
 
 </script>
+<script>
+  // Auto-fill from URL parameters (for admin creation)
+  window.addEventListener('load', function () {
+    // Small delay to ensure dynamic options (like years) are populated
+    setTimeout(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // Map URL params to form field IDs
+      const fieldMap = {
+        'name': 'name',
+        'surname': 'surname',
+        'email': 'email',
+        'major': 'major',
+        'graduationYear': 'graduationYear',
+        'status': 'status',
+        'country': 'country'
+      };
+
+      // Function to set value and trigger change
+      const setFieldValue = (id, value) => {
+        const field = document.getElementById(id);
+        if (field) {
+          // For selects, we need to check if the option exists
+          if (field.tagName === 'SELECT') {
+            // Try exact match
+            let options = Array.from(field.options);
+            let match = options.find(opt => opt.value === value || opt.text === value);
+
+            if (match) {
+              field.value = match.value;
+            } else {
+              // Try partial match or case-insensitive
+              match = options.find(opt => opt.value.toLowerCase().includes(value.toLowerCase()) || opt.text.toLowerCase().includes(value.toLowerCase()));
+              if (match) {
+                field.value = match.value;
+              } else {
+                // If not found, maybe add it? Or leave blank.
+                console.warn(`Value ${value} not found for field ${id}`);
+              }
+            }
+          } else {
+            field.value = value;
+          }
+          field.dispatchEvent(new Event('change', { bubbles: true }));
+          field.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+
+      for (const [param, id] of Object.entries(fieldMap)) {
+        if (urlParams.has(param)) {
+          const val = urlParams.get(param);
+          if (val && val !== 'null' && val !== 'None') {
+            setFieldValue(id, val);
+          }
+        }
+      }
+    }, 500); // 500ms delay
+  });
+</script>
 </body>
 
 </html>

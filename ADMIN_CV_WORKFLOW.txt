@@ -1,0 +1,184 @@
+# Admin CV Management Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    ADMIN CV MANAGEMENT WORKFLOW                  │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 1. ADMIN ACCESSES DASHBOARD                                     │
+│    URL: /cv/admin/dashboard/                                    │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 2. CLICKS "MANAGE STUDENT CVS"                                  │
+│    Navigates to: /cv/admin/student-cvs/                        │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 3. BACKEND PROCESSING                                           │
+│    ┌─────────────────────────────────────────────────────────┐ │
+│    │ a) Fetch all Senior students from Co-op DB              │ │
+│    │    Query: SELECT * FROM students WHERE cohort='Senior'  │ │
+│    └─────────────────────────────────────────────────────────┘ │
+│    ┌─────────────────────────────────────────────────────────┐ │
+│    │ b) Fetch all existing CV submissions                    │ │
+│    │    Query: CVSubmission.objects.filter(is_uca_student=T) │ │
+│    └─────────────────────────────────────────────────────────┘ │
+│    ┌─────────────────────────────────────────────────────────┐ │
+│    │ c) Merge lists by email (case-insensitive)              │ │
+│    │    - Match seniors with their CVs                       │ │
+│    │    - Identify seniors without CVs                       │ │
+│    └─────────────────────────────────────────────────────────┘ │
+│    ┌─────────────────────────────────────────────────────────┐ │
+│    │ d) Apply filters (search, cohort, major, status)        │ │
+│    └─────────────────────────────────────────────────────────┘ │
+│    ┌─────────────────────────────────────────────────────────┐ │
+│    │ e) Sort: Missing CVs first, then alphabetically         │ │
+│    └─────────────────────────────────────────────────────────┘ │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ 4. DISPLAY STUDENT LIST                                         │
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ Name    │ Email         │ Major  │ Cohort │ Status      │  │
+│  ├──────────────────────────────────────────────────────────┤  │
+│  │ John D  │ john@uca.edu  │ CS     │ Senior │ 🔴 Missing  │  │
+│  │ Jane S  │ jane@uca.edu  │ CM     │ Senior │ 🟢 Published│  │
+│  │ Bob M   │ bob@uca.edu   │ EES    │ Senior │ 🟠 Pending  │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+                         ▼
+                    ┌─────────┐
+                    │ STUDENT │
+                    │ HAS CV? │
+                    └────┬────┘
+                         │
+         ┌───────────────┴───────────────┐
+         │                               │
+         ▼ YES                           ▼ NO
+┌─────────────────────┐         ┌─────────────────────┐
+│ SHOW EDIT ACTIONS   │         │ SHOW CREATE BUTTON  │
+│                     │         │                     │
+│ [✏️ Edit]           │         │ [➕ Create CV]      │
+│ [👁️ Toggle Publish] │         │                     │
+└─────────────────────┘         └──────────┬──────────┘
+                                           │
+                                           ▼
+                              ┌────────────────────────┐
+                              │ ADMIN CLICKS CREATE CV │
+                              └──────────┬─────────────┘
+                                         │
+                                         ▼
+                              ┌────────────────────────────────────┐
+                              │ 5. OPEN CV FORM WITH PRE-FILLED    │
+                              │    STUDENT DATA                    │
+                              │                                    │
+                              │  ✓ Name: John                      │
+                              │  ✓ Surname: Doe                    │
+                              │  ✓ Email: john@uca.edu             │
+                              │  ✓ Major: Computer Science         │
+                              │  ✓ Graduation Year: 2026           │
+                              │  ✓ Status: Open to full-time       │
+                              │  ✓ user_type: student (hidden)     │
+                              │  ✓ cohort_status: Senior (hidden)  │
+                              └──────────┬─────────────────────────┘
+                                         │
+                                         ▼
+                              ┌────────────────────────┐
+                              │ 6. ADMIN COMPLETES     │
+                              │    REMAINING SECTIONS  │
+                              │                        │
+                              │  - Education           │
+                              │  - Experience          │
+                              │  - Skills              │
+                              │  - Projects            │
+                              │  - etc.                │
+                              └──────────┬─────────────┘
+                                         │
+                                         ▼
+                              ┌────────────────────────┐
+                              │ 7. SUBMIT FORM         │
+                              │    POST to /cv/submit/ │
+                              └──────────┬─────────────┘
+                                         │
+                                         ▼
+                              ┌────────────────────────────────────┐
+                              │ 8. BACKEND PROCESSING              │
+                              │                                    │
+                              │  a) Create CVSubmission record     │
+                              │  b) Set is_uca_student = True      │
+                              │  c) Set cohort_status = 'Senior'   │
+                              │                                    │
+                              │  ┌──────────────────────────────┐ │
+                              │  │ IS STUDENT A SENIOR?         │ │
+                              │  └────────┬─────────────────────┘ │
+                              │           │                        │
+                              │  ┌────────┴────────┐              │
+                              │  │ YES             │ NO           │
+                              │  ▼                 ▼              │
+                              │  ✅ AUTO-APPROVE   ❌ REQUIRES    │
+                              │  admin_approved=T  MANUAL REVIEW  │
+                              │  is_published=T                   │
+                              │                                    │
+                              │  d) Save all CV sections           │
+                              │  e) Generate PDF                   │
+                              └──────────┬─────────────────────────┘
+                                         │
+                                         ▼
+                              ┌────────────────────────┐
+                              │ 9. SUCCESS!            │
+                              │                        │
+                              │  ✓ CV created          │
+                              │  ✓ PDF generated       │
+                              │  ✓ Published (if Sr)   │
+                              │  ✓ Visible on CV Book  │
+                              └────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════
+                            STATUS BADGES
+═══════════════════════════════════════════════════════════════════
+
+🔴 NOT SUBMITTED   - Student has no CV in system
+🟠 PENDING         - CV exists, awaiting admin approval
+🔵 APPROVED        - CV approved, not yet published
+🟢 PUBLISHED       - CV is live on CV Book
+
+
+═══════════════════════════════════════════════════════════════════
+                          KEY FEATURES
+═══════════════════════════════════════════════════════════════════
+
+✅ Shows ALL seniors (not just those with CVs)
+✅ Pre-fills student data when creating CVs
+✅ Auto-approves and publishes senior CVs
+✅ Supports filtering and searching
+✅ Pagination for large lists
+✅ Case-insensitive email matching
+✅ Clear visual status indicators
+
+
+═══════════════════════════════════════════════════════════════════
+                        DATABASE INTERACTION
+═══════════════════════════════════════════════════════════════════
+
+┌──────────────────────┐         ┌──────────────────────┐
+│   Co-op Database     │         │   CV-Book Database   │
+│  (UCA-Co-op-Website) │         │ (CV-Book-For-UCA-...) │
+├──────────────────────┤         ├──────────────────────┤
+│                      │         │                      │
+│  • users             │◄────┐   │  • cv_cvsubmission   │
+│  • students          │     │   │  • cv_education      │
+│  • cohort_status     │     │   │  • cv_experience     │
+│  • graduation_year   │     └───┤  • cv_project        │
+│                      │  Match  │  • cv_skill          │
+│                      │   by    │  • etc.              │
+│                      │  email  │                      │
+└──────────────────────┘         └──────────────────────┘
+```

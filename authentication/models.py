@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 class CustomUser(AbstractUser):
+    company = models.CharField(max_length=255, null=True, blank=True)
     is_pending = models.BooleanField(default=True)  # True for pending approval
     approved_by = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='approved_users')
     accepted_at = models.DateTimeField(null=True, blank=True)

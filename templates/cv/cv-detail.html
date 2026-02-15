@@ -370,11 +370,12 @@
     <div class="action-buttons-container"></div> <!-- Spacer -->
     <div class="action-buttons" id="smartHeader">
         <div class="action-buttons-inner">
-            <a href="/#cv-cards" class="btn btn-secondary">
+            <a href="/{% if admin_token %}?admin_token={{ admin_token }}{% endif %}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i>
                 <span>Back to Cards</span>
             </a>
-            <a href="{% url 'cv:cv-download' cv_id=cv.id %}" class="btn btn-primary">
+            <a href="{% url 'cv:cv-download' cv_id=cv.id %}{% if admin_token %}?admin_token={{ admin_token }}{% endif %}"
+                class="btn btn-primary">
                 <i class="fas fa-download"></i>
                 <span>Download</span>
             </a>
@@ -442,7 +443,8 @@
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">{{ exp.position_title|default:"Position Title" }}</div>
-                    <div class="entry-date">{{ exp.start_date|format_date_str }} — {{ exp.end_date|format_date_str|default:"Present" }}</div>
+                    <div class="entry-date">{{ exp.start_date|format_date_str }} — {{
+                        exp.end_date|format_date_str|default:"Present" }}</div>
                 </div>
                 <div class="entry-subtitle">
                     {{ exp.company|default:"Company" }}{% if exp.location %}, {{ exp.location }}{% endif %}
@@ -576,9 +578,11 @@
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">{{ involvement.position_title|default:"Position Title" }}</div>
-                    <div class="entry-date">{{ involvement.start_date|format_date_str }} — {{ involvement.end_date|format_date_str|default:"Present" }}</div>
+                    <div class="entry-date">{{ involvement.start_date|format_date_str }} — {{
+                        involvement.end_date|format_date_str|default:"Present" }}</div>
                 </div>
-                <div class="entry-subtitle">{{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{ involvement.location }}{% endif %}</div>
+                <div class="entry-subtitle">{{ involvement.organization|default:"Organization" }}{% if
+                    involvement.location %}, {{ involvement.location }}{% endif %}</div>
                 {% if involvement.achievements %}
                 <ul>
                     {% for line in involvement.achievements.splitlines %}
