@@ -898,37 +898,92 @@ class CVListView(APIView):
         return Response(serialized_data, status=status.HTTP_200_OK)
 
 def cv_detail_view(request, cv_id):
+    """
+    Render CV detail page with comprehensive error handling
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
     # Task 1 & 3: Authorization check with admin token bypass
     admin_token = request.GET.get('admin_token')
     
     # Check authorization if not using admin bypass
     if admin_token != 'ucacoop_admin_access_2025':
         if not request.user.is_authenticated:
+            logger.warning(f"Unauthenticated access attempt to CV {cv_id}")
             return redirect('home')
         if getattr(request.user, 'is_pending', False) or getattr(request.user, 'rejected_at', None):
             from django.contrib.auth import logout
+            logger.warning(f"Pending/rejected user attempted to access CV {cv_id}")
             logout(request)
             return redirect('home')
     
     from .models import CVSubmission, Education, Certificate, ProfessionalExperience, ProfessionalCompetency, Project, TechnicalSkill, Language, CommunityInvolvement, Award, Reference
+    
     try:
+        # Fetch CV with related data
         cv = CVSubmission.objects.get(id=cv_id)
-        context = {
-            'cv': cv,
-            'educations': cv.educations.all(),
-            'experiences': cv.experiences.all(),
-            'competencies': cv.competencies.all(),
-            'projects': cv.projects.all(),
-            'technical_skills': cv.technical_skills.all(),
-            'languages': cv.languages.all(),
-            'community_involvements': cv.community_involvements.all(),
-            'awards': cv.awards.all(),
-            'references': cv.references.all(),
-            'admin_token': admin_token,
-        }
-        return render(request, 'cv/cv-detail.html', context)
+        logger.info(f"Successfully fetched CV {cv_id} for {cv.name} {cv.surname}")
+        
+        # Build context with safe queries
+        try:
+            context = {
+                'cv': cv,
+                'educations': cv.educations.all() if hasattr(cv, 'educations') else [],
+                'experiences': cv.experiences.all() if hasattr(cv, 'experiences') else [],
+                'competencies': cv.competencies.all() if hasattr(cv, 'competencies') else [],
+                'projects': cv.projects.all() if hasattr(cv, 'projects') else [],
+                'technical_skills': cv.technical_skills.all() if hasattr(cv, 'technical_skills') else [],
+                'languages': cv.languages.all() if hasattr(cv, 'languages') else [],
+                'community_involvements': cv.community_involvements.all() if hasattr(cv, 'community_involvements') else [],
+                'awards': cv.awards.all() if hasattr(cv, 'awards') else [],
+                'references': cv.references.all() if hasattr(cv, 'references') else [],
+                'admin_token': admin_token,
+            }
+            logger.info(f"Context built successfully for CV {cv_id}")
+        except Exception as e:
+            logger.error(f"Error building context for CV {cv_id}: {str(e)}", exc_info=True)
+            # Return with minimal context
+            context = {
+                'cv': cv,
+                'educations': [],
+                'experiences': [],
+                'competencies': [],
+                'projects': [],
+                'technical_skills': [],
+                'languages': [],
+                'community_involvements': [],
+                'awards': [],
+                'references': [],
+                'admin_token': admin_token,
+                'error_message': 'Some CV sections could not be loaded'
+            }
+        
+        # Attempt to render template
+        try:
+            return render(request, 'cv/cv-detail.html', context)
+        except Exception as e:
+            logger.error(f"Error rendering template for CV {cv_id}: {str(e)}", exc_info=True)
+            # Return error response with details
+            from django.http import HttpResponse
+            return HttpResponse(
+                f"<h1>Error Loading CV</h1><p>CV ID: {cv_id}</p><p>Error: {str(e)}</p>",
+                status=500
+            )
+            
     except CVSubmission.DoesNotExist:
-        return render(request, 'cv/cv-cards.html', {'cvs': CVSubmission.objects.all().order_by('-submitted_at'), 'error': 'CV not found'})
+        logger.warning(f"CV {cv_id} not found")
+        return render(request, 'cv/cv-cards.html', {
+            'cvs': CVSubmission.objects.all().order_by('-submitted_at'), 
+            'error': 'CV not found'
+        })
+    except Exception as e:
+        logger.error(f"Unexpected error in cv_detail_view for CV {cv_id}: {str(e)}", exc_info=True)
+        from django.http import HttpResponse
+        return HttpResponse(
+            f"<h1>Unexpected Error</h1><p>CV ID: {cv_id}</p><p>Error: {str(e)}</p>",
+            status=500
+        )
     
 def cv_cards_view(request):
     """
