@@ -581,8 +581,7 @@
                     <div class="entry-date">{{ involvement.start_date|format_date_str }} — {{
                         involvement.end_date|format_date_str|default:"Present" }}</div>
                 </div>
-                <div class="entry-subtitle">{{ involvement.organization|default:"Organization" }}{% if
-                    involvement.location %}, {{ involvement.location }}{% endif %}</div>
+                <div class="entry-subtitle">{{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{ involvement.location }}{% endif %}</div>
                 {% if involvement.achievements %}
                 <ul>
                     {% for line in involvement.achievements.splitlines %}
