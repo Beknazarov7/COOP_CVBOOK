@@ -8,57 +8,74 @@
 </head>
 
 <body
-    style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 0; background-color: #f4f7f9;">
-    <div
-        style="max-width: 630px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
-        <!-- Blue Header -->
-        <div
-            style="background-color: #1967d2; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); padding: 35px 20px; text-align: center;">
-            <h1 style="margin: 0; color: #ffffff; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">{% block
-                header_title %}Welcome to UCA Co-op Platform!{% endblock %}</h1>
-        </div>
+    style="font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Open Sans', 'Helvetica Neue', 'Arial', sans-serif; line-height: 1.7; color: #333333; margin: 0; padding: 0; background-color: #f5f5f5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f5f5f5; padding: 20px 0;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="600"
+                    style="background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                    <!-- Header -->
+                    <tr>
+                        <td align="center"
+                            style="background-color: #1967d2; padding: 25px; border-radius: 8px 8px 0 0;">
+                            <h1
+                                style="margin: 0; color: #ffffff; font-weight: 600; font-size: 24px; letter-spacing: -0.5px;">
+                                {% block header_title %}UCA Co-op Platform{% endblock %}
+                            </h1>
+                        </td>
+                    </tr>
 
-        <!-- Main Content -->
-        <div style="padding: 40px 45px;">
-            {% block content %}{% endblock %}
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 30px 40px;">
+                            {% block content %}{% endblock %}
 
-            <!-- Support Section -->
-            <div style="background-color: #f1f3f5; border-radius: 8px; padding: 25px; margin-top: 35px;">
-                <p style="margin: 0 0 15px 0; font-weight: 700; font-size: 15px; color: #495057;">Need help? Contact us:
-                </p>
-                <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: #495057;">
-                    <li style="margin-bottom: 10px;"><span style="color: #6c757d; margin-right: 5px;">•</span> Email: <a
-                            href="mailto:co-op.sas@ucentralasia.org"
-                            style="color: #1d4ed8; text-decoration: none;">co-op.sas@ucentralasia.org</a></li>
-                    <li style="margin-bottom: 10px;"><span style="color: #6c757d; margin-right: 5px;">•</span> Telegram:
-                        <a href="https://t.me/ucacoopbot" style="color: #1d4ed8; text-decoration: none;">@ucacoopbot</a>
-                    </li>
-                    <li style="margin-bottom: 0;"><span style="color: #6c757d; margin-right: 5px;">•</span> Support: <a
-                            href="https://t.me/alibaxshov"
-                            style="color: #1d4ed8; text-decoration: none;">@alibaxshov</a></li>
-                </ul>
-            </div>
+                            <!-- Contact Info Box -->
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%"
+                                style="background-color: #f5f5f5; border-radius: 6px; padding: 20px; margin-top: 30px;">
+                                <tr>
+                                    <td style="font-size: 14px; color: #333333;">
+                                        <p style="margin: 0 0 12px 0; font-weight: 600; color: #1967d2;">Need help?
+                                            Contact us:</p>
+                                        <p style="margin: 6px 0;">• Email: <a href="mailto:co-op.sas@ucentralasia.org"
+                                                style="color: #1967d2; text-decoration: none;">co-op.sas@ucentralasia.org</a>
+                                        </p>
+                                        <p style="margin: 6px 0;">• Telegram: <a href="https://t.me/ucacoopbot"
+                                                style="color: #1967d2; text-decoration: none;">@ucacoopbot</a></p>
+                                        <p style="margin: 6px 0;">• Support: <a href="https://t.me/alibaxshov"
+                                                style="color: #1967d2; text-decoration: none;">@alibaxshov</a></p>
+                                    </td>
+                                </tr>
+                            </table>
 
-            <div style="margin-top: 35px;">
-                <p style="margin: 0; color: #495057;">Best regards,<br><strong
-                        style="color: #1a1a1a; font-size: 16px;">The UCA Co-op Team</strong></p>
-            </div>
-        </div>
+                            <!-- Signature -->
+                            <p style="margin-top: 30px; font-size: 16px;">
+                                Best regards,<br>
+                                <strong>The UCA Co-op Team</strong>
+                            </p>
+                        </td>
+                    </tr>
 
-        <!-- Footer -->
-        <div
-            style="padding: 25px 45px; border-top: 1px solid #f1f3f5; text-align: center; font-size: 13px; color: #8898aa;">
-            <p style="margin: 0 0 12px 0;">This is an automated message, please do not reply directly to this email.</p>
-            <div style="margin-bottom: 12px;">
-                <a href="https://ucentralasia.org/" style="color: #1d4ed8; text-decoration: underline;">University of
-                    Central Asia</a> |
-                <a href="https://ucentralasia.org/schools/school-of-arts-and-sciences/co-operative-education-programme"
-                    style="color: #1d4ed8; text-decoration: underline;">Co-op Programme</a>
-            </div>
-            <p style="margin: 0;">&copy; {{ current_year|default:"2026" }} University of Central Asia. All rights
-                reserved.</p>
-        </div>
-    </div>
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center"
+                            style="padding: 25px 40px; border-top: 1px solid #eee; font-size: 13px; color: #666666;">
+                            <p style="margin: 0 0 12px 0;">This is an automated message, please do not reply directly to
+                                this email.</p>
+                            <p style="margin: 0 0 12px 0;">
+                                <a href="https://ucentralasia.org/"
+                                    style="color: #1967d2; text-decoration: none;">University of Central Asia</a> |
+                                <a href="https://ucentralasia.org/schools/school-of-arts-and-sciences/co-operative-education-programme"
+                                    style="color: #1967d2; text-decoration: none;">Co-op Programme</a>
+                            </p>
+                            <p style="margin: 0;">© {{ current_year|default:"2026" }} University of Central Asia. All
+                                rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>

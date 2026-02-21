@@ -3568,10 +3568,14 @@
           {
             position_title: x.position_title || "",
             company: x.company || "",
+            location: x.location || "",
+            employment_type: x.employment_type || "",
+            start_date: x.start_date || "",
+            end_date: x.end_date || "",
             dates,
             accomplishments
           },
-          ["position_title", "company", "dates", "accomplishments"]
+          ["position_title", "company", "location", "employment_type", "start_date", "end_date", "dates", "accomplishments"]
         );
       });
 
@@ -3616,10 +3620,13 @@
           {
             position_title: ci.position_title || "",
             organization: ci.organization || "",
+            location: ci.location || "",
+            start_date: ci.start_date || "",
+            end_date: ci.end_date || "",
             dates,
-            achievements: ci.accomplishment || ""
+            achievements: ci.achievements || ""
           },
-          ["position_title", "organization", "dates", "achievements"]
+          ["position_title", "organization", "location", "start_date", "end_date", "dates", "achievements"]
         );
       });
 

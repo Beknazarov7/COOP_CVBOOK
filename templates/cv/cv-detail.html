@@ -170,7 +170,7 @@
             text-decoration: underline;
         }
 
-        /* Action Buttons - Improved Animation */
+        /* Action Buttons - IMPROVED: Top center with smooth transition */
         .action-buttons-container {
             height: 80px;
             margin-bottom: 20px;
@@ -178,47 +178,46 @@
 
         .action-buttons {
             position: fixed;
-            top: 0;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100%;
+            width: auto;
             background: transparent;
             z-index: 2000;
-            padding: 20px 0;
-            display: flex;
-            justify-content: center;
             pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .action-buttons-inner {
-            width: 100%;
-            max-width: 8.5in;
-            padding: 0 1in;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 50px;
             pointer-events: auto;
-            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* Scrolled State - Move to right with smooth animation */
+        /* Scrolled State - smooth slide to right */
         .action-buttons.scrolled {
             top: 80px;
             left: auto;
             right: 30px;
             transform: translateX(0);
-            width: auto;
-            padding: 0;
         }
 
         .action-buttons.scrolled .action-buttons-inner {
             flex-direction: column;
             gap: 12px;
-            padding: 0;
             align-items: flex-end;
-            max-width: none;
+        }
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .action-buttons,
+            .action-buttons-inner,
+            .btn {
+                transition: none !important;
+            }
         }
 
         .btn {
@@ -280,10 +279,6 @@
 
         /* Responsive button sizing */
         @media (max-width: 1200px) {
-            .action-buttons-inner {
-                padding: 0 20px;
-            }
-
             .action-buttons.scrolled {
                 right: 20px;
             }
@@ -392,12 +387,12 @@
             <div class="contact-line">
                 {% if cv.phone %}{{ cv.phone }} | {% endif %}
                 <a href="mailto:{{ cv.email }}">{{ cv.email }}</a>
-                {% if cv.linkedin %} | <a href="{{ cv.linkedin }}">LinkedIn.com/{{
-                    cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/"
-                    }}</a>{% endif %}
-                {% if cv.github %} | <a href="{{ cv.github }}">GitHub.com/{{
-                    cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/"
-                    }}</a>{% endif %}
+                {% if cv.linkedin %}
+                    | <a href="{{ cv.linkedin }}">LinkedIn.com/{{ cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/" }}</a>
+                {% endif %}
+                {% if cv.github %}
+                    | <a href="{{ cv.github }}">GitHub.com/{{ cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/" }}</a>
+                {% endif %}
             </div>
         </div>
 
@@ -414,11 +409,16 @@
                 <div class="entry-subtitle">
                     {{ edu.university|default:"University" }}, {{ edu.university_location|default:"City, Country" }}
                 </div>
-                {% if edu.honors %}<div class="entry-detail"><strong>Honours:</strong> {{ edu.honors }}</div>{% endif %}
+
+                {% if edu.honors %}
+                <div class="entry-detail"><strong>Honours:</strong> {{ edu.honors }}</div>
+                {% endif %}
+
                 {% if edu.relevant_courses %}
                 <div class="entry-detail"><strong>Relevant Courses:</strong> {{ edu.relevant_courses }}</div>
                 {% endif %}
-                {% if edu.certificates.all %}
+
+                <!-- ✅ Certificates - FIXED (NO if/endif around the for loop) -->
                 <div class="entry-detail" style="margin-top:4pt;"><strong>Certificates:</strong></div>
                 <ul>
                     {% for cert in edu.certificates.all %}
@@ -427,9 +427,10 @@
                         {% if cert.organization %} — {{ cert.organization }}{% endif %}
                         {% if cert.year %} ({{ cert.year }}){% endif %}
                     </li>
+                    {% empty %}
+                    {# No certificates → show nothing #}
                     {% endfor %}
                 </ul>
-                {% endif %}
             </div>
             {% endfor %}
         </div>
@@ -443,8 +444,9 @@
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">{{ exp.position_title|default:"Position Title" }}</div>
-                    <div class="entry-date">{{ exp.start_date|format_date_str }} — {{
-                        exp.end_date|format_date_str|default:"Present" }}</div>
+                    <div class="entry-date">
+                        {{ exp.start_date|format_date_str }} — {{ exp.end_date|format_date_str|default:"Present" }}
+                    </div>
                 </div>
                 <div class="entry-subtitle">
                     {{ exp.company|default:"Company" }}{% if exp.location %}, {{ exp.location }}{% endif %}
@@ -452,7 +454,7 @@
                 {% if exp.accomplishments %}
                 <ul>
                     {% for accomplishment in exp.accomplishments.splitlines %}
-                    {% if accomplishment.strip %}
+                    {% if accomplishment %}
                     <li>{{ accomplishment }}</li>
                     {% endif %}
                     {% endfor %}
@@ -473,7 +475,7 @@
                 {% if comp.key_accomplishments %}
                 <ul>
                     {% for accomplishment in comp.key_accomplishments.splitlines %}
-                    {% if accomplishment.strip %}
+                    {% if accomplishment %}
                     <li>{{ accomplishment }}</li>
                     {% endif %}
                     {% endfor %}
@@ -491,19 +493,19 @@
             {% for project in projects %}
             <div class="entry">
                 <div class="entry-header">
-                    <div class="entry-title"><strong>{{ project.project_title|default:"Project Title" }}</strong> |
+                    <div class="entry-title">
+                        <strong>{{ project.project_title|default:"Project Title" }}</strong> |
                         <i>{{ project.technologies_used|default:"insert technical skills used" }}</i>
                     </div>
                     <div class="entry-date">{{ project.year|format_year_only }}</div>
                 </div>
                 {% if project.summary %}
-                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of
-                    Project." }}</div>
+                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of Project." }}</div>
                 {% endif %}
                 {% if project.accomplishment %}
                 <ul>
                     {% for line in project.accomplishment.splitlines %}
-                    {% if line.strip %}
+                    {% if line %}
                     <li>{{ line }}</li>
                     {% endif %}
                     {% endfor %}
@@ -514,38 +516,45 @@
         </div>
         {% endif %}
 
-        <!-- Technical Skills - ORIGINAL -->
+        <!-- Technical Skills - FIXED -->
         {% if technical_skills %}
         <div class="section">
             <div class="section-title">Technical Skills</div>
-            <div style="font-size: 9pt; font-style: italic; color: #666; margin-bottom: 8pt;">(Customize according to
-                your field of study)</div>
+            <div style="font-size: 9pt; font-style: italic; color: #666; margin-bottom: 8pt;">
+                (Customize according to your field of study)
+            </div>
             {% for skill in technical_skills %}
             <div class="skills-grid">
                 {% if skill.programming_languages %}
                 <div class="skill-category">Programming & Statistical Tools:</div>
                 <div class="skill-items">{{ skill.programming_languages }}</div>
                 {% endif %}
+
                 {% if skill.tools %}
                 <div class="skill-category">Data Analysis & Visualization:</div>
                 <div class="skill-items">{{ skill.tools }}</div>
                 {% endif %}
+
                 {% if skill.web_development %}
                 <div class="skill-category">Web & Software Development:</div>
                 <div class="skill-items">{{ skill.web_development }}</div>
                 {% endif %}
+
                 {% if skill.frameworks_databases %}
                 <div class="skill-category">Frameworks & Databases:</div>
                 <div class="skill-items">{{ skill.frameworks_databases }}</div>
                 {% endif %}
+
                 {% if skill.multimedia %}
                 <div class="skill-category">Media & Design Tools:</div>
                 <div class="skill-items">{{ skill.multimedia }}</div>
                 {% endif %}
+
                 {% if skill.network %}
                 <div class="skill-category">Communication & Collaboration:</div>
                 <div class="skill-items">{{ skill.network }}</div>
                 {% endif %}
+
                 {% if skill.operating_systems %}
                 <div class="skill-category">Operating Systems:</div>
                 <div class="skill-items">{{ skill.operating_systems }}</div>
@@ -562,8 +571,7 @@
             <div class="languages-list">
                 <ul>
                     {% for lang in languages %}
-                    <li>{{ lang.name|default:"Language" }}{% if lang.proficiency %}, {{ lang.proficiency }}{% endif %}
-                    </li>
+                    <li>{{ lang.name|default:"Language" }}{% if lang.proficiency %}, {{ lang.proficiency }}{% endif %}</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -578,14 +586,17 @@
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">{{ involvement.position_title|default:"Position Title" }}</div>
-                    <div class="entry-date">{{ involvement.start_date|format_date_str }} — {{
-                        involvement.end_date|format_date_str|default:"Present" }}</div>
+                    <div class="entry-date">
+                        {{ involvement.start_date|format_date_str }} — {{ involvement.end_date|format_date_str|default:"Present" }}
+                    </div>
                 </div>
-                <div class="entry-subtitle">{{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{ involvement.location }}{% endif %}</div>
+                <div class="entry-subtitle">
+                    {{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{ involvement.location }}{% endif %}
+                </div>
                 {% if involvement.achievements %}
                 <ul>
                     {% for line in involvement.achievements.splitlines %}
-                    {% if line.strip %}
+                    {% if line %}
                     <li>{{ line }}</li>
                     {% endif %}
                     {% endfor %}
@@ -607,7 +618,9 @@
                     <div class="entry-date">{{ award.year|format_date_str|default:"Year" }}</div>
                 </div>
                 <div class="entry-subtitle">{{ award.presenting_organization|default:"Organization" }}</div>
-                {% if award.short_description %}<div class="entry-detail">{{ award.short_description }}</div>{% endif %}
+                {% if award.short_description %}
+                <div class="entry-detail">{{ award.short_description }}</div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
@@ -635,6 +648,18 @@
     </div>
 
     <script>
+        // Check for return_url in the query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnUrl = urlParams.get('return_url');
+        if (returnUrl) {
+            const backBtn = document.querySelector('.btn-secondary');
+            if (backBtn) {
+                backBtn.href = returnUrl;
+                const btnSpan = backBtn.querySelector('span');
+                if (btnSpan) btnSpan.textContent = 'Back to Admin';
+            }
+        }
+
         window.addEventListener('scroll', function () {
             const header = document.getElementById('smartHeader');
             if (window.scrollY > 100) {

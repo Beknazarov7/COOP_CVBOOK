@@ -97,6 +97,7 @@ body {
       box-shadow: 0 8px 32px rgba(0, 0, 0, .1);
       position: relative;
       margin-bottom: 2rem;
+      overflow: hidden;
     }
 
     .filters-section::before {
@@ -155,7 +156,7 @@ body {
       border-radius: 8px;
       font-weight: 600;
       background: #fff;
-      transition: .2s;
+      transition: all 0.3s ease;
       white-space: nowrap;
       text-align: center;
     }
@@ -222,7 +223,7 @@ body {
       background-repeat: no-repeat;
       background-position: right 1rem center;
       background-size: 14px;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       cursor: pointer;
     }
 
@@ -249,7 +250,7 @@ body {
       color: #334155;
       text-align: left;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -305,7 +306,7 @@ body {
       opacity: 0;
       transform: translateY(-10px);
       pointer-events: none;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .custom-dropdown-menu.show {
@@ -320,7 +321,7 @@ body {
       font-size: 0.9rem;
       color: #334155;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -443,6 +444,7 @@ body {
       border-radius: 6px;
       background: transparent;
       font-weight: 600;
+      transition: all 0.3s ease;
     }
 
     .view-btn.active {
@@ -476,7 +478,7 @@ body {
       border: 1px solid rgba(0, 0, 0, .1);
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
-      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
     }
@@ -608,7 +610,7 @@ body {
       border-radius: 16px;
       font-size: .75rem;
       font-weight: 600;
-      transition: transform .15s ease, box-shadow .15s ease;
+      transition: all 0.3s ease;
     }
 
     .skill-tag:hover {
@@ -620,6 +622,7 @@ body {
     .add-student-btn.fab-add {
       background: linear-gradient(135deg, #2c5aa0, #1e3d72);
       box-shadow: 0 8px 24px rgba(44, 90, 160, .4);
+      transition: all 0.3s ease;
     }
 
     .add-student-btn.fab-add:hover {
@@ -658,8 +661,7 @@ body {
       justify-content: space-between;
       align-items: center;
       padding: 0 2rem;
-      min-height: 90px;
-      /* Reduced from 100px */
+      min-height: 100px;
     }
 
     .header-left {
@@ -669,8 +671,7 @@ body {
     }
 
     .header-logo {
-      height: 90px;
-      /* Reduced from 110px */
+      height: 100px;
       width: auto;
       object-fit: contain;
     }
@@ -684,12 +685,13 @@ body {
     /* Main site link style */
     .header-nav a {
       color: #3c3c3c;
-      font-weight: 500;
+      font-weight: 400;
       text-decoration: none;
       padding: 0.5rem 0.75rem;
       position: relative;
       transition: color 0.3s ease;
-      font-size: 15px;
+      font-size: 16px;
+      font-family: "Rubik", sans-serif;
     }
 
     .header-nav a::after {
@@ -697,7 +699,8 @@ body {
       position: absolute;
       width: 0;
       height: 3px;
-      bottom: 0px;
+      bottom: 3px;
+      /* Closer to the text like main site */
       left: 50%;
       background-color: #1c8ffb;
       transition: all 0.3s ease;
@@ -707,11 +710,19 @@ body {
 
     .header-nav a:hover {
       color: #1967d2;
+      background-color: rgba(69, 151, 203, 0.05);
+      border-radius: 6px;
     }
 
-    .header-nav a:hover::after {
+    .header-nav a:hover::after,
+    .header-nav a.active::after {
       width: 70%;
       opacity: 1;
+    }
+
+    .header-nav a.active {
+      font-weight: 400;
+      color: #1967d2;
     }
 
     /* Auth buttons matching main site */
@@ -978,9 +989,24 @@ body {
               <img src="/static/cv/UCA_Logo_Eng_web.png" alt="UCA Logo" className="header-logo" />
             </div>
             <nav className="header-nav">
-              <a href="https://ucacoop.org" target="_blank" rel="noopener noreferrer">Home Page</a>
-              <a href="https://ucentralasia.org/schools/school-of-arts-and-sciences/co-operative-education-programme" target="_blank" rel="noopener noreferrer">About</a>
-              <a href="https://ucacoop.org/faq/#category-all" target="_blank" rel="noopener noreferrer">FAQ</a>
+              <a
+                href="https://ucacoop.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={currentHash === '#home' ? 'active' : ''}
+              >Home Page</a>
+              <a
+                href="https://ucentralasia.org/schools/school-of-arts-and-sciences/co-operative-education-programme"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={currentHash === '#about' ? 'active' : ''}
+              >About</a>
+              <a
+                href="https://ucacoop.org/faq/#category-all"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={currentHash === '#faq' ? 'active' : ''}
+              >FAQ</a>
             </nav>
             <div className="header-social">
               <a href="https://www.linkedin.com/in/uca-career-opportunities/" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
@@ -1600,7 +1626,7 @@ body {
 
                     <div style={{ textAlign: 'center', marginTop: '25px', padding: '20px 0 0 0', borderTop: '1px solid #e0e0e0' }}>
                       <p style={{ color: '#6c757d', fontSize: '14px', margin: '0' }}>
-                        Already have an account? <a href="#login" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Log in here</a>
+                        Already have an account? <a href="#login" style={{ color: '#007bff', textDecoration: 'none', fontWeight: '700', transition: 'color 0.3s' }} onMouseOver={(e) => e.target.style.color = '#0056b3'} onMouseOut={(e) => e.target.style.color = '#007bff'}>Log in here</a>
                       </p>
                     </div>
                   </div>
@@ -1792,7 +1818,7 @@ body {
                         <a
                           href="#password/reset"
                           onClick={(e) => { e.preventDefault(); handleLostPassword(); }}
-                          style={{ color: '#007bff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', transition: 'color 0.2s' }}
+                          style={{ color: '#007bff', textDecoration: 'none', fontSize: '13px', fontWeight: '600', transition: 'color 0.3s' }}
                           onMouseOver={(e) => e.target.style.color = '#0056b3'}
                           onMouseOut={(e) => e.target.style.color = '#007bff'}
                         >
