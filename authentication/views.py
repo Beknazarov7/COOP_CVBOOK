@@ -107,18 +107,18 @@ class SignupView(APIView):
         
         # Check if username already exists
         if CustomUser.objects.filter(username=username).exists():
-            return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Username already exists.'}, status=status.HTTP_409_CONFLICT)
         
         # Check if email already exists in CVBook
         if CustomUser.objects.filter(email=email).exists():
-            return Response({'error': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Email already exists.'}, status=status.HTTP_409_CONFLICT)
         
         # Check if email exists in management system (Removed as per request)
         # if not auto_approve and self.check_email_exists_in_management_system(email):
         #     return Response({'error': 'Email already exists in the system. Please use a different email or login if you have an account.'}, status=status.HTTP_400_BAD_REQUEST)
         
+        # --- Step 1: Create the user (must always succeed independently of emails) ---
         try:
-            # Create user with appropriate approval status
             is_pending = not auto_approve
             user = CustomUser.objects.create_user(
                 username=username,
@@ -131,7 +131,6 @@ class SignupView(APIView):
                 company=request.data.get('company', '')
             )
             
-            # If auto-approved, set approval timestamp
             if auto_approve:
                 user.accepted_at = timezone.now()
                 user.save()
@@ -141,41 +140,57 @@ class SignupView(APIView):
                 logger.info(f"User created: {username}, awaiting approval")
                 message = 'Account created. Awaiting admin approval.'
                 
-                # Send email to the user
+        except Exception as e:
+            # Only a DB-level failure should prevent signup entirely
+            logger.error(f"Error creating user {username}: {str(e)}")
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # --- Step 2: Send emails (failures here must NOT cause signup to appear failed) ---
+        if not auto_approve:
+            try:
                 from .utils import send_postmark_email, notify_coordinators_new_signup
                 
                 user_subject = "Your CVBook Access Request is Pending"
-                
                 context = {
                     'first_name': first_name,
                     'last_name': last_name,
                     'email': email,
-                    'role': 'student', # Default role for CVBook signups
+                    'role': 'student',
                     'current_year': timezone.now().year,
                 }
                 user_html = render_to_string('emails/pending_approval.html', context)
                 
-                send_postmark_email(email, user_subject, user_html, "Your CVBook request is pending approval.")
-                
-                # Notify coordinators
-                notify_coordinators_new_signup(email, first_name, last_name)
-
+                email_sent = send_postmark_email(
+                    email, user_subject, user_html,
+                    "Your CVBook request is pending approval."
+                )
+                if not email_sent:
+                    logger.warning(f"Pending-approval email NOT sent to {email} (Postmark returned False — check POSTMARK_API_KEY)")
+                    
+            except Exception as e:
+                # Log but do NOT propagate — user was created successfully
+                logger.error(f"Failed to send pending-approval email to {email}: {str(e)}")
             
-            return Response({
-                'message': message,
-                'user': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                    'first_name': user.first_name,
-                    'last_name': user.last_name,
-                    'is_pending': user.is_pending,
-                    'is_approved': not user.is_pending
-                }
-            }, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            logger.error(f"Error creating user {username}: {str(e)}")
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                from .utils import notify_coordinators_new_signup
+                notify_coordinators_new_signup(email, first_name, last_name)
+            except Exception as e:
+                # Log but do NOT propagate — coordinator notification is best-effort
+                logger.error(f"Failed to notify coordinators about {email}: {str(e)}")
+        
+        # --- Step 3: Always return 201 if the user was created ---
+        return Response({
+            'message': message,
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'is_pending': user.is_pending,
+                'is_approved': not user.is_pending
+            }
+        }, status=status.HTTP_201_CREATED)
 
 class SigninView(APIView):
     permission_classes = [AllowAny]
