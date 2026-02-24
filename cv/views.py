@@ -1109,3 +1109,28 @@ def cv_management_action(request):
         logger.error(f"Error in cv_management_action: {str(e)}")
         return Response({'success': False, 'message': str(e)}, 
                       status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def access_denied_view(request):
+    """
+    Standalone Access Denied page for the CVBook service.
+    Shown when a user's session expires (401) or access is forbidden (403).
+    Mirrors the design of the main UCA Co-op Website's access_denied.html.
+    """
+    reason = request.GET.get('reason', 'session_expired')
+
+    if reason == 'forbidden':
+        message = "You don't have permission to access this page. This area is restricted to users with specific roles."
+        back_text = "Back to Home"
+    else:
+        # Default: session expired
+        message = "Your session has expired. Please log in again to continue viewing the CV Book."
+        back_text = "Back to Home"
+
+    context = {
+        'message': message,
+        'back_url': '/',
+        'back_text': back_text,
+        'login_url': '/#login',
+    }
+    return render(request, 'cv/access_denied.html', context, status=403)

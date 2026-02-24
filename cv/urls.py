@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CVSubmitView, CVDetailView, CVListView, CVPDFView, CVEditView
+from .views import CVSubmitView, CVDetailView, CVListView, CVPDFView, CVEditView, access_denied_view
 from django.views.generic import TemplateView
 from . import views, admin_views
 
@@ -27,4 +27,7 @@ urlpatterns = [
     path('admin/toggle-publication/<int:cv_id>/', admin_views.toggle_cv_publication, name='toggle-cv-publication'),
     path('admin/toggle-approval/<int:cv_id>/', admin_views.toggle_cv_approval, name='toggle-cv-approval'),
     path('admin/bulk-action/', admin_views.bulk_cv_action, name='bulk-cv-action'),
+
+    # Error pages
+    path('access-denied/', access_denied_view, name='cv-access-denied'),
 ]

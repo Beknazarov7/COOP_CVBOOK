@@ -1963,13 +1963,12 @@ body {
               credentials: "include"
             });
             if (response.status === 401) {
-              setError("❌ Session expired. Please log in again.");
               localStorage.removeItem('token');
-              window.location.hash = '#login';
+              window.location.href = '/cv/access-denied/?reason=session_expired';
               return;
             }
             if (response.status === 403) {
-              setError("❌ Access denied. Your account may need approval.");
+              window.location.href = '/cv/access-denied/?reason=forbidden';
               return;
             }
             if (response.status === 404) {
