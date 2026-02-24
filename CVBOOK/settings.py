@@ -284,8 +284,10 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_BROWSER_XSS_FILTER = True
     X_FRAME_OPTIONS = 'DENY'
-    CORS_ALLOW_ALL_ORIGINS = False
-    CORS_ALLOW_CREDENTIALS = False
+    # NOTE: CORS_ALLOW_CREDENTIALS must stay True in production so that the
+    # main UCA Co-op Website can send cookies cross-origin to the CVBook API.
+    # Setting it to False here breaks session-based auth entirely.
+    CORS_ALLOW_CREDENTIALS = True
 
 # Ignore source map 404s
 IGNORABLE_404_URLS = [

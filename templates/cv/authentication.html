@@ -973,7 +973,7 @@ body {
 
     // If you previously had: export default NavBar;  ← REMOVE this line
 
-    const NavBar = ({ token, setToken, page }) => {
+    const NavBar = ({ token, setToken, onLogout, page }) => {
       const currentHash = page || window.location.hash || '#login';
 
       // ✅ Hide NavBar on login, signup, or pending-approval pages
@@ -1016,11 +1016,7 @@ body {
             <div className="auth-buttons">
               {token ? (
                 <button
-                  onClick={() => {
-                    localStorage.removeItem('token');
-                    setToken(null);
-                    window.location.hash = '#login';
-                  }}
+                  onClick={() => onLogout && onLogout()}
                   className="btn-main-site btn-light-blue"
                 >
                   <i className="fas fa-sign-out-alt"></i> Log Out
@@ -2342,19 +2338,22 @@ body {
     };
 
 
-    /* ---------------- App (passes filters + setFilters) ---------------- */
+    /* ================================================================
+       App — root component
+       Auth flow:
+         1. On mount, call /api/auth/me/ to verify the Django session.
+         2. If the session is valid  → show CV cards (token = username string).
+         3. If the session is gone   → clear localStorage, show login (token = null).
+         4. Logout calls /api/auth/signout/ then clears state.
+       This eliminates the "stale localStorage → 401 flash" bug.
+    ================================================================ */
     const App = () => {
-      const [token, setToken] = useState(localStorage.getItem('token'));
-      const [page, setPage] = useState('#login');
-
-      useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const adminToken = urlParams.get('admin_token');
-        if (adminToken === 'ucacoop_admin_access_2025') {
-          setToken('admin_bypass_token');
-        }
-      }, []);
-
+      // null  = session check in progress
+      // false = not logged in
+      // string = logged in (username stored as identifier)
+      const [token, setToken] = useState(null);
+      const [sessionChecked, setSessionChecked] = useState(false);
+      const [page, setPage] = useState('');
 
       const [filters, setFilters] = useState({
         category: 'all',
@@ -2366,50 +2365,120 @@ body {
         searchTerm: ''
       });
 
+      // ── Step 1: admin_token bypass (skip session check for admin embed) ──
       useEffect(() => {
-        const onHash = () => setPage(window.location.hash || (token ? '#cv-cards' : '#login'));
+        const urlParams = new URLSearchParams(window.location.search);
+        const adminToken = urlParams.get('admin_token');
+        if (adminToken === 'ucacoop_admin_access_2025') {
+          setToken('admin_bypass_token');
+          setSessionChecked(true);
+          return;
+        }
+
+        // ── Step 2: Verify session with the server ──────────────────────
+        fetch('/api/auth/me/', { credentials: 'include' })
+          .then(res => {
+            if (res.ok) return res.json();
+            // 401 = session gone, 403 = pending/rejected
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            return null;
+          })
+          .then(data => {
+            if (data && data.username) {
+              // Session is valid — use server-returned username as the token
+              localStorage.setItem('token', data.username);
+              localStorage.setItem('user', JSON.stringify(data));
+              setToken(data.username);
+            } else {
+              setToken(false);
+            }
+            setSessionChecked(true);
+          })
+          .catch(() => {
+            // Network error — fall back to localStorage so the app still
+            // works offline / during brief server restarts.
+            const stored = localStorage.getItem('token');
+            setToken(stored || false);
+            setSessionChecked(true);
+          });
+      }, []);
+
+      // ── Page routing (hash-based) ────────────────────────────────────
+      useEffect(() => {
+        const onHash = () => {
+          setPage(window.location.hash || (token ? '#cv-cards' : '#login'));
+        };
         window.addEventListener('hashchange', onHash);
-        onHash(); // Call it once on mount
+        onHash();
         return () => window.removeEventListener('hashchange', onHash);
       }, [token]);
 
-      // Redirect helpers to keep URLs sensible
+      // Guard: once session is confirmed, redirect to sensible pages
       useEffect(() => {
+        if (!sessionChecked) return;
         if (token && (page === '#login' || page === '#signup' || page === '')) {
           window.location.hash = '#cv-cards';
         }
         if (!token && (page === '#cv-cards' || page === '')) {
           window.location.hash = '#login';
         }
-      }, [token, page]);
+      }, [token, page, sessionChecked]);
+
+      // ── Logout handler — passed down to NavBar ───────────────────────
+      const handleLogout = () => {
+        fetch('/api/auth/signout/', {
+          method: 'POST',
+          headers: { 'X-CSRFToken': getCookie('csrftoken') },
+          credentials: 'include',
+        })
+          .catch(err => console.error('Signout request failed:', err))
+          .finally(() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            setToken(false);
+            window.location.hash = '#login';
+          });
+      };
+
+      // ── Loading state while /me/ is in-flight ────────────────────────
+      if (!sessionChecked) {
+        return (
+          <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)'
+          }}>
+            <div style={{ textAlign: 'center', color: '#fff' }}>
+              <i className="fas fa-spinner fa-spin" style={{ fontSize: '40px', marginBottom: '16px', color: '#4597CB' }}></i>
+              <p style={{ fontSize: '16px', opacity: 0.8 }}>Verifying session…</p>
+            </div>
+          </div>
+        );
+      }
 
       return (
         <div>
-          <NavBar token={token} setToken={setToken} page={page} />
+          <NavBar token={token} setToken={setToken} onLogout={handleLogout} page={page} />
 
-          {/* Route by hash */}
           {(() => {
             if (!token) {
               if (page === '#signup') return <SignUp />;
               if (page === '#pending-approval') return <PendingApproval />;
-              // default for unauthenticated = login
               return <Login setToken={setToken} />;
             }
 
             // Authenticated routes
             if (page === '#cv-cards') return (
-              <CVCards
-                token={token}
-                filters={filters}
-                setFilters={setFilters}
-              />
+              <CVCards token={token} filters={filters} setFilters={setFilters} />
             );
             if (page === '#pending-approval') return <PendingApproval />;
 
-            // Fallback (unknown hash)
+            // Fallback
             return <CVCards token={token} filters={filters} setFilters={setFilters} />;
           })()}
-
         </div>
       );
     };

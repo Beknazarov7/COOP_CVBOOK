@@ -445,3 +445,57 @@ def user_management_action(request):
         logger.error(f"Error in user_management_action: {str(e)}")
         return Response({'success': False, 'message': str(e)}, 
                       status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def current_user_view(request):
+    """
+    Session check endpoint.
+    Returns 200 + user info if the Django session is valid and the user is approved.
+    Returns 401 if not authenticated (session expired / never logged in).
+    Returns 403 if authenticated but pending or rejected.
+    The frontend calls this on every page load to verify the session before deciding
+    whether to show the CV cards or the login form.
+    """
+    if not request.user.is_authenticated:
+        return Response({'error': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    user = request.user
+
+    # Pending or rejected users must re-authenticate (middleware also handles this,
+    # but we check here too so the API always returns consistent results)
+    if getattr(user, 'is_pending', False):
+        from django.contrib.auth import logout as django_logout
+        django_logout(request)
+        return Response({'error': 'Account is pending admin approval.'}, status=status.HTTP_403_FORBIDDEN)
+
+    if getattr(user, 'rejected_at', None):
+        from django.contrib.auth import logout as django_logout
+        django_logout(request)
+        return Response({'error': 'Account has been rejected.'}, status=status.HTTP_403_FORBIDDEN)
+
+    logger.debug(f"Session valid for user: {user.username}")
+    return Response({
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'is_pending': user.is_pending,
+        'is_approved': not user.is_pending,
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def signout_view(request):
+    """
+    Properly destroy the server-side Django session.
+    The frontend should also clear localStorage after calling this.
+    """
+    from django.contrib.auth import logout as django_logout
+    username = request.user.username if request.user.is_authenticated else 'anonymous'
+    django_logout(request)
+    logger.info(f"User '{username}' signed out")
+    return Response({'message': 'Signed out successfully'}, status=status.HTTP_200_OK)
