@@ -2378,8 +2378,20 @@ body {
         // ── Step 2: Verify session with the server ──────────────────────
         fetch('/api/auth/me/', { credentials: 'include' })
           .then(res => {
+            const hadSession = !!localStorage.getItem('token');
+
             if (res.ok) return res.json();
-            // 401 = session gone, 403 = pending/rejected
+
+            // If the session is gone (401) or forbidden (403) but the user
+            // HAD an active session, redirect to the Access Denied page.
+            if (hadSession && (res.status === 401 || res.status === 403)) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              window.location.href = `/cv/access-denied/?reason=${res.status === 403 ? 'forbidden' : 'session_expired'}`;
+              return null;
+            }
+
+            // Otherwise (no previous session, or server error), just clear and show login
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             return null;
