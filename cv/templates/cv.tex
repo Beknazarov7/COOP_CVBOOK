@@ -156,7 +156,6 @@
 {% if technical_skills %}
 \section{Technical Skills}
 
-\textit{(Customize according to your field of study)} \\
 \vspace{2pt}
 
 {% with skill=technical_skills.0 %}
@@ -236,42 +235,23 @@
 {% if references %}
 \section{References}
 
-\noindent
-\begin{minipage}[t]{0.32\textwidth}
-{% for ref in references %}
-{% if forloop.counter0 == 0 %}
+{% for ref in references %}{% if forloop.counter0|divisibleby:2 %}\noindent
+\begin{minipage}[t]{0.48\textwidth}
 \textbf{ {{ ref.reference_name|escape_latex }} } \\
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
 Phone: {{ ref.phone|default:"+1-234-5678"|escape_latex }} \\
 Email: \href{mailto:{{ ref.email|escape_latex_url }}}{ {{ ref.email|escape_latex }} }
-{% endif %}
-{% endfor %}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.32\textwidth}
-{% for ref in references %}
-{% if forloop.counter0 == 1 %}
+\end{minipage}\hfill{% else %}\begin{minipage}[t]{0.48\textwidth}
 \textbf{ {{ ref.reference_name|escape_latex }} } \\
 {{ ref.position|default:"Position"|escape_latex }} \\
 {{ ref.company|default:"Company"|escape_latex }} \\
 Phone: {{ ref.phone|default:"+1-234-5678"|escape_latex }} \\
 Email: \href{mailto:{{ ref.email|escape_latex_url }}}{ {{ ref.email|escape_latex }} }
-{% endif %}
-{% endfor %}
 \end{minipage}
-\hfill
-\begin{minipage}[t]{0.32\textwidth}
-{% for ref in references %}
-{% if forloop.counter0 == 2 %}
-\textbf{ {{ ref.reference_name|escape_latex }} } \\
-{{ ref.position|default:"Position"|escape_latex }} \\
-{{ ref.company|default:"Company"|escape_latex }} \\
-Phone: {{ ref.phone|default:"+1-234-5678"|escape_latex }} \\
-Email: \href{mailto:{{ ref.email|escape_latex_url }}}{ {{ ref.email|escape_latex }} }
-{% endif %}
-{% endfor %}
-\end{minipage}
+
+\vspace{24pt}
+{% endif %}{% endfor %}
 
 \vspace{6pt}
 {% endif %}

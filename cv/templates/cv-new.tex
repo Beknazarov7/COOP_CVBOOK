@@ -194,9 +194,7 @@
 
 {% if technical_skills %}
 \section{Technical Skills}
-
-\textit{(Customize according to your field of study)} \\
-\vspace{4pt}
+\vspace{2pt}
 
 {% for skill in technical_skills %}
 \textbf{ {{ skill.category|default:"Programming \& Statistical Tools"|escape_latex }}: } {{ skill.skills|default:""|escape_latex }} \\

@@ -213,6 +213,7 @@
 
         /* Respect reduced motion preference */
         @media (prefers-reduced-motion: reduce) {
+
             .action-buttons,
             .action-buttons-inner,
             .btn {
@@ -388,10 +389,14 @@
                 {% if cv.phone %}{{ cv.phone }} | {% endif %}
                 <a href="mailto:{{ cv.email }}">{{ cv.email }}</a>
                 {% if cv.linkedin %}
-                    | <a href="{{ cv.linkedin }}">LinkedIn.com/{{ cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/" }}</a>
+                | <a href="{{ cv.linkedin }}">LinkedIn.com/{{
+                    cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/"
+                    }}</a>
                 {% endif %}
                 {% if cv.github %}
-                    | <a href="{{ cv.github }}">GitHub.com/{{ cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/" }}</a>
+                | <a href="{{ cv.github }}">GitHub.com/{{
+                    cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/"
+                    }}</a>
                 {% endif %}
             </div>
         </div>
@@ -500,7 +505,8 @@
                     <div class="entry-date">{{ project.year|format_year_only }}</div>
                 </div>
                 {% if project.summary %}
-                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of Project." }}</div>
+                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of
+                    Project." }}</div>
                 {% endif %}
                 {% if project.accomplishment %}
                 <ul>
@@ -520,9 +526,6 @@
         {% if technical_skills %}
         <div class="section">
             <div class="section-title">Technical Skills</div>
-            <div style="font-size: 9pt; font-style: italic; color: #666; margin-bottom: 8pt;">
-                (Customize according to your field of study)
-            </div>
             {% for skill in technical_skills %}
             <div class="skills-grid">
                 {% if skill.programming_languages %}
@@ -571,7 +574,8 @@
             <div class="languages-list">
                 <ul>
                     {% for lang in languages %}
-                    <li>{{ lang.name|default:"Language" }}{% if lang.proficiency %}, {{ lang.proficiency }}{% endif %}</li>
+                    <li>{{ lang.name|default:"Language" }}{% if lang.proficiency %}, {{ lang.proficiency }}{% endif %}
+                    </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -587,11 +591,13 @@
                 <div class="entry-header">
                     <div class="entry-title">{{ involvement.position_title|default:"Position Title" }}</div>
                     <div class="entry-date">
-                        {{ involvement.start_date|format_date_str }} — {{ involvement.end_date|format_date_str|default:"Present" }}
+                        {{ involvement.start_date|format_date_str }} — {{
+                        involvement.end_date|format_date_str|default:"Present" }}
                     </div>
                 </div>
                 <div class="entry-subtitle">
-                    {{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{ involvement.location }}{% endif %}
+                    {{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{
+                    involvement.location }}{% endif %}
                 </div>
                 {% if involvement.achievements %}
                 <ul>
