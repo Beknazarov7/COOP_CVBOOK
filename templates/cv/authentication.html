@@ -90,37 +90,48 @@ body {
 
     /* Filters panel */
     .filters-section {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(0, 0, 0, .1);
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, .1);
-      position: relative;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+      position: sticky;
+      top: 1rem;
       margin-bottom: 2rem;
-      overflow: hidden;
+      z-index: 1000;
     }
 
-    .filters-section::before {
-      content: "";
+    .filters-section-accent {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .filters-accent-line {
       position: absolute;
       left: 0;
       right: 0;
       top: 0;
       height: 4px;
-      background: linear-gradient(90deg, #2c5aa0, #4a90e2, #6bb6ff);
+      background: linear-gradient(90deg, #2c5aa0, #4a90e2);
     }
 
     .filters-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.25rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid #f8f9fa;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #f1f5f9;
     }
 
     .filters-title {
-      font-size: 1.125rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #2c5aa0;
     }
@@ -142,8 +153,8 @@ body {
 
     .department-tabs.filter-tabs {
       display: flex;
-      gap: 0.75rem;
-      padding: 1rem;
+      gap: 0.5rem;
+      padding: 0.5rem;
       background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
       border-radius: 12px;
       border: 1px solid rgba(44, 90, 160, .12);
@@ -151,9 +162,10 @@ body {
 
     .tab {
       flex: 1;
-      padding: .75rem 1.1rem;
-      border: 2px solid #dee2e6;
-      border-radius: 8px;
+      padding: .5rem .75rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 0.85rem;
       font-weight: 600;
       background: #fff;
       transition: all 0.3s ease;
@@ -175,11 +187,43 @@ body {
       transform: translateY(-1px);
     }
 
+    .clear-filters-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: .25rem .75rem;
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      border-radius: 16px;
+      font-size: .75rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+
+    .clear-filters-btn:hover {
+      background: #fecaca;
+      color: #b91c1c;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
     .filters-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 1.25rem;
+      gap: 1rem;
+      margin-top: 1rem;
     }
 
     @media (max-width: 992px) {
@@ -237,6 +281,11 @@ body {
     .custom-dropdown-container {
       position: relative;
       width: 100%;
+      z-index: 1;
+    }
+
+    .custom-dropdown-container.active {
+      z-index: 10000;
     }
 
     .custom-dropdown-trigger {
@@ -298,8 +347,8 @@ body {
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(226, 232, 240, 0.8);
       border-radius: 14px;
-      box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.1), 0 4px 12px -4px rgba(0, 0, 0, 0.05);
-      z-index: 1000;
+      box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.15), 0 4px 12px -4px rgba(0, 0, 0, 0.1);
+      z-index: 10002;
       max-height: 280px;
       overflow-y: auto;
       padding: 6px;
@@ -367,12 +416,12 @@ body {
 
     .search-input {
       width: 100%;
-      padding: 1rem 1rem 1rem 3.5rem;
+      padding: 0.75rem 1rem 0.75rem 3rem;
       border: 1px solid #e2e8f0;
-      border-radius: 14px;
+      border-radius: 12px;
       background: #ffffff;
       transition: all 0.3s ease;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     .search-input:focus {
@@ -394,10 +443,10 @@ body {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: .875rem;
+      font-size: .8rem;
       font-weight: 700;
       color: #475569;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.4rem;
     }
 
     .filter-group label i {
@@ -830,6 +879,7 @@ body {
       padding: 1.5rem;
       margin-bottom: 5rem;
       box-shadow: none;
+      overflow: visible;
     }
 
     .filter-tabs {
@@ -1893,7 +1943,7 @@ body {
       const selectedOption = options.find(opt => opt.value === value) || { label: placeholder || "Select...", value: "" };
 
       return (
-        <div className="custom-dropdown-container" ref={dropdownRef}>
+        <div className={`custom-dropdown-container ${isOpen ? 'active' : ''}`} ref={dropdownRef}>
           <button
             type="button"
             className={`custom-dropdown-trigger ${isOpen ? 'active' : ''}`}
@@ -2158,6 +2208,9 @@ body {
         <main className="main-content">
           {/* Filters */}
           <section className="filters-section">
+            <div className="filters-section-accent">
+              <div className="filters-accent-line"></div>
+            </div>
             <div className="filters-header">
               <h2 className="filters-title"><i className="fas fa-search me-2"></i> Search &amp; Filter Students</h2>
               <div className="active-filters">
@@ -2169,20 +2222,40 @@ body {
                 {filters.country && <span className="filter-badge">Country: {filters.country}</span>}
                 {filters.techSkill && <span className="filter-badge">Tech: {filters.techSkill}</span>}
                 {filters.nonTechSkill && <span className="filter-badge">Soft: {filters.nonTechSkill}</span>}
+
+                {(filters.category !== 'all' || filters.country || filters.techSkill || filters.nonTechSkill || filters.searchTerm) && (
+                  <button
+                    className="clear-filters-btn"
+                    onClick={() => setFilters({
+                      category: 'all',
+                      country: '',
+                      language: '',
+                      techSkill: '',
+                      nonTechSkill: '',
+                      sortOrder: '',
+                      searchTerm: ''
+                    })}
+                    type="button"
+                  >
+                    <i className="fas fa-times-circle"></i> Clear Filters
+                  </button>
+                )}
               </div>
             </div>
 
             <div className="department-tabs filter-tabs">
-              {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
-                <button
-                  key={cat}
-                  className={`tab filter-tab ${filters.category === cat ? 'active' : ''}`}
-                  onClick={() => setFilters({ ...filters, category: cat })}
-                  type="button"
-                >
-                  {cat === 'all' ? 'All Programs' : cat.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
-                </button>
-              ))}
+              <div className="flex-1 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
+                  <button
+                    key={cat}
+                    className={`tab filter-tab ${filters.category === cat ? 'active' : ''}`}
+                    onClick={() => setFilters({ ...filters, category: cat })}
+                    type="button"
+                  >
+                    {cat === 'all' ? 'All Programs' : cat.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="filters-grid">
