@@ -423,7 +423,8 @@
                 <div class="entry-detail"><strong>Relevant Courses:</strong> {{ edu.relevant_courses }}</div>
                 {% endif %}
 
-                <!-- ✅ Certificates - FIXED (NO if/endif around the for loop) -->
+                <!-- ✅ Certificates - FIXED -->
+                {% if edu.certificates.all %}
                 <div class="entry-detail" style="margin-top:4pt;"><strong>Certificates:</strong></div>
                 <ul>
                     {% for cert in edu.certificates.all %}
@@ -432,10 +433,9 @@
                         {% if cert.organization %} — {{ cert.organization }}{% endif %}
                         {% if cert.year %} ({{ cert.year }}){% endif %}
                     </li>
-                    {% empty %}
-                    {# No certificates → show nothing #}
                     {% endfor %}
                 </ul>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
@@ -492,10 +492,11 @@
         {% endif %}
 
         <!-- Projects - ORIGINAL -->
-        {% if projects %}
+        {% if projects and projects.0.project_title != '-' and projects.0.project_title != '' %}
         <div class="section">
             <div class="section-title">Projects</div>
             {% for project in projects %}
+            {% if project.project_title != '-' and project.project_title != '' %}
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">
@@ -504,7 +505,7 @@
                     </div>
                     <div class="entry-date">{{ project.year|format_year_only }}</div>
                 </div>
-                {% if project.summary %}
+                {% if project.summary and "project.summary" not in project.summary %}
                 <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of
                     Project." }}</div>
                 {% endif %}
@@ -518,6 +519,7 @@
                 </ul>
                 {% endif %}
             </div>
+            {% endif %}
             {% endfor %}
         </div>
         {% endif %}
@@ -583,10 +585,12 @@
         {% endif %}
 
         <!-- Community Involvement - ORIGINAL -->
-        {% if community_involvements %}
+        {% if community_involvements and community_involvements.0.position_title != '-' and
+        community_involvements.0.position_title != '' %}
         <div class="section">
             <div class="section-title">Community Involvement</div>
             {% for involvement in community_involvements %}
+            {% if involvement.position_title != '-' and involvement.position_title != '' %}
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">{{ involvement.position_title|default:"Position Title" }}</div>
@@ -599,16 +603,17 @@
                     {{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{
                     involvement.location }}{% endif %}
                 </div>
-                {% if involvement.achievements %}
+                {% if involvement.achievements and "involvement.location" not in involvement.achievements %}
                 <ul>
                     {% for line in involvement.achievements.splitlines %}
-                    {% if line %}
+                    {% if line and "involvement.end_date" not in line and "involvement.location" not in line %}
                     <li>{{ line }}</li>
                     {% endif %}
                     {% endfor %}
                 </ul>
                 {% endif %}
             </div>
+            {% endif %}
             {% endfor %}
         </div>
         {% endif %}

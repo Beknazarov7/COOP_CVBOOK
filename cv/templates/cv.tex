@@ -130,12 +130,15 @@
 % PROJECTS
 %----------------------------------------------------------------------------------------
 
-{% if projects %}
+{% if projects and projects.0.project_title != '-' and projects.0.project_title != '' %}
 \section{Projects}
 
 {% for project in projects %}
+{% if project.project_title != '-' and project.project_title != '' %}
 \noindent\textbf{ {{ project.project_title|escape_latex }} } | \textit{ {{ project.technologies_used|default:"insert technical skills used"|escape_latex }} } \hfill \textbf{ {{ project.year|format_year_only|default:"20XX"|escape_latex }} } \\
+{% if project.summary and "project.summary" not in project.summary %}
 \textbf{Summary:} {{ project.summary|default:"Brief Summary of Project."|escape_latex }} \\
+{% endif %}
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
 {% for line in project.accomplishment.splitlines %}
@@ -145,7 +148,7 @@
 {% endfor %}
 \end{itemize}
 \vspace{4pt}
-
+{% endif %}
 {% endfor %}
 {% endif %}
 
@@ -190,20 +193,21 @@
 % COMMUNITY INVOLVEMENT
 %----------------------------------------------------------------------------------------
 
-{% if community_involvements %}
+{% if community_involvements and community_involvements.0.position_title != '-' and community_involvements.0.position_title != '' %}
 \section{Community Involvement}
 
 {% for involvement in community_involvements %}
+{% if involvement.position_title != '-' and involvement.position_title != '' %}
 \noindent\textbf{ {{ involvement.position_title|escape_latex }} } \hfill \textbf{ {{ involvement.start_date|format_date_str|escape_latex }} -- {{ involvement.end_date|format_date_str|default:"Present"|escape_latex }} } \\
 \textit{ {{ involvement.organization|escape_latex }}{% if involvement.location %}, {{ involvement.location|escape_latex }}{% endif %} } \\
 \vspace{-6pt}
 \begin{itemize}[leftmargin=15pt,itemsep=1pt,parsep=0pt,topsep=2pt]
 {% for line in involvement.achievements.splitlines %}
-{% if line.strip %}\item {{ line|escape_latex }}{% endif %}
+{% if line.strip and "involvement.end_date" not in line %}\item {{ line|escape_latex }}{% endif %}
 {% empty %}\item Accomplishment statement{% endfor %}
 \end{itemize}
 \vspace{4pt}
-
+{% endif %}
 {% endfor %}
 {% endif %}
 
