@@ -389,14 +389,10 @@
                 {% if cv.phone %}{{ cv.phone }} | {% endif %}
                 <a href="mailto:{{ cv.email }}">{{ cv.email }}</a>
                 {% if cv.linkedin %}
-                | <a href="{{ cv.linkedin }}">LinkedIn.com/{{
-                    cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/"
-                    }}</a>
+                | <a href="{{ cv.linkedin }}">LinkedIn.com/{{                     cv.linkedin|cut:"https://www.linkedin.com/in/"|cut:"https://linkedin.com/in/"|cut:"http://www.linkedin.com/in/"|cut:"http://linkedin.com/in/"                     }}</a>
                 {% endif %}
                 {% if cv.github %}
-                | <a href="{{ cv.github }}">GitHub.com/{{
-                    cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/"
-                    }}</a>
+                | <a href="{{ cv.github }}">GitHub.com/{{                     cv.github|cut:"https://github.com/"|cut:"http://github.com/"|cut:"https://www.github.com/"|cut:"http://www.github.com/"                     }}</a>
                 {% endif %}
             </div>
         </div>
@@ -424,8 +420,7 @@
                 {% endif %}
 
                 <!-- ✅ Certificates - FIXED -->
-                {% if edu.certificates.all and edu.certificates.all.0.certificate_title|length > 1 and
-                edu.certificates.all.0.certificate_title != ' - ' %}
+                {% if edu.certificates.all and edu.certificates.all.0.certificate_title|length > 1 and                 edu.certificates.all.0.certificate_title != ' - ' %}
                 <div class="entry-detail" style="margin-top:4pt;"><strong>Certificates:</strong></div>
                 <ul>
                     {% for cert in edu.certificates.all %}
@@ -509,8 +504,7 @@
                     <div class="entry-date">{{ project.year|format_year_only }}</div>
                 </div>
                 {% if project.summary and "project.summary" not in project.summary %}
-                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of
-                    Project." }}</div>
+                <div class="entry-detail"><strong>Summary:</strong> {{ project.summary|default:"Brief Summary of                     Project." }}</div>
                 {% endif %}
                 {% if project.accomplishment %}
                 <ul>
@@ -588,8 +582,7 @@
         {% endif %}
 
         <!-- Community Involvement - ORIGINAL -->
-        {% if community_involvements and community_involvements.0.position_title|length > 1 and
-        community_involvements.0.position_title != ' - ' %}
+        {% if community_involvements and community_involvements.0.position_title|length > 1 and         community_involvements.0.position_title != ' - ' %}
         <div class="section">
             <div class="section-title">Community Involvement</div>
             {% for involvement in community_involvements %}
@@ -598,13 +591,11 @@
                 <div class="entry-header">
                     <div class="entry-title">{{ involvement.position_title|default:"Position Title" }}</div>
                     <div class="entry-date">
-                        {{ involvement.start_date|format_date_str }} — {{
-                        involvement.end_date|format_date_str|default:"Present" }}
+                        {{ involvement.start_date|format_date_str }} — {{                         involvement.end_date|format_date_str|default:"Present" }}
                     </div>
                 </div>
                 <div class="entry-subtitle">
-                    {{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{
-                    involvement.location }}{% endif %}
+                    {{ involvement.organization|default:"Organization" }}{% if involvement.location %}, {{                     involvement.location }}{% endif %}
                 </div>
                 {% if involvement.achievements and "involvement.location" not in involvement.achievements %}
                 <ul>
