@@ -424,7 +424,8 @@
                 {% endif %}
 
                 <!-- ✅ Certificates - FIXED -->
-                {% if edu.certificates.all and edu.certificates.all.0.certificate_title|length > 1 and edu.certificates.all.0.certificate_title != ' - ' %}
+                {% if edu.certificates.all and edu.certificates.all.0.certificate_title|length > 1 and
+                edu.certificates.all.0.certificate_title != ' - ' %}
                 <div class="entry-detail" style="margin-top:4pt;"><strong>Certificates:</strong></div>
                 <ul>
                     {% for cert in edu.certificates.all %}
@@ -587,7 +588,8 @@
         {% endif %}
 
         <!-- Community Involvement - ORIGINAL -->
-        {% if community_involvements and community_involvements.0.position_title|length > 1 and community_involvements.0.position_title != ' - ' %}
+        {% if community_involvements and community_involvements.0.position_title|length > 1 and
+        community_involvements.0.position_title != ' - ' %}
         <div class="section">
             <div class="section-title">Community Involvement</div>
             {% for involvement in community_involvements %}
