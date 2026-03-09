@@ -4,15 +4,13 @@
 {% block header_title %}Registration Update{% endblock %}
 
 {% block content %}
-<p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Dear <span style="color: #1967d2; font-weight: 600;">{{
-                first_name }} {{ last_name }}</span>,</p>
+<p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Dear <span style="color: #1967d2; font-weight: 600;">{{ first_name }} {{ last_name }}</span>,</p>
 
 <p style="margin-bottom: 25px; line-height: 1.7;">Thank you for your interest in the UCA Co-op Platform. We have
         reviewed your request for access.</p>
 
 <p style="margin-bottom: 25px; line-height: 1.7;">We regret to inform you that your request for access as a <span
-                style="background-color: #fee2e2; color: #b91c1c; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">{{
-                role|default:"student" }}</span> has been <strong>declined</strong> at this time.</p>
+                style="background-color: #fee2e2; color: #b91c1c; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">{{ role|default:"Partner" }}</span> has been <strong>declined</strong> at this time.</p>
 
 <div
         style="background-color: #fff5f5; border: 1px solid #feb2b2; border-radius: 6px; padding: 20px; margin-bottom: 30px;">

@@ -97,8 +97,7 @@ body {
       border-radius: 10px;
       padding: 1.25rem 1.5rem;
       box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
-      position: sticky;
-      top: 1rem;
+      position: relative;
       margin-bottom: 2rem;
       z-index: 1000;
     }
@@ -154,7 +153,8 @@ body {
     .department-tabs.filter-tabs {
       display: flex;
       gap: 0.5rem;
-      padding: 0.5rem;
+      padding: 0.75rem 0.5rem 0.5rem;
+      /* Increased top padding */
       background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
       border-radius: 12px;
       border: 1px solid rgba(44, 90, 160, .12);
@@ -175,16 +175,18 @@ body {
 
     .tab.active {
       background: linear-gradient(135deg, #2c5aa0 0%, #1e3d72 100%);
-      border-color: #2c5aa0;
+      border-color: #1e3d72;
       color: #fff;
-      box-shadow: 0 4px 12px rgba(44, 90, 160, .28);
-      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(44, 90, 160, 0.2);
+      transform: translateY(0);
     }
 
     .tab:not(.active):hover {
-      background: #f8f9fa;
+      background: #ffffff;
       border-color: #2c5aa0;
-      transform: translateY(-1px);
+      color: #2c5aa0;
+      box-shadow: 0 6px 16px rgba(44, 90, 160, 0.12);
+      transform: translateY(-2px);
     }
 
     .clear-filters-btn {
@@ -1926,7 +1928,7 @@ body {
     };
 
     /* ---------------- CVCards Components ---------------- */
-    const CustomDropdown = ({ options, value, onChange, placeholder, icon }) => {
+    const CustomDropdown = ({ options, value, onChange, placeholder, icon, isMulti }) => {
       const [isOpen, setIsOpen] = useState(false);
       const dropdownRef = useRef(null);
 
@@ -1940,7 +1942,47 @@ body {
         return () => document.removeEventListener("mousedown", handleClickOutside);
       }, []);
 
-      const selectedOption = options.find(opt => opt.value === value) || { label: placeholder || "Select...", value: "" };
+      const handleToggle = (optValue) => {
+        if (isMulti) {
+          const newValue = Array.isArray(value) ? [...value] : [];
+          const index = newValue.indexOf(optValue);
+          if (index > -1) {
+            newValue.splice(index, 1);
+          } else if (optValue !== "") {
+            newValue.push(optValue);
+          } else {
+            // If "All" is clicked, clear all
+            onChange([]);
+            setIsOpen(false);
+            return;
+          }
+          onChange(newValue);
+        } else {
+          onChange(optValue);
+          setIsOpen(false);
+        }
+      };
+
+      const getLabel = () => {
+        if (isMulti) {
+          if (!value || value.length === 0) return placeholder || "Select...";
+          if (value.length === 1) {
+            const opt = options.find(o => o.value === value[0]);
+            return opt ? opt.label : placeholder;
+          }
+          return `${value.length} selected`;
+        }
+        const selectedOption = options.find(opt => opt.value === value) || { label: placeholder || "Select...", value: "" };
+        return selectedOption.label;
+      };
+
+      const isSelected = (optValue) => {
+        if (isMulti) {
+          if (optValue === "") return !value || value.length === 0;
+          return Array.isArray(value) && value.includes(optValue);
+        }
+        return value === optValue;
+      };
 
       return (
         <div className={`custom-dropdown-container ${isOpen ? 'active' : ''}`} ref={dropdownRef}>
@@ -1951,20 +1993,20 @@ body {
           >
             <span className="flex items-center gap-2">
               {icon && <i className={icon + " text-blue-600 w-4 text-center"}></i>}
-              <span className={!value ? "text-slate-400" : ""}>{selectedOption.label}</span>
+              <span className={((isMulti ? (!value || value.length === 0) : !value)) ? "text-slate-400 truncate" : "truncate"}>
+                {getLabel()}
+              </span>
             </span>
           </button>
-          <div className={`custom-dropdown-menu ${isOpen ? 'show' : ''}`}>
+          <div className={`custom-dropdown-menu ${isOpen ? 'show' : ''} no-scrollbar`}>
             {options.map((opt, idx) => (
               <div
                 key={idx}
-                className={`custom-dropdown-option ${value === opt.value ? 'selected' : ''}`}
-                onClick={() => {
-                  onChange(opt.value);
-                  setIsOpen(false);
-                }}
+                className={`custom-dropdown-option ${isSelected(opt.value) ? 'selected' : ''} flex items-center justify-between`}
+                onClick={() => handleToggle(opt.value)}
               >
-                {opt.label}
+                <span>{opt.label}</span>
+                {isSelected(opt.value) && opt.value !== "" && <i className="fas fa-check text-xs text-blue-600"></i>}
               </div>
             ))}
           </div>
@@ -1998,7 +2040,13 @@ body {
           "earth-and-environmental-sciences": ["earth and environmental sciences", "earth", "environmental"],
         };
         const needles = map[cat] || [normalize(cat.replace(/-/g, " "))];
-        return needles.some((n) => m.includes(n));
+
+        // Use regex for whole-word matching to avoid partial matches (e.g., 'cs' matching 'economics')
+        return needles.some((n) => {
+          const escaped = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+          return regex.test(m);
+        });
       };
 
       useEffect(() => {
@@ -2061,13 +2109,13 @@ body {
           filtered = filtered.filter(cv => splitList(cv.language).includes(needle));
         }
 
-        // Technical skill contains
-        if (filters.techSkill) {
-          const needle = normalize(filters.techSkill);
+        // Technical skill contains (OR logic for multiple selections)
+        if (filters.techSkill && filters.techSkill.length > 0) {
+          const needles = filters.techSkill.map(normalize);
           filtered = filtered.filter(cv => {
             if (!cv.technical_skills || cv.technical_skills.length === 0) return false;
             const techSkills = cv.technical_skills[0];
-            const allSkills = [
+            const allSkills = normalize([
               techSkills.programming_languages,
               techSkills.frameworks_databases,
               techSkills.tools,
@@ -2075,18 +2123,19 @@ body {
               techSkills.multimedia,
               techSkills.network,
               techSkills.operating_systems
-            ].filter(Boolean).join(',');
-            return normalize(allSkills).includes(needle);
+            ].filter(Boolean).join(','));
+
+            return needles.some(needle => allSkills.includes(needle));
           });
         }
 
-        // Non-technical skill contains (languages)
-        if (filters.nonTechSkill) {
-          const needle = normalize(filters.nonTechSkill);
+        // Non-technical skill contains (languages) (OR logic for multiple selections)
+        if (filters.nonTechSkill && filters.nonTechSkill.length > 0) {
+          const needles = filters.nonTechSkill.map(normalize);
           filtered = filtered.filter(cv => {
             if (!cv.languages || cv.languages.length === 0) return false;
-            const langNames = cv.languages.map(l => l.name).join(',');
-            return normalize(langNames).includes(needle);
+            const langNames = normalize(cv.languages.map(l => l.name).join(','));
+            return needles.some(needle => langNames.includes(needle));
           });
         }
 
@@ -2220,31 +2269,53 @@ body {
                     : filters.category.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}
                 </span>
                 {filters.country && <span className="filter-badge">Country: {filters.country}</span>}
-                {filters.techSkill && <span className="filter-badge">Tech: {filters.techSkill}</span>}
-                {filters.nonTechSkill && <span className="filter-badge">Soft: {filters.nonTechSkill}</span>}
+                {(() => {
+                  const formatList = (list) => {
+                    if (list.length <= 2) return list.join(', ');
+                    return `${list.slice(0, 2).join(', ')} + ${list.length - 2} more`;
+                  };
+                  return (
+                    <>
+                      {filters.techSkill && filters.techSkill.length > 0 && (
+                        <span className="filter-badge" title={filters.techSkill.join(', ')}>
+                          Tech: {formatList(filters.techSkill)}
+                        </span>
+                      )}
+                      {filters.nonTechSkill && filters.nonTechSkill.length > 0 && (
+                        <span className="filter-badge" title={filters.nonTechSkill.join(', ')}>
+                          Soft: {formatList(filters.nonTechSkill)}
+                        </span>
+                      )}
+                    </>
+                  );
+                })()}
 
-                {(filters.category !== 'all' || filters.country || filters.techSkill || filters.nonTechSkill || filters.searchTerm) && (
-                  <button
-                    className="clear-filters-btn"
-                    onClick={() => setFilters({
-                      category: 'all',
-                      country: '',
-                      language: '',
-                      techSkill: '',
-                      nonTechSkill: '',
-                      sortOrder: '',
-                      searchTerm: ''
-                    })}
-                    type="button"
-                  >
-                    <i className="fas fa-times-circle"></i> Clear Filters
-                  </button>
-                )}
+                {(filters.category !== 'all' ||
+                  filters.country ||
+                  (filters.techSkill && filters.techSkill.length > 0) ||
+                  (filters.nonTechSkill && filters.nonTechSkill.length > 0) ||
+                  filters.searchTerm) && (
+                    <button
+                      className="clear-filters-btn"
+                      onClick={() => setFilters({
+                        category: 'all',
+                        country: '',
+                        language: '',
+                        techSkill: [],
+                        nonTechSkill: [],
+                        sortOrder: '',
+                        searchTerm: ''
+                      })}
+                      type="button"
+                    >
+                      <i className="fas fa-times-circle"></i> Clear Filters
+                    </button>
+                  )}
               </div>
             </div>
 
             <div className="department-tabs filter-tabs">
-              <div className="flex-1 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+              <div className="flex-1 flex gap-2 overflow-x-auto pt-1 pb-1 no-scrollbar">
                 {['all', 'computer-science', 'communication-and-media', 'global-economics', 'earth-and-environmental-sciences'].map(cat => (
                   <button
                     key={cat}
@@ -2276,26 +2347,30 @@ body {
               <div className="filter-group">
                 <label><i className="fas fa-bolt"></i> Technical Skills</label>
                 <CustomDropdown
+                  isMulti={true}
                   options={[
                     { label: "All Technical Skills", value: "" },
                     ...uniqueTechSkills.map(s => ({ label: s, value: s }))
                   ]}
-                  value={filters.techSkill || ""}
+                  value={filters.techSkill || []}
                   onChange={v => setFilters({ ...filters, techSkill: v })}
                   placeholder="All Technical Skills"
+                  icon="fas fa-bolt"
                 />
               </div>
 
               <div className="filter-group">
                 <label><i className="fas fa-handshake"></i> Non-technical Skills</label>
                 <CustomDropdown
+                  isMulti={true}
                   options={[
                     { label: "All Non-technical Skills", value: "" },
                     ...uniqueNonTechSkills.map(s => ({ label: s, value: s }))
                   ]}
-                  value={filters.nonTechSkill || ""}
+                  value={filters.nonTechSkill || []}
                   onChange={v => setFilters({ ...filters, nonTechSkill: v })}
                   placeholder="All Non-technical Skills"
+                  icon="fas fa-handshake"
                 />
               </div>
 
@@ -2432,8 +2507,8 @@ body {
         category: 'all',
         country: '',
         language: '',
-        techSkill: '',
-        nonTechSkill: '',
+        techSkill: [],
+        nonTechSkill: [],
         sortOrder: '',
         searchTerm: ''
       });

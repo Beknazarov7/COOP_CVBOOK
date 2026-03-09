@@ -4,13 +4,11 @@
 {% block header_title %}Registration Received!{% endblock %}
 
 {% block content %}
-<p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Dear <span style="color: #1967d2; font-weight: 600;">{{
-        first_name }} {{ last_name }}</span>,</p>
+<p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Dear <span style="color: #1967d2; font-weight: 600;">{{ first_name }} {{ last_name }}</span>,</p>
 
 <p style="margin-bottom: 25px; line-height: 1.7;">Thank you for registering on the UCA Co-op Platform! Your request for
     access as a <span
-        style="background-color: #e8f0fe; color: #1967d2; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">{{
-        role|default:"student" }}</span> is currently <span
+        style="background-color: #e8f0fe; color: #1967d2; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">{{ role|default:"Partner" }}</span> is currently <span
         style="background-color: #fff4e5; color: #f59e0b; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">pending
         approval</span> by our
     coordinators.</p>
@@ -27,7 +25,7 @@
 <ul style="margin: 0 0 30px 0; padding-left: 20px; font-size: 15px; color: #333333;">
     <li style="margin-bottom: 10px;"><strong>Name:</strong> {{ first_name }} {{ last_name }}</li>
     <li style="margin-bottom: 10px;"><strong>Email:</strong> {{ email }}</li>
-    <li style="margin-bottom: 0;"><strong>Role:</strong> {{ role|default:"student" }}</li>
+    <li style="margin-bottom: 0;"><strong>Role:</strong> {{ role|default:"Partner" }}</li>
 </ul>
 
 <p style="margin-bottom: 0;">We appreciate your patience while we verify your account. If you have any questions, please

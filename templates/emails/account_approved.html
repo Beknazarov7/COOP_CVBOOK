@@ -4,13 +4,11 @@
 {% block header_title %}Account Approved{% endblock %}
 
 {% block content %}
-<p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Dear <span style="color: #1967d2; font-weight: 600;">{{
-        first_name }} {{ last_name }}</span>,</p>
+<p style="margin-top: 0; margin-bottom: 20px; font-size: 16px;">Dear <span style="color: #1967d2; font-weight: 600;">{{ first_name }} {{ last_name }}</span>,</p>
 
 <p style="margin-bottom: 25px; line-height: 1.7;">We are thrilled to welcome you to the UCA Co-op Platform! Your account
     has been successfully created with the role of <span
-        style="background-color: #e8f0fe; color: #1967d2; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">{{
-        role|default:"student" }}</span>.</p>
+        style="background-color: #e8f0fe; color: #1967d2; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">{{ role|default:"Partner" }}</span>.</p>
 
 <div
     style="background-color: #f0f7ff; border: 1px solid #d0e3f7; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
