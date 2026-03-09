@@ -424,15 +424,18 @@
                 {% endif %}
 
                 <!-- ✅ Certificates - FIXED -->
-                {% if edu.certificates.all %}
+                {% if edu.certificates.all and edu.certificates.all.0.certificate_title|length > 1 and
+                edu.certificates.all.0.certificate_title != ' - ' %}
                 <div class="entry-detail" style="margin-top:4pt;"><strong>Certificates:</strong></div>
                 <ul>
                     {% for cert in edu.certificates.all %}
+                    {% if cert.certificate_title|length > 1 and cert.certificate_title != ' - ' %}
                     <li>
                         {{ cert.certificate_title }}
-                        {% if cert.organization %} — {{ cert.organization }}{% endif %}
-                        {% if cert.year %} ({{ cert.year }}){% endif %}
+                        {% if cert.organization and cert.organization|length > 1 %} — {{ cert.organization }}{% endif %}
+                        {% if cert.year and cert.year|length > 1 %} ({{ cert.year }}){% endif %}
                     </li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -492,11 +495,11 @@
         {% endif %}
 
         <!-- Projects - ORIGINAL -->
-        {% if projects and projects.0.project_title != '-' and projects.0.project_title != '' %}
+        {% if projects and projects.0.project_title|length > 1 and projects.0.project_title != ' - ' %}
         <div class="section">
             <div class="section-title">Projects</div>
             {% for project in projects %}
-            {% if project.project_title != '-' and project.project_title != '' %}
+            {% if project.project_title|length > 1 and project.project_title != ' - ' %}
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">
@@ -585,11 +588,12 @@
         {% endif %}
 
         <!-- Community Involvement - ORIGINAL -->
-        {% if community_involvements and community_involvements.0.position_title != "-" and community_involvements.0.position_title != "" %}
+        {% if community_involvements and community_involvements.0.position_title|length > 1 and
+        community_involvements.0.position_title != ' - ' %}
         <div class="section">
             <div class="section-title">Community Involvement</div>
             {% for involvement in community_involvements %}
-            {% if involvement.position_title != '-' and involvement.position_title != '' %}
+            {% if involvement.position_title|length > 1 and involvement.position_title != ' - ' %}
             <div class="entry">
                 <div class="entry-header">
                     <div class="entry-title">{{ involvement.position_title|default:"Position Title" }}</div>

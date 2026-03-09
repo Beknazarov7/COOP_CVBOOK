@@ -75,12 +75,15 @@
 {% if edu.relevant_courses %}\textbf{Relevant Courses:} {{ edu.relevant_courses|escape_latex }} \\{% endif %}
 \vspace{4pt}
 
-{% if edu.certificates.all %}
+{% if edu.certificates.all and edu.certificates.all.0.certificate_title|length > 1 and edu.certificates.all.0.certificate_title != ' - ' %}
 {% for cert in edu.certificates.all %}
+{% if cert.certificate_title|length > 1 and cert.certificate_title != ' - ' %}
 \noindent\textbf{ {{ cert.certificate_title|escape_latex }} } \hfill \textbf{ {{ cert.year|format_year_only|default:"20XX"|escape_latex }} } \\
-{% if cert.organization or cert.location %}\textit{ {% if cert.organization %}{{ cert.organization|escape_latex }}{% endif %}{% if cert.location %}, {{ cert.location|escape_latex }}{% endif %} } \\{% endif %}
+{% if cert.organization|length > 1 or cert.location|length > 1 %}\textit{ {% if cert.organization|length > 1 %}{{ cert.organization|escape_latex }}{% endif %}{% if cert.location|length > 1 %}, {{ cert.location|escape_latex }}{% endif %} } \\{% endif %}
 \vspace{4pt}
-{% endfor %}{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}
 
 {% endfor %}
 {% endif %}
@@ -130,11 +133,11 @@
 % PROJECTS
 %----------------------------------------------------------------------------------------
 
-{% if projects and projects.0.project_title != '-' and projects.0.project_title != '' %}
+{% if projects and projects.0.project_title|length > 1 and projects.0.project_title != ' - ' %}
 \section{Projects}
 
 {% for project in projects %}
-{% if project.project_title != '-' and project.project_title != '' %}
+{% if project.project_title|length > 1 and project.project_title != ' - ' %}
 \noindent\textbf{ {{ project.project_title|escape_latex }} } | \textit{ {{ project.technologies_used|default:"insert technical skills used"|escape_latex }} } \hfill \textbf{ {{ project.year|format_year_only|default:"20XX"|escape_latex }} } \\
 {% if project.summary and "project.summary" not in project.summary %}
 \textbf{Summary:} {{ project.summary|default:"Brief Summary of Project."|escape_latex }} \\
@@ -193,11 +196,11 @@
 % COMMUNITY INVOLVEMENT
 %----------------------------------------------------------------------------------------
 
-{% if community_involvements and community_involvements.0.position_title != '-' and community_involvements.0.position_title != '' %}
+{% if community_involvements and community_involvements.0.position_title|length > 1 and community_involvements.0.position_title != ' - ' %}
 \section{Community Involvement}
 
 {% for involvement in community_involvements %}
-{% if involvement.position_title != '-' and involvement.position_title != '' %}
+{% if involvement.position_title|length > 1 and involvement.position_title != ' - ' %}
 \noindent\textbf{ {{ involvement.position_title|escape_latex }} } \hfill \textbf{ {{ involvement.start_date|format_date_str|escape_latex }} -- {{ involvement.end_date|format_date_str|default:"Present"|escape_latex }} } \\
 \textit{ {{ involvement.organization|escape_latex }}{% if involvement.location %}, {{ involvement.location|escape_latex }}{% endif %} } \\
 \vspace{-6pt}
