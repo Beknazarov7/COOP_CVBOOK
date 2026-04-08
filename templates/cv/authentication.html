@@ -1930,19 +1930,29 @@ body {
     /* ---------------- CVCards Components ---------------- */
     const CustomDropdown = ({ options, value, onChange, placeholder, icon, isMulti }) => {
       const [isOpen, setIsOpen] = useState(false);
+      const [searchQuery, setSearchQuery] = useState("");
       const dropdownRef = useRef(null);
+      const inputRef = useRef(null);
 
       useEffect(() => {
         const handleClickOutside = (event) => {
           if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setIsOpen(false);
+            setSearchQuery("");
           }
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
       }, []);
 
+      useEffect(() => {
+        if (isOpen && inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, [isOpen]);
+
       const handleToggle = (optValue) => {
+        setSearchQuery(""); // Reset search on selection
         if (isMulti) {
           const newValue = Array.isArray(value) ? [...value] : [];
           const index = newValue.indexOf(optValue);
@@ -1984,31 +1994,52 @@ body {
         return value === optValue;
       };
 
+      const filteredOptions = options.filter(opt =>
+        opt.label.toLowerCase().includes(searchQuery.toLowerCase()) || opt.value === ""
+      );
+
       return (
         <div className={`custom-dropdown-container ${isOpen ? 'active' : ''}`} ref={dropdownRef}>
-          <button
-            type="button"
+          <div
             className={`custom-dropdown-trigger ${isOpen ? 'active' : ''}`}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen(true)}
           >
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-2 w-full">
               {icon && <i className={icon + " text-blue-600 w-4 text-center"}></i>}
-              <span className={((isMulti ? (!value || value.length === 0) : !value)) ? "text-slate-400 truncate" : "truncate"}>
-                {getLabel()}
-              </span>
+              {isOpen ? (
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="w-full bg-transparent focus:outline-none text-sm"
+                  placeholder={getLabel()}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <span className={((isMulti ? (!value || value.length === 0) : !value)) ? "text-slate-400 truncate" : "truncate"}>
+                  {getLabel()}
+                </span>
+              )}
             </span>
-          </button>
-          <div className={`custom-dropdown-menu ${isOpen ? 'show' : ''} no-scrollbar`}>
-            {options.map((opt, idx) => (
-              <div
-                key={idx}
-                className={`custom-dropdown-option ${isSelected(opt.value) ? 'selected' : ''} flex items-center justify-between`}
-                onClick={() => handleToggle(opt.value)}
-              >
-                <span>{opt.label}</span>
-                {isSelected(opt.value) && opt.value !== "" && <i className="fas fa-check text-xs text-blue-600"></i>}
-              </div>
-            ))}
+          </div>
+          <div className={`custom-dropdown-menu ${isOpen ? 'show' : ''} no-scrollbar pt-0`}>
+            <div className="max-h-[220px] overflow-y-auto no-scrollbar">
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map((opt, idx) => (
+                  <div
+                    key={idx}
+                    className={`custom-dropdown-option ${isSelected(opt.value) ? 'selected' : ''} flex items-center justify-between`}
+                    onClick={() => handleToggle(opt.value)}
+                  >
+                    <span>{opt.label}</span>
+                    {isSelected(opt.value) && opt.value !== "" && <i className="fas fa-check text-xs text-blue-600"></i>}
+                  </div>
+                ))
+              ) : (
+                <div className="px-4 py-2 text-sm text-gray-500 italic">No results found</div>
+              )}
+            </div>
           </div>
         </div>
       );
@@ -2109,33 +2140,38 @@ body {
           filtered = filtered.filter(cv => splitList(cv.language).includes(needle));
         }
 
-        // Technical skill contains (OR logic for multiple selections)
+        // Technical skill contains (AND logic for multiple selections)
         if (filters.techSkill && filters.techSkill.length > 0) {
           const needles = filters.techSkill.map(normalize);
           filtered = filtered.filter(cv => {
             if (!cv.technical_skills || cv.technical_skills.length === 0) return false;
-            const techSkills = cv.technical_skills[0];
-            const allSkills = normalize([
-              techSkills.programming_languages,
-              techSkills.frameworks_databases,
-              techSkills.tools,
-              techSkills.web_development,
-              techSkills.multimedia,
-              techSkills.network,
-              techSkills.operating_systems
-            ].filter(Boolean).join(','));
+            const ts = cv.technical_skills[0];
 
-            return needles.some(needle => allSkills.includes(needle));
+            // Collect all skills into a flat array for exact matching
+            const allSkills = [
+              ts.programming_languages,
+              ts.frameworks_databases,
+              ts.tools,
+              ts.web_development,
+              ts.multimedia,
+              ts.network,
+              ts.operating_systems
+            ].flatMap(field =>
+              String(field ?? "").split(/[,;|]/).map(s => s.trim().toLowerCase()).filter(Boolean)
+            );
+
+            // Must contain EVERY selected skill
+            return needles.every(needle => allSkills.includes(needle));
           });
         }
 
-        // Non-technical skill contains (languages) (OR logic for multiple selections)
+        // Non-technical skill contains (languages) (AND logic for multiple selections)
         if (filters.nonTechSkill && filters.nonTechSkill.length > 0) {
           const needles = filters.nonTechSkill.map(normalize);
           filtered = filtered.filter(cv => {
             if (!cv.languages || cv.languages.length === 0) return false;
-            const langNames = normalize(cv.languages.map(l => l.name).join(','));
-            return needles.some(needle => langNames.includes(needle));
+            const cvLangs = cv.languages.map(l => normalize(l.name));
+            return needles.every(needle => cvLangs.includes(needle));
           });
         }
 
